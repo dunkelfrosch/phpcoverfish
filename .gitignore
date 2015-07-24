@@ -1,0 +1,8 @@
+/build/
+/vendor/
+/.idea/
+/composer.phar
+composer.lock
+*.log
+./tmp/*
+./tmp
