@@ -539,4 +539,50 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue($pass);
         }
     }
+
+    /**
+     * check for covered ClassName::<!private> annotation "no not private methods", cover is invalid!
+     */
+    public function testCoverClassNameAccessorNoNotPrivateMethodsFail()
+    {
+        /** @var CoverFishScanner $scanner */
+        $scanner = new CoverFishScanner($this->getDefaultScannerOptions(
+            sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPrivateFailTest.php', __DIR__)
+        ));
+
+        /** @var array $jsonResult */
+        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
+        /** @var \stdClass $jsonResult */
+        foreach ($jsonResult as $result) {
+
+            if (true === (bool) $result->pass) {
+                continue;
+            }
+
+            $errorCode = (int) $result->errorCode;
+            $error = (bool) $result->error;
+
+            $this->assertTrue($error);
+            $this->assertEquals(2006, $errorCode);
+        }
+    }
+
+    /**
+     * check for covered ClassName::<!private> annotation "no not private methods found", cover is valid!
+     */
+    public function testCoverClassNameAccessorNoNotPrivateMethodsPass()
+    {
+        /** @var CoverFishScanner $scanner */
+        $scanner = new CoverFishScanner($this->getDefaultScannerOptions(
+            sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPrivatePassTest.php', __DIR__)
+        ));
+
+        /** @var array $jsonResult */
+        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
+        /** @var \stdClass $jsonResult */
+        foreach ($jsonResult as $result) {
+            $pass = (bool) $result->pass;
+            $this->assertTrue($pass);
+        }
+    }
 }
