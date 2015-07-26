@@ -447,4 +447,50 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue($pass);
         }
     }
+
+    /**
+     * check for covered ClassName::<!public> annotation "no not public methods", cover is invalid!
+     */
+    public function testCoverClassNameAccessorNoNotPublicMethodsFail()
+    {
+        /** @var CoverFishScanner $scanner */
+        $scanner = new CoverFishScanner($this->getDefaultScannerOptions(
+            sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPublicFailTest.php', __DIR__)
+        ));
+
+        /** @var array $jsonResult */
+        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
+        /** @var \stdClass $jsonResult */
+        foreach ($jsonResult as $result) {
+
+            if (true === (bool) $result->pass) {
+                continue;
+            }
+
+            $errorCode = (int) $result->errorCode;
+            $error = (bool) $result->error;
+
+            $this->assertTrue($error);
+            $this->assertEquals(2004, $errorCode);
+        }
+    }
+
+    /**
+     * check for covered ClassName::<!public> annotation "no not public methods found", cover is valid!
+     */
+    public function testCoverClassNameAccessorNoNotPublicMethodsPass()
+    {
+        /** @var CoverFishScanner $scanner */
+        $scanner = new CoverFishScanner($this->getDefaultScannerOptions(
+            sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPublicPassTest.php', __DIR__)
+        ));
+
+        /** @var array $jsonResult */
+        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
+        /** @var \stdClass $jsonResult */
+        foreach ($jsonResult as $result) {
+            $pass = (bool) $result->pass;
+            $this->assertTrue($pass);
+        }
+    }
 }

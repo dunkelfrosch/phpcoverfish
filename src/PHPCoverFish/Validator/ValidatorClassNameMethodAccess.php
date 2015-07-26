@@ -25,7 +25,7 @@ class ValidatorClassNameMethodAccess extends CoverFishValidator
      */
     private function execute()
     {
-        preg_match_all('/^(?P<class>(^(([\\\\])|([A-Z]))([A-Za-z0-9_\\\\]+)))(?P<sep>::{1})((<{1})(?P<accessor>[\w]+)(>{1})\s*\Z)$/', $this->coversToken, $this->result, PREG_SET_ORDER);
+        preg_match_all('/^(?P<class>(^(([\\\\])|([A-Z]))([A-Za-z0-9_\\\\]+)))(?P<sep>::{1})((<{1})(?P<accessor>[!\w]+)(>{1})\s*\Z)$/', $this->coversToken, $this->result, PREG_SET_ORDER);
 
         return $this->result;
     }
