@@ -115,7 +115,6 @@ class CoverFishScanner
      */
     public function __construct()
     {
-        $this->phpUnitFile = new CoverFishPHPUnitFile();
         $this->coverFishHelper = new CoverFishHelper();
         $this->coverFishResult = new CoverFishResult();
 

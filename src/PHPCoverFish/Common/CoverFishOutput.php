@@ -102,7 +102,7 @@ class CoverFishOutput
             $this->jsonResult['fileFQN'] = $coverFishUnitFile->getFile();
             $this->write(sprintf('check file -> %s ', $this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile())));
 
-            /** @var CoverFishPHPUnitTest $test */
+            /** @var CoverFishPHPUnitTest $coverFishTest */
             foreach ($coverFishUnitFile->getTests() as $coverFishTest) {
 
                 /** @var CoverFishMapping $coverMappings */

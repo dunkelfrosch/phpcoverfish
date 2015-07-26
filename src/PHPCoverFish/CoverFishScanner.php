@@ -3,6 +3,7 @@
 namespace DF\PHPCoverFish;
 
 use DF\PHPCoverFish\Base\CoverFishScanner as CoverFishScannerBase;
+use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitTest;
 use DF\PHPCoverFish\Validator\ValidatorClassName;
 use DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess;
@@ -73,9 +74,8 @@ class CoverFishScanner extends CoverFishScannerBase
         $this->addValidator(new ValidatorMethodName($coverToken));
         // covers ClassName
         $this->addValidator(new ValidatorClassName($coverToken));
-        // covers ClassName::<public>
+        // covers ClassName::<public|protected|private|!public|!protected|!private>
         $this->addValidator(new ValidatorClassNameMethodAccess($coverToken));
-        // (...)
     }
 
     /**
@@ -88,8 +88,6 @@ class CoverFishScanner extends CoverFishScannerBase
             $this->analyseClassesInFile($file);
         }
 
-        $this->coverFishResult->setTaskFinishedAt(new \DateTime());
-
         return $this->coverFishOutput->writeResult($this->coverFishResult);
     }
 
@@ -101,6 +99,7 @@ class CoverFishScanner extends CoverFishScannerBase
     public function analyseClassesInFile($file)
     {
         $ts = new PHP_Token_Stream($file);
+        $this->phpUnitFile = new CoverFishPHPUnitFile();
         foreach ($ts->getClasses() as $className => $classData) {
             $this->analyseClass($classData, $className, $file);
         }
@@ -125,13 +124,6 @@ class CoverFishScanner extends CoverFishScannerBase
 
             // ignore docBlock free testMethods!
             if (false === array_key_exists('docblock', $methodData)) {
-                /**
-                 * @todo: add/handle coverFish warnings here!
-                 *
-                 * - testMethod without covers
-                 * - testMethod without annotation
-                 *
-                 */
                 continue;
             }
 
@@ -167,10 +159,7 @@ class CoverFishScanner extends CoverFishScannerBase
             }
 
             $this->validateAndReturnMapping($phpUnitTest);
-
             $this->phpUnitFile->addTest($phpUnitTest);
-            // @todo: not necessary!
-            $this->phpUnitFile->setScanFinishedAt(new \DateTime());
         }
 
         $this->coverFishResult->addUnit($this->phpUnitFile);
