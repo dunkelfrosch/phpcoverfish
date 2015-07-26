@@ -493,4 +493,50 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue($pass);
         }
     }
+
+    /**
+     * check for covered ClassName::<!protected> annotation "no not protected methods", cover is invalid!
+     */
+    public function testCoverClassNameAccessorNoNotProtectedMethodsFail()
+    {
+        /** @var CoverFishScanner $scanner */
+        $scanner = new CoverFishScanner($this->getDefaultScannerOptions(
+            sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotProtectedFailTest.php', __DIR__)
+        ));
+
+        /** @var array $jsonResult */
+        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
+        /** @var \stdClass $jsonResult */
+        foreach ($jsonResult as $result) {
+
+            if (true === (bool) $result->pass) {
+                continue;
+            }
+
+            $errorCode = (int) $result->errorCode;
+            $error = (bool) $result->error;
+
+            $this->assertTrue($error);
+            $this->assertEquals(2005, $errorCode);
+        }
+    }
+
+    /**
+     * check for covered ClassName::<!protected> annotation "no not protected methods found", cover is valid!
+     */
+    public function testCoverClassNameAccessorNoNotProtectedMethodsPass()
+    {
+        /** @var CoverFishScanner $scanner */
+        $scanner = new CoverFishScanner($this->getDefaultScannerOptions(
+            sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotProtectedPassTest.php', __DIR__)
+        ));
+
+        /** @var array $jsonResult */
+        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
+        /** @var \stdClass $jsonResult */
+        foreach ($jsonResult as $result) {
+            $pass = (bool) $result->pass;
+            $this->assertTrue($pass);
+        }
+    }
 }

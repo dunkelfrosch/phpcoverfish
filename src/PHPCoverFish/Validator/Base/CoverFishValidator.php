@@ -268,6 +268,20 @@ class CoverFishValidator implements CoverFishValidatorInterface
 
                 break;
 
+            case '!protected':
+                $methods = array_merge(
+                    $reflectionClass->getMethods(\ReflectionMethod::IS_PRIVATE),
+                    $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC)
+                );
+
+                if (empty($methods)) {
+                    return new CoverFishError(
+                        CoverFishError::PHPUNIT_REFLECTION_NO_NOT_PROTECTED_METHODS_FOUND, null
+                    );
+                }
+
+                break;
+
             default:
                 return false;
                 break;
