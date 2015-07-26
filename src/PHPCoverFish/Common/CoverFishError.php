@@ -27,6 +27,12 @@ final class CoverFishError
     const PHPUNIT_REFLECTION_NO_PROTECTED_METHODS_FOUND = 2002;
     // reflection problem, class exists but no protected methods available
     const PHPUNIT_REFLECTION_NO_PRIVATE_METHODS_FOUND = 2003;
+    // reflection problem, class exists but no not public methods available
+    const PHPUNIT_REFLECTION_NO_NOT_PUBLIC_METHODS_FOUND = 2004;
+    // reflection problem, class exists but no not protected methods available
+    const PHPUNIT_REFLECTION_NO_NOT_PROTECTED_METHODS_FOUND = 2005;
+    // reflection problem, class exists but no not private methods available
+    const PHPUNIT_REFLECTION_NO_NOT_PRIVATE_METHODS_FOUND = 2006;
     // class does not provide any of defined methods in corresponding visibility
     const PHPUNIT_REFLECTION_CLASS_NOT_DEFINED = 4000;
     // annotation problem, cover class not found or class part in 'class::method' not available
@@ -41,6 +47,9 @@ final class CoverFishError
         self::PHPUNIT_REFLECTION_NO_PUBLIC_METHODS_FOUND => 'no public methods in class!', // method-access/-visibility problem!
         self::PHPUNIT_REFLECTION_NO_PROTECTED_METHODS_FOUND => 'no protected methods in class!', // method-access/-visibility problem!
         self::PHPUNIT_REFLECTION_NO_PRIVATE_METHODS_FOUND => 'no private methods in class!', // method-access/-visibility problem!
+        self::PHPUNIT_REFLECTION_NO_NOT_PUBLIC_METHODS_FOUND => 'no not public methods in class!', // method-access/-visibility problem!
+        self::PHPUNIT_REFLECTION_NO_NOT_PROTECTED_METHODS_FOUND => 'no not protected methods in class!', // method-access/-visibility problem!
+        self::PHPUNIT_REFLECTION_NO_NOT_PRIVATE_METHODS_FOUND => 'no not private methods in class!', // method-access/-visibility problem!
         self::PHPUNIT_REFLECTION_CLASS_NOT_DEFINED => 'Class not defined!', // class not defined, not found in use statement
         self::PHPUNIT_VALIDATOR_PROBLEM => 'cover Annotation problem!', // cover annotation spelling/validation error
         self::PHPUNIT_VALIDATOR_MISSING_DEFAULT_COVER_CLASS_PROBLEM => 'defaultCoverClass Annotation missing!', // defaultCoverClass annotation spelling/validation error
