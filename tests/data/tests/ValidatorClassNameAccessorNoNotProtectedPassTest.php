@@ -18,9 +18,6 @@ use DF\PHPCoverFish\Tests\Data\Src\SampleClassOnlyPublicMethods;
 class ValidatorClassNameAccessorNoNotProtectedPassTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * check validator that specifies that the annotated test method covers all public methods
-     * of a given existing class.
-     *
      * @covers SampleClassOnlyPublicMethods::<!protected>
      */
     public function testCanCallDummyMethod()
