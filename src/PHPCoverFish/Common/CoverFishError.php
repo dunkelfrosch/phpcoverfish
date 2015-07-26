@@ -141,6 +141,9 @@ final class CoverFishError
             case self::PHPUNIT_REFLECTION_NO_PUBLIC_METHODS_FOUND:
             case self::PHPUNIT_REFLECTION_NO_PROTECTED_METHODS_FOUND:
             case self::PHPUNIT_REFLECTION_NO_PRIVATE_METHODS_FOUND:
+            case self::PHPUNIT_REFLECTION_NO_NOT_PUBLIC_METHODS_FOUND:
+            case self::PHPUNIT_REFLECTION_NO_NOT_PROTECTED_METHODS_FOUND:
+            case self::PHPUNIT_REFLECTION_NO_NOT_PRIVATE_METHODS_FOUND:
 
                 $coverLine = sprintf('@covers %s::<%s>', $coverMapping->getClassFQN(), $coverMapping->getAccessor());
                 if (!$noAnsiColors) {
@@ -153,6 +156,11 @@ final class CoverFishError
                 break;
 
             case self::PHPUNIT_VALIDATOR_MISSING_DEFAULT_COVER_CLASS_PROBLEM:
+                $coverLine = sprintf('@covers %s', $coverMapping->getClass());
+                if (!$noAnsiColors) {
+                    $coverLine  = Color::tplNormalColor('@covers ');
+                    $coverLine .= Color::tplMarkFailure($coverMapping->getClass());
+                }
                 break;
 
             case self::PHPUNIT_VALIDATOR_PROBLEM:

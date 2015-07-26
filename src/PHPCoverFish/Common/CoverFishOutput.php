@@ -195,13 +195,14 @@ class CoverFishOutput
             $this->jsonResult['cover'] = $coverLine;
             $this->jsonResult['method'] = $unitTest->getName();
             $this->jsonResult['line'] = $unitTest->getLine();
+            $this->jsonResult['file'] = $unitTest->getFile();
 
             $coverFishResult->addFailureToStream(PHP_EOL);
-            $lineInfo = sprintf('Error #%s in method "%s", Line ~%s%s', $coverFishResult->getFailureCount(), $unitTest->getName(), $unitTest->getLine(), PHP_EOL);
+            $lineInfo = sprintf('Error #%s in method "%s", Line ~%s (File: %s)%s', $coverFishResult->getFailureCount(), $unitTest->getName(), $unitTest->getLine(), $unitTest->getFile(), PHP_EOL);
             $lineAnnotation = sprintf('Annotation: %s%s', $coverLine, PHP_EOL);
             $lineMessage = sprintf('Message: %s (ErrorCode: %s) %s',$mappingError->getTitle(), $mappingError->getErrorCode(), PHP_EOL);
             if (false === $this->preventAnsiColors) {
-                $lineInfo = sprintf('Error #%s in method "%s", Line ~%s%s', Color::tplWhiteColor($coverFishResult->getFailureCount()), Color::tplWhiteColor($unitTest->getName()), Color::tplWhiteColor($unitTest->getLine()), PHP_EOL);
+                $lineInfo = sprintf('Error #%s in method "%s", Line ~%s (File: %s)%s', Color::tplWhiteColor($coverFishResult->getFailureCount()), Color::tplWhiteColor($unitTest->getName()), Color::tplWhiteColor($unitTest->getLine()), $unitTest->getFile(), PHP_EOL);
                 $lineAnnotation = sprintf('%s: %s%s',Color::tplDarkGrayColor('Annotation'), $coverLine, PHP_EOL);
                 $lineMessage = sprintf('%s: %s (ErrorCode: %s) %s',Color::tplDarkGrayColor('Message'), $mappingError->getTitle(), $mappingError->getErrorCode(), PHP_EOL);
             }

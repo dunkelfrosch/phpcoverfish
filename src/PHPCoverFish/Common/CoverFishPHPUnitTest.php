@@ -46,6 +46,11 @@ class CoverFishPHPUnitTest
     private $loc;
 
     /**
+     * @var string
+     */
+    private $file;
+
+    /**
      * @var ArrayCollection
      */
     private $coverAnnotations;
@@ -216,11 +221,26 @@ class CoverFishPHPUnitTest
     }
 
     /**
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param string $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
      * class constructor
      */
     public function __construct()
     {
- //       $this->coverAnnotations = new ArrayCollection();
         $this->coverMappings = new ArrayCollection();
     }
 }

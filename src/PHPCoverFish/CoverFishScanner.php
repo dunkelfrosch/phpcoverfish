@@ -102,7 +102,7 @@ class CoverFishScanner extends CoverFishScannerBase
     {
         $ts = new PHP_Token_Stream($file);
         foreach ($ts->getClasses() as $className => $classData) {
-            $this->analyseClass($classData, $className);
+            $this->analyseClass($classData, $className, $file);
         }
     }
 
@@ -111,10 +111,11 @@ class CoverFishScanner extends CoverFishScannerBase
      *
      * @param array  $classData
      * @param string $className
+     * @param string $classFile
      *
      * @return array
      */
-    public function analyseClass(array $classData, $className)
+    public function analyseClass(array $classData, $className, $classFile)
     {
         // add class meta information firstly
         $this->setPHPUnitTestMetaDetails($className, $classData);
@@ -144,6 +145,7 @@ class CoverFishScanner extends CoverFishScannerBase
             $phpUnitTest->setVisibility($methodData['visibility']);
             $phpUnitTest->setLine($methodData['startLine']);
             $phpUnitTest->setSignature($methodData['signature']);
+            $phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($classFile));
             $phpUnitTest->setLoc($this->coverFishHelper->getLocOfTestMethod($methodData));
 
             // clear validator collection before use in next method
