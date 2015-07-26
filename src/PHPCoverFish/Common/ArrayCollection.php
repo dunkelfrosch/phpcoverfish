@@ -1,12 +1,4 @@
 <?php
-/**
- * ArrayCollection helper, based on the work on \Doctrine\Common\ArrayCollection of Benjamin Eberlei <kontakt@beberlei.de>,
- * Jonathan Wage <jonwage@gmail.com> and Roman Borschel <roman@code-factory.org>.
- *
- * @license   http://www.opensource.org/licenses/MIT
- * @since     file available since Release 0.9.0
- * @version   0.9.0
- */
 
 namespace DF\PHPCoverFish\Common;
 
@@ -14,7 +6,8 @@ use ArrayIterator;
 use Closure;
 
 /**
- * An ArrayCollection is a Collection implementation that wraps a regular PHP array.
+ * ArrayCollection helper, based on the work on \Doctrine\Common\ArrayCollection of Benjamin Eberlei <kontakt@beberlei.de>,
+ * Jonathan Wage <jonwage@gmail.com> and Roman Borschel <roman@code-factory.org>.
  *
  * @since  2.0
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>

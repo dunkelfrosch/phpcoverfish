@@ -1,11 +1,4 @@
 <?php
-/**
- * Collections helper, based on the work on \Doctrine\Common\Collections from Benjamin Eberlei <kontakt@beberlei.de>
- *
- * @license   http://www.opensource.org/licenses/MIT
- * @since     file available since Release 0.9.0
- * @version   0.9.0
- */
 
 namespace DF\PHPCoverFish\Common;
 
@@ -15,6 +8,7 @@ use Countable;
 use IteratorAggregate;
 
 /**
+ * Collections helper, based on the work on \Doctrine\Common\Collections from Benjamin Eberlei <kontakt@beberlei.de>
  * The missing (SPL) Collection/Array/OrderedMap interface.
  *
  * A Collection resembles the nature of a regular PHP array. That is,
