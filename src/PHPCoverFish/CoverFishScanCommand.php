@@ -128,8 +128,7 @@ class CoverFishScanCommand extends Command
      */
     protected function showExecTitle(OutputInterface $output)
     {
-        $output->writeln(sprintf('<info>%s</info> <comment>%s</comment>', CoverFishScanner::APP_RELEASE_NAME, $this->getLongVersion()));
-        $output->writeln('');
+        $output->writeln(sprintf('<info>%s</info> <comment>%s</comment>%s', CoverFishScanner::APP_RELEASE_NAME, $this->getLongVersion(), PHP_EOL));
     }
 
     /**
@@ -142,7 +141,7 @@ class CoverFishScanCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // @todo: separate options and arguments in multi-dimensional array instead of prefix your keys!!!
+        // @todo: separate options and arguments in multi-dimensional array instead of prefix your keys - maybe precast keyCheck firstly!!!
         $options = array(
             'arg_test_file_src' => $input->getArgument('scan-path'),
             'opt_mode_debug' => $input->getOption('debug'),
@@ -152,7 +151,7 @@ class CoverFishScanCommand extends Command
             'opt_warning_threshold' => $input->getOption('warning-threshold-stop'),
             'opt_output_format' => $input->getOption('output-format'),
             'opt_output_no_echo' => $input->getOption('output-prevent-echo'),
-            'opt_output_level' => $input->getOption('output-level'),
+            'opt_output_level' => (int)$input->getOption('output-level'),
             'opt_no_ansi' => $input->getOption('no-ansi')
         );
 
