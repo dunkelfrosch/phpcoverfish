@@ -158,7 +158,9 @@ class CoverFishScanner extends CoverFishScannerBase
                 $this->phpUnitFile->addCover($cover);
             }
 
-            $this->validateAndReturnMapping($phpUnitTest);
+            // write validation result to phpUnitTest directly
+            $phpUnitTest = $this->validateAndReturnMapping($phpUnitTest);
+            // add final test structure and result to phpUnitFile
             $this->phpUnitFile->addTest($phpUnitTest);
         }
 
