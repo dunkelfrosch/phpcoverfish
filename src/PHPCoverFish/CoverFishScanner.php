@@ -21,7 +21,7 @@ use \PHP_Token_Stream;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/dfphpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.2
  */
 class CoverFishScanner extends CoverFishScannerBase
 {
@@ -30,35 +30,16 @@ class CoverFishScanner extends CoverFishScannerBase
 
     const APP_VERSION_MAJOR = 0;
     const APP_VERSION_MINOR = 9;
-    const APP_VERSION_BUILD = 1;
-
-    const APP_LICENSE = 'http://www.opensource.org/licenses/MIT';
-    const APP_SOURCE = 'http://github.com/dunkelfrosch/dfphpcoverfish/tree';
+    const APP_VERSION_BUILD = 2;
 
     /**
-     * @param array $options
+     * @param array $cliOptions
+     * @param array $outputOptions
      */
-    public function __construct(array $options)
+    public function __construct(array $cliOptions, array $outputOptions)
     {
-        parent::__construct();
-
-        $this->testSourcePath = $options['arg_test_file_src'];
-        $this->verbose = $options['opt_mode_verbose'];
-        $this->debug = $options['opt_mode_debug'];
-        $this->stopOnError = $options['opt_stop_on_error'];
-        $this->stopOnFailure = $options['opt_stop_on_failure'];
-        $this->warningThreshold = $options['opt_warning_threshold'];
-        $this->outputFormat = $options['opt_output_format'];
-        $this->outputLevel = $options['opt_output_level'];
-        $this->preventAnsiColors = $options['opt_no_ansi'];
-        $this->preventEcho = $options['opt_output_no_echo'];
-
-        $this->coverFishOutput = new CoverFishOutput(
-            $this->outputFormat,
-            $this->outputLevel,
-            $this->preventAnsiColors,
-            $this->preventEcho
-        );
+        parent::__construct($cliOptions);
+        $this->coverFishOutput = new CoverFishOutput($outputOptions);
     }
 
     /**
@@ -137,6 +118,7 @@ class CoverFishScanner extends CoverFishScannerBase
             $phpUnitTest->setVisibility($methodData['visibility']);
             $phpUnitTest->setLine($methodData['startLine']);
             $phpUnitTest->setSignature($methodData['signature']);
+            $phpUnitTest->setFileAndPath($classFile);
             $phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($classFile));
             $phpUnitTest->setLoc($this->coverFishHelper->getLocOfTestMethod($methodData));
 
@@ -147,7 +129,7 @@ class CoverFishScanner extends CoverFishScannerBase
             foreach ($annotations['covers'] as $cover) {
                 // step through all cover annotations in scanned method, ignore empty covers
                 if (true === empty($cover)) {
-                    // @todo: add/handle coverFish warnings here!
+                    // @todo: add/handle additional coverFish warnings here!
                     continue;
                 }
 

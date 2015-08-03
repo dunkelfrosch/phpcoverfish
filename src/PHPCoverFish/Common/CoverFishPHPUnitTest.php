@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/dfphpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.2
  */
 class CoverFishPHPUnitTest
 {
@@ -49,6 +49,11 @@ class CoverFishPHPUnitTest
      * @var string
      */
     private $file;
+
+    /**
+     * @var string
+     */
+    private $fileAndPath;
 
     /**
      * @var ArrayCollection
@@ -234,6 +239,22 @@ class CoverFishPHPUnitTest
     public function setFile($file)
     {
         $this->file = $file;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileAndPath()
+    {
+        return $this->fileAndPath;
+    }
+
+    /**
+     * @param string $fileAndPath
+     */
+    public function setFileAndPath($fileAndPath)
+    {
+        $this->fileAndPath = $fileAndPath;
     }
 
     /**

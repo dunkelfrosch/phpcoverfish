@@ -13,7 +13,7 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/dfphpcoverfish/tree
  * @since      class available since Release 0.9.0
- * @version    0.9.0
+ * @version    0.9.2
  */
 class CoverFishOutput
 {
@@ -25,19 +25,27 @@ class CoverFishOutput
     /**
      * @var bool
      */
-    protected $preventAnsiColors = false;
-
-    /**
-     * prevent echo of json result, return serialized object directly
-     *
-     * @var bool
-     */
-    protected $preventEcho = false;
+    protected $verbose = false;
 
     /**
      * @var string
      */
     protected $outputFormat;
+
+    /**
+     * @var string
+     */
+    protected $outputLevel;
+
+    /**
+     * @var bool
+     */
+    protected $preventAnsiColors = false;
+
+    /**
+     * @var bool
+     */
+    protected $preventEcho = false;
 
     /**
      * @var bool
@@ -60,34 +68,28 @@ class CoverFishOutput
     protected $jsonResults = array();
 
     /**
-     * @var string
-     */
-    protected $outputLevel;
-
-    /**
      * @var bool
      */
     protected $scanFailure;
 
     /**
-     * @param string     $outputFormat
-     * @param int        $outputLevel
-     * @param bool|false $preventAnsiColors
-     * @param bool|false $preventEcho
+     * @param array $outputOptions
      */
-    public function __construct($outputFormat = 'text', $outputLevel = 1, $preventAnsiColors = false, $preventEcho = false)
+    public function __construct(array $outputOptions)
     {
         $this->coverFishHelper = new CoverFishHelper();
-        $this->preventAnsiColors = $preventAnsiColors;
-        $this->outputFormat = $outputFormat;
-        $this->outputLevel = $outputLevel;
         $this->scanFailure = false;
+
+        $this->verbose = $outputOptions['out_verbose'];
+        $this->outputFormat = $outputOptions['out_format'];
+        $this->outputLevel = $outputOptions['out_level'];
+        $this->preventAnsiColors = $outputOptions['out_no_ansi'];
+        $this->preventEcho = $outputOptions['out_no_echo'];
 
         if ($this->outputFormat === 'json') {
             $this->outputFormatText = false;
             $this->outputFormatJson = true;
             $this->preventAnsiColors = true;
-            $this->preventEcho = $preventEcho;
         }
     }
 
@@ -106,32 +108,22 @@ class CoverFishOutput
             $coverFishResult->setFailureStream(null);
             $coverFishResult->setFailureCount(0);
 
-            // write additional json result
+            $this->writeFileName($coverFishUnitFile);
             $this->writeJsonResult($coverFishUnitFile);
-
-            // show scanFile info line
-            // @todo:refactor!
-            if (false === $this->preventAnsiColors) {
-                $this->write(sprintf('%s%s%s',
-                    Color::tplNormalColor(($this->outputLevel > 1) ? 'scan file ' : null),
-                    Color::tplYellowColor($this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile())),
-                    ($this->outputLevel > 1) ? PHP_EOL : ' '
-                ));
-            } else {
-                $this->write(sprintf('%s%s%s',
-                    ($this->outputLevel > 1) ? 'scan file ' : null,
-                    $this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile()),
-                    ($this->outputLevel > 1) ? PHP_EOL : ' '
-                ));
-            }
 
             /** @var CoverFishPHPUnitTest $coverFishTest */
             foreach ($coverFishUnitFile->getTests() as $coverFishTest) {
-                // show scanMethod info line
+
                 if ($this->outputLevel > 1) {
-                    $this->write(sprintf('-> %s %s : ', Color::tplDarkGrayColor($coverFishTest->getVisibility()), $coverFishTest->getSignature()));
+                    $this->write(sprintf('-> %s %s : ',
+                        (false === $this->preventAnsiColors)
+                            ? Color::tplDarkGrayColor($coverFishTest->getVisibility())
+                            : $coverFishTest->getVisibility()
+                        ,
+                        $coverFishTest->getSignature()));
                 }
-                    /** @var CoverFishMapping $coverMappings */
+
+                /** @var CoverFishMapping $coverMappings */
                 foreach ($coverFishTest->getCoverMappings() as $coverMappings) {
                     if (false === $coverMappings->getValidatorResult()->isPass()) {
                         // collection detailed error messages
@@ -184,10 +176,27 @@ class CoverFishOutput
     /**
      * @param CoverFishPHPUnitFile $coverFishUnitFile
      */
-    public function writeJsonResult(CoverFishPHPUnitFile $coverFishUnitFile) {
+    public function writeJsonResult(CoverFishPHPUnitFile $coverFishUnitFile)
+    {
         $this->jsonResult['pass'] = false;
         $this->jsonResult['file'] = $this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile());
         $this->jsonResult['fileFQN'] = $coverFishUnitFile->getFile();
+    }
+
+    /**
+     * @param int    $count
+     * @param string $char
+     *
+     * @return null|string
+     */
+    private function setIndent($count, $char = ' ')
+    {
+        $outChar = null;
+        for ($i = 1; $i <= $count; $i++) {
+            $outChar .= $char;
+        }
+
+        return $outChar;
     }
 
     /**
@@ -204,6 +213,8 @@ class CoverFishOutput
         CoverFishMapping $coverMapping
     )
     {
+        /** @var int $lineIndent */
+        $lineIndent = 3;
         /** @var CoverFishError $mappingError */
         foreach ($coverMapping->getValidatorResult()->getErrors() as $mappingError) {
 
@@ -219,12 +230,13 @@ class CoverFishOutput
             $coverFishResult->addFailureToStream(PHP_EOL);
 
             // message block, line 01, message title
-            $lineInfoMacro = 'Error #%s in method "%s" (L:~%s)'.PHP_EOL;
+            $lineInfoMacro = '%sError #%s in method "%s" (L:~%s)';
             if ($this->outputLevel > 1) {
-                $lineInfoMacro = 'Error #%s in method "%s", Line ~%s (File: %s)%s';
+                $lineInfoMacro = '%sError #%s in method "%s", Line ~%s';
             }
 
             $lineInfo = sprintf($lineInfoMacro,
+                $this->setIndent($lineIndent),
                 (false === $this->preventAnsiColors)
                     ? Color::tplWhiteColor($coverFishResult->getFailureCount()) // colored version
                     : $coverFishResult->getFailureCount(), // normal (no-ansi) version
@@ -234,13 +246,27 @@ class CoverFishOutput
                 (false === $this->preventAnsiColors)
                     ? Color::tplWhiteColor($unitTest->getLine())
                     : $unitTest->getLine(),
-                $unitTest->getFile(),
                 PHP_EOL
             );
 
+
             // message block, line 02, cover/annotation line
-            $lineCoverMacro = '%s: %s%s';
+            $fileInfoMacro = '%s%s%s: %s';
+            $fileInfo = sprintf($fileInfoMacro,
+                PHP_EOL,
+                $this->setIndent($lineIndent),
+                (false === $this->preventAnsiColors)
+                    ? Color::tplDarkGrayColor('File')
+                    : 'File'
+                ,
+                $unitTest->getFileAndPath()
+            );
+
+            // message block, line 02, cover/annotation line
+            $lineCoverMacro = '%s%s%s: %s%s';
             $lineCover = sprintf($lineCoverMacro,
+                PHP_EOL,
+                $this->setIndent($lineIndent),
                 (false === $this->preventAnsiColors)
                     ? Color::tplDarkGrayColor('Annotation')
                     : 'Annotation'
@@ -250,12 +276,13 @@ class CoverFishOutput
             );
 
             // message block, line 03, error message
-            $lineMessageMacro = '%s %s ';
+            $lineMessageMacro = '%s%s %s ';
             if ($this->outputLevel > 1) {
-                $lineMessageMacro = '%s %s (ErrorCode: %s)';
+                $lineMessageMacro = '%s%s %s (ErrorCode: %s)';
             }
 
             $lineMessage = sprintf($lineMessageMacro,
+                $this->setIndent($lineIndent),
                 (false === $this->preventAnsiColors)
                     ? Color::tplDarkGrayColor('Message')
                     : 'Message',
@@ -265,6 +292,10 @@ class CoverFishOutput
             );
 
             $coverFishResult->addFailureToStream($lineInfo);
+            if ($this->outputLevel > 1) {
+                $coverFishResult->addFailureToStream($fileInfo);
+            }
+
             $coverFishResult->addFailureToStream($lineCover);
             $coverFishResult->addFailureToStream($lineMessage);
             $coverFishResult->addFailureToStream(PHP_EOL);
@@ -278,7 +309,7 @@ class CoverFishOutput
      */
     public function writeLine($content)
     {
-        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
+        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
             return null;
         }
 
@@ -292,7 +323,7 @@ class CoverFishOutput
      */
     public function write($content)
     {
-        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
+        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
             return null;
         }
 
@@ -306,7 +337,9 @@ class CoverFishOutput
      */
     public function writePass()
     {
-        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
+        $this->jsonResult['pass'] = true;
+
+        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
             return null;
         }
 
@@ -329,7 +362,9 @@ class CoverFishOutput
      */
     public function writeFailure()
     {
-        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
+        $this->jsonResult['pass'] = false;
+
+        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
             return null;
         }
 
@@ -352,7 +387,9 @@ class CoverFishOutput
      */
     public function writeError()
     {
-        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
+        $this->jsonResult['pass'] = false;
+
+        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
             return null;
         }
 
@@ -369,12 +406,45 @@ class CoverFishOutput
     }
 
     /**
-     * print out fail testFile EOL message
+     * @param CoverFishPHPUnitFile $coverFishUnitFile
      *
+     * @return null
+     */
+    private function writeFileName(CoverFishPHPUnitFile $coverFishUnitFile)
+    {
+        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
+            return null;
+        }
+
+        $fileNameLine = sprintf('%s%s%s',
+            (false === $this->preventAnsiColors)
+                ? Color::tplNormalColor(($this->outputLevel > 1) ? 'scan file ' : null)
+                : 'scan file'
+            ,
+            (false === $this->preventAnsiColors)
+                ? Color::tplYellowColor($this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile()))
+                : $this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile())
+            ,
+            ($this->outputLevel > 1) ? PHP_EOL : ' '
+        );
+
+
+        $this->write($fileNameLine);
+    }
+
+    /**
      * @param CoverFishResult $coverFishResult
+     *
+     * @return null
      */
     private function writeFileFail(CoverFishResult $coverFishResult)
     {
+        $this->scanFailure = true;
+
+        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
+            return null;
+        }
+
         $output = 'FAIL';
         if ($this->outputLevel > 1) {
             $output = 'file/test failure';
@@ -394,21 +464,24 @@ class CoverFishOutput
             $coverFishResult->getFailureStream()
         );
 
-        $this->scanFailure = true;
         $this->writeLine($fileResult);
     }
 
     /**
-     * print out pass testFile EOL message
+     * @return null
      */
     private function writeFilePass()
     {
+        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
+            return null;
+        }
+
         $output = 'OK';
         if ($this->outputLevel > 1) {
             $output = 'file/test okay';
         }
 
-        $fileResultMacro = '%s %s%s';
+        $fileResultMacro = '%s %s';
         $fileResult = sprintf($fileResultMacro,
             ($this->outputLevel > 1)
                 ? '=>'
@@ -417,39 +490,53 @@ class CoverFishOutput
             (false === $this->preventAnsiColors)
                 ? Color::tplGreenColor($output)
                 : $output
-            ,
-            PHP_EOL
         );
 
         $this->writeLine($fileResult);
     }
 
+    /**
+     * @todo: print out more detailed information about the final scan failure result
+     *
+     * write scan pass results
+     */
     private function writeScanPass()
     {
         $output = 'scan succeeded, no problems found.';
 
-        $scanResultMacro = '%s';
+        $scanResultMacro = '%s%s%s%s';
         $scanResult = sprintf($scanResultMacro,
+            PHP_EOL,
+            PHP_EOL,
             (false === $this->preventAnsiColors)
                 ? Color::tplGreenColor($output)
-                : $output
+                : $output,
+            PHP_EOL
         );
 
-        echo $scanResult.PHP_EOL;
+        echo $scanResult;
     }
 
+    /**
+     * @todo: print out more detailed information about the final scan success result
+     *
+     * write scan fail result
+     */
     private function writeScanFail()
     {
         $output = 'scan failed, coverage problems found!';
 
-        $scanResultMacro = '%s';
+        $scanResultMacro = '%s%s%s%s';
         $scanResult = sprintf($scanResultMacro,
+            PHP_EOL,
+            PHP_EOL,
             (false === $this->preventAnsiColors)
                 ? Color::tplRedColor($output)
-                : $output
+                : $output,
+            PHP_EOL
         );
 
-        echo $scanResult.PHP_EOL;
+        echo $scanResult;
     }
 
     /**

@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/dfphpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.2
  */
 class CoverFishScanCommand extends Command
 {
@@ -33,28 +33,7 @@ class CoverFishScanCommand extends Command
             ->addArgument(
                 'scan-path',
                 InputArgument::REQUIRED,
-                'the source path of your corresponding phpunit test files or a specific testFile (e.g. tests/ or tests/myTestClass.php)'
-            )
-            ->addOption(
-                'stop-on-error',
-                'soe',
-                InputOption::VALUE_OPTIONAL,
-                'stop on first application error (not available in alpha)',
-                false
-            )
-            ->addOption(
-                'stop-on-failure',
-                'sof',
-                InputOption::VALUE_OPTIONAL,
-                'stop on first detected coverFish failure (not available in alpha)',
-                false
-            )
-            ->addOption(
-                'warning-threshold-stop',
-                'wth',
-                InputOption::VALUE_OPTIONAL,
-                'numbers of allowed warnings before scan will be stopped (not available in alpha)',
-                99
+                'the source path of your corresponding phpunit test files or a specific testFile (e.g. tests/ or tests/mySampleClassTest.php)'
             )
             ->addOption(
                 'output-format',
@@ -64,25 +43,46 @@ class CoverFishScanCommand extends Command
                 'text'
             )
             ->addOption(
+                'output-level',
+                'l',
+                InputOption::VALUE_OPTIONAL,
+                'level of output information (0:minimal, 1: normal (default), 2: detailed)',
+                1
+            )
+            ->addOption(
                 'output-prevent-echo',
-                'x',
+                null,
                 InputOption::VALUE_OPTIONAL,
                 'prevent direct echo on output, return json object directly',
                 false
             )
             ->addOption(
-                'output-level',
-                'l',
-                InputOption::VALUE_OPTIONAL,
-                'level of output information (1:normal, ... more types will be coming soon)',
-                1
-            )
-            ->addOption(
                 'debug',
                 'd',
                 InputOption::VALUE_OPTIONAL,
-                'output debug level information',
+                'output debug level information (not available in alpha)',
                 false
+            )
+            ->addOption(
+                'stop-on-error',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'stop on first application error (not available in alpha)',
+                false
+            )
+            ->addOption(
+                'stop-on-failure',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'stop on first detected coverFish failure (not available in alpha)',
+                false
+            )
+            ->addOption(
+                'warning-threshold-stop',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'numbers of allowed warnings before scan will be stopped (not available in alpha)',
+                99
             )
         ;
     }
@@ -128,7 +128,29 @@ class CoverFishScanCommand extends Command
      */
     protected function showExecTitle(OutputInterface $output)
     {
-        $output->writeln(sprintf('<info>%s</info> <comment>%s</comment>%s', CoverFishScanner::APP_RELEASE_NAME, $this->getLongVersion(), PHP_EOL));
+        $output->writeln(sprintf('<info>%s</info> <comment>%s</comment>', CoverFishScanner::APP_RELEASE_NAME, $this->getLongVersion()));
+        $output->writeln(sprintf('%s%s','*** developer preview ***', PHP_EOL));
+    }
+
+    /**
+     * @param $input
+     *
+     * @return bool
+     */
+    protected function getBoolFromInput($input)
+    {
+        // define empty option argument as true flagged option
+        if (true === empty($input)) {
+            return true;
+        }
+
+        $result = array();
+        preg_match_all('/\d+/',$input , $result, PREG_SET_ORDER);
+        if (false === empty($result) ) {
+            return $input === '1' ? true : false;
+        }
+
+        return $input === 'true' ? true : false;
     }
 
     /**
@@ -141,23 +163,26 @@ class CoverFishScanCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // @todo: separate options and arguments in multi-dimensional array instead of prefix your keys - maybe precast keyCheck firstly!!!
-        $options = array(
-            'arg_test_file_src' => $input->getArgument('scan-path'),
-            'opt_mode_debug' => $input->getOption('debug'),
-            'opt_mode_verbose' => $input->getOption('verbose'),
-            'opt_stop_on_error' => $input->getOption('stop-on-error'),
-            'opt_stop_on_failure' => $input->getOption('stop-on-failure'),
-            'opt_warning_threshold' => $input->getOption('warning-threshold-stop'),
-            'opt_output_format' => $input->getOption('output-format'),
-            'opt_output_no_echo' => $input->getOption('output-prevent-echo'),
-            'opt_output_level' => (int)$input->getOption('output-level'),
-            'opt_no_ansi' => $input->getOption('no-ansi')
+        $this->showExecTitle($output);
+
+        $cliOptions = array(
+            'sys_scan_source' => $input->getArgument('scan-path'),
+            'sys_debug' => $input->getOption('debug'),
+            'sys_stop_on_error' => $input->getOption('stop-on-error'),
+            'sys_stop_on_failure' => $input->getOption('stop-on-failure'),
+            'sys_warning_threshold' => (int) $input->getOption('warning-threshold-stop'),
         );
 
-        $this->showExecTitle($output);
+        $outOptions = array(
+            'out_verbose' => $input->getOption('verbose'),
+            'out_format' => $input->getOption('output-format'),
+            'out_level' => (int) $input->getOption('output-level'),
+            'out_no_ansi' => $input->getOption('no-ansi'),
+            'out_no_echo' => $input->getOption('output-prevent-echo'),
+        );
+
         if ($testPathOrFile = $input->getArgument('scan-path')) {
-            $scanner = new CoverFishScanner($options);
+            $scanner = new CoverFishScanner($cliOptions, $outOptions);
             $scanner->analysePHPUnitFiles();
         }
     }

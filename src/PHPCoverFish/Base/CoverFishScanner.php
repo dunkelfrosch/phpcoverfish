@@ -20,7 +20,7 @@ use SebastianBergmann\FinderFacade\FinderFacade;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/dfphpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.2
  */
 class CoverFishScanner
 {
@@ -28,16 +28,6 @@ class CoverFishScanner
      * @var string
      */
     protected $testSourcePath;
-
-    /**
-     * @var bool
-     */
-    protected $verbose = false;
-
-    /**
-     * @var bool
-     */
-    protected $debug = false;
 
     /**
      * @var bool
@@ -53,27 +43,6 @@ class CoverFishScanner
      * @var int
      */
     protected $warningThreshold = 99;
-
-    /**
-     * @var string
-     */
-    protected $outputFormat;
-
-    /**
-     * @var string
-     */
-    protected $outputLevel;
-
-    /**
-     * @var bool
-     */
-    protected $preventAnsiColors = false;
-
-    /**
-     * @var bool
-     */
-    protected $preventEcho = false;
-
 
     /**
      * @var bool
@@ -111,13 +80,45 @@ class CoverFishScanner
     protected $validatorCollection;
 
     /**
-     * our base class constructor
+     * @var bool
      */
-    public function __construct()
+    protected $debug = false;
+
+    /**
+     * @var string
+     */
+    protected $baseFilePattern = '*.php';
+
+    /**
+     * @var array
+     */
+    protected $baseFilePatternExclude = array(
+        '*.log',
+        '*.js',
+        '*.html',
+        '*.twig',
+        '*.css',
+        '*.scss',
+        '*.less',
+        '*.txt',
+        '*.md',
+        '*.yml',
+        '*.xml'
+    );
+
+    /**
+     * @param array $cliOptions
+     */
+    public function __construct(array $cliOptions)
     {
+        $this->testSourcePath = $cliOptions['sys_scan_source'];
+        $this->debug = $cliOptions['sys_debug'];
+        $this->stopOnError = $cliOptions['sys_stop_on_error'];
+        $this->stopOnFailure = $cliOptions['sys_stop_on_failure'];
+        $this->warningThreshold = $cliOptions['sys_warning_threshold'];
+
         $this->coverFishHelper = new CoverFishHelper();
         $this->coverFishResult = new CoverFishResult();
-
         $this->validatorCollection = new ArrayCollection();
     }
 
@@ -205,14 +206,14 @@ class CoverFishScanner
      */
     protected function scanFilesInPath($sourcePath)
     {
-        $filePattern = '*.php';
-        if (strpos($sourcePath, '.php')) {
+        $filePattern = $this->baseFilePattern;
+        if (strpos($sourcePath, str_replace('*', null, $filePattern))) {
             $filePattern = $this->coverFishHelper->getFileNameFromPath($sourcePath);
         }
 
         $facade = new FinderFacade(
             array($sourcePath),
-            array('*.log','*.js','*.html','*.twig','*.css','*.scss','*.less','*.txt','*.md','*.yml','*.xml'),
+            $this->baseFilePatternExclude,
             array($filePattern),
             array()
         );
