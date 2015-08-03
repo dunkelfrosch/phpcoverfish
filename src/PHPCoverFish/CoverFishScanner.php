@@ -43,7 +43,7 @@ class CoverFishScanner extends CoverFishScannerBase
     }
 
     /**
-     * set all used cover validator classes
+     * set all available cover validators
      *
      * @param $coverToken
      */

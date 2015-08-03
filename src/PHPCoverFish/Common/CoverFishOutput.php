@@ -94,7 +94,55 @@ class CoverFishOutput
     }
 
     /**
-     * alpha implementation of minimal reporting output
+     * @param CoverFishPHPUnitFile $coverFishUnitFile
+     * @param CoverFishResult      $coverFishResult
+     */
+    public function writeSingleTestResult(
+        CoverFishPHPUnitFile $coverFishUnitFile,
+        CoverFishResult $coverFishResult
+    ) {
+
+        $this->writeFileName($coverFishUnitFile);
+        $this->writeJsonResult($coverFishUnitFile);
+
+        /** @var CoverFishPHPUnitTest $coverFishTest */
+        foreach ($coverFishUnitFile->getTests() as $coverFishTest) {
+
+            if ($this->outputLevel > 1) {
+                $this->write(sprintf('-> %s %s : ',
+                    (false === $this->preventAnsiColors)
+                        ? Color::tplDarkGrayColor($coverFishTest->getVisibility())
+                        : $coverFishTest->getVisibility()
+                    ,
+                    $coverFishTest->getSignature()));
+            }
+
+            $this->writeSingleMappingResult($coverFishTest, $coverFishResult);
+        }
+    }
+
+    /**
+     * @param CoverFishPHPUnitTest $coverFishTest
+     * @param CoverFishResult      $coverFishResult
+     */
+    public function writeSingleMappingResult(
+        CoverFishPHPUnitTest $coverFishTest,
+        CoverFishResult $coverFishResult
+    ) {
+        /** @var CoverFishMapping $coverMappings */
+        foreach ($coverFishTest->getCoverMappings() as $coverMappings) {
+
+            if (false === $coverMappings->getValidatorResult()->isPass()) {
+                $this->writeFailureStream($coverFishResult, $coverFishTest, $coverMappings);
+                $this->writeFailure();
+            } else {
+                $this->writePass();
+            }
+        }
+    }
+
+    /**
+     * alpha/basic implementation of minimal reporting output
      *
      * @param CoverFishResult $coverFishResult
      *
@@ -104,46 +152,23 @@ class CoverFishOutput
     {
         /** @var CoverFishPHPUnitFile $coverFishUnitFile */
         foreach ($coverFishResult->getUnits() as $coverFishUnitFile) {
-            // reset failureStream and failureCount for current scanned file
-            $coverFishResult->setFailureStream(null);
-            $coverFishResult->setFailureCount(0);
-
-            $this->writeFileName($coverFishUnitFile);
-            $this->writeJsonResult($coverFishUnitFile);
-
-            /** @var CoverFishPHPUnitTest $coverFishTest */
-            foreach ($coverFishUnitFile->getTests() as $coverFishTest) {
-
-                if ($this->outputLevel > 1) {
-                    $this->write(sprintf('-> %s %s : ',
-                        (false === $this->preventAnsiColors)
-                            ? Color::tplDarkGrayColor($coverFishTest->getVisibility())
-                            : $coverFishTest->getVisibility()
-                        ,
-                        $coverFishTest->getSignature()));
-                }
-
-                /** @var CoverFishMapping $coverMappings */
-                foreach ($coverFishTest->getCoverMappings() as $coverMappings) {
-
-                    if (true === $coverMappings->getValidatorResult()->isPass()) {
-                        $this->writePass();
-                    } else {
-                        $this->writeFailureStream($coverFishResult, $coverFishTest, $coverMappings);
-                        $this->writeFailure();
-                    }
-                }
-
-                if ($this->outputLevel > 1) {
-                    $this->write(PHP_EOL);
-                }
-            }
-
+            $this->resetSingleTestResult($coverFishResult);
+            $this->writeSingleTestResult($coverFishUnitFile, $coverFishResult);
             $this->writeFinalCheckResults($coverFishResult);
-
         }
 
         return $this->outputResult();
+    }
+
+    /**
+     * reset failureStream and failureCount for current scanned file
+     *
+     * @param CoverFishResult $coverFishResult
+     */
+    private function resetSingleTestResult(CoverFishResult $coverFishResult)
+    {
+        $coverFishResult->setFailureStream(null);
+        $coverFishResult->setFailureCount(0);
     }
 
     /**
@@ -151,10 +176,10 @@ class CoverFishOutput
      */
     private function writeFinalCheckResults(CoverFishResult $coverFishResult)
     {
-        if ($coverFishResult->getFailureCount() > 0) {
-            $this->writeFileFail($coverFishResult);
-        } else {
+        if (0 === $coverFishResult->getFailureCount()) {
             $this->writeFilePass();
+        } else {
+            $this->writeFileFail($coverFishResult);
         }
 
         $this->jsonResults[] = $this->jsonResult;
@@ -238,7 +263,7 @@ class CoverFishOutput
 
             $coverFishResult->addFailureToStream(PHP_EOL);
 
-            // message block, line 01, message title
+            // *** message block, line 01, message title
             $lineInfoMacro = '%sError #%s in method "%s" (L:~%s)';
             if ($this->outputLevel > 1) {
                 $lineInfoMacro = '%sError #%s in method "%s", Line ~%s';
@@ -258,8 +283,7 @@ class CoverFishOutput
                 PHP_EOL
             );
 
-
-            // message block, line 02, cover/annotation line
+            // *** message block, line 02, cover/annotation line
             $fileInfoMacro = '%s%s%s: %s';
             $fileInfo = sprintf($fileInfoMacro,
                 PHP_EOL,
@@ -271,7 +295,7 @@ class CoverFishOutput
                 $unitTest->getFileAndPath()
             );
 
-            // message block, line 02, cover/annotation line
+            // *** message block, line 02, cover/annotation line
             $lineCoverMacro = '%s%s%s: %s%s';
             $lineCover = sprintf($lineCoverMacro,
                 PHP_EOL,
@@ -284,7 +308,7 @@ class CoverFishOutput
                 PHP_EOL
             );
 
-            // message block, line 03, error message
+            // *** message block, line 03, error message
             $lineMessageMacro = '%s%s %s ';
             if ($this->outputLevel > 1) {
                 $lineMessageMacro = '%s%s %s (ErrorCode: %s)';
