@@ -125,12 +125,12 @@ class CoverFishOutput
 
                 /** @var CoverFishMapping $coverMappings */
                 foreach ($coverFishTest->getCoverMappings() as $coverMappings) {
-                    if (false === $coverMappings->getValidatorResult()->isPass()) {
-                        // collection detailed error messages
+
+                    if (true === $coverMappings->getValidatorResult()->isPass()) {
+                        $this->writePass();
+                    } else {
                         $this->writeFailureStream($coverFishResult, $coverFishTest, $coverMappings);
                         $this->writeFailure();
-                    } else {
-                        $this->writePass();
                     }
                 }
 
@@ -139,18 +139,27 @@ class CoverFishOutput
                 }
             }
 
-            if ($coverFishResult->getFailureCount() > 0) {
-                $this->writeFileFail($coverFishResult);
-            } else {
-                $this->writeFilePass();
-            }
+            $this->writeFinalCheckResults($coverFishResult);
 
-            // summarize json results
-            $this->jsonResults[] = $this->jsonResult;
         }
 
         return $this->outputResult();
     }
+
+    /**
+     * @param CoverFishResult $coverFishResult
+     */
+    private function writeFinalCheckResults(CoverFishResult $coverFishResult)
+    {
+        if ($coverFishResult->getFailureCount() > 0) {
+            $this->writeFileFail($coverFishResult);
+        } else {
+            $this->writeFilePass();
+        }
+
+        $this->jsonResults[] = $this->jsonResult;
+    }
+
 
     /**
      * @param CoverFishResult      $coverFishResult
@@ -481,7 +490,7 @@ class CoverFishOutput
             $output = 'file/test okay';
         }
 
-        $fileResultMacro = '%s %s';
+        $fileResultMacro = '%s %s%s';
         $fileResult = sprintf($fileResultMacro,
             ($this->outputLevel > 1)
                 ? '=>'
@@ -490,6 +499,10 @@ class CoverFishOutput
             (false === $this->preventAnsiColors)
                 ? Color::tplGreenColor($output)
                 : $output
+            ,
+            ($this->outputLevel > 1)
+                ? PHP_EOL
+                : null
         );
 
         $this->writeLine($fileResult);
