@@ -18,6 +18,11 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
 class CoverFishOutput
 {
     /**
+     * @const MACRO_DETAIL_LINE_INDENT set line indent for detailed error message block
+     */
+    const MACRO_DETAIL_LINE_INDENT = 3;
+
+    /**
      * @var CoverFishHelper
      */
     protected $coverFishHelper;
@@ -185,7 +190,6 @@ class CoverFishOutput
         $this->jsonResults[] = $this->jsonResult;
     }
 
-
     /**
      * @param CoverFishResult      $coverFishResult
      * @param CoverFishPHPUnitTest $unitTest
@@ -234,6 +238,104 @@ class CoverFishOutput
     }
 
     /**
+     * message block macro, line 01, message title
+     *
+     * @param int                  $failureCount
+     * @param CoverFishPHPUnitTest $unitTest
+     *
+     * @return string
+     */
+    private function getMacroLineInfo($failureCount, CoverFishPHPUnitTest $unitTest)
+    {
+        $lineInfoMacro = '%sError #%s in method "%s" (L:~%s)';
+        if ($this->outputLevel > 1) {
+            $lineInfoMacro = '%sError #%s in method "%s", Line ~%s';
+        }
+
+        return sprintf($lineInfoMacro,
+            $this->setIndent(self::MACRO_DETAIL_LINE_INDENT),
+            (false === $this->preventAnsiColors)
+                ? Color::tplWhiteColor($failureCount) // colored version
+                : $failureCount,                      // normal version (--no-ansi)
+            (false === $this->preventAnsiColors)
+                ? Color::tplWhiteColor($unitTest->getName())
+                : $unitTest->getName(),
+            (false === $this->preventAnsiColors)
+                ? Color::tplWhiteColor($unitTest->getLine())
+                : $unitTest->getLine(),
+            PHP_EOL
+        );
+    }
+
+    /**
+     * message block macro, line 02, cover/annotation line
+     *
+     * @param CoverFishPHPUnitTest $unitTest
+     *
+     * @return string
+     */
+    private function getMacroFileInfo(CoverFishPHPUnitTest $unitTest)
+    {
+        $fileInfo = null;
+        $fileInfoMacro = '%s%s%s: %s';
+        return sprintf($fileInfoMacro,
+            PHP_EOL,
+            $this->setIndent(self::MACRO_DETAIL_LINE_INDENT),
+            (false === $this->preventAnsiColors)
+                ? Color::tplDarkGrayColor('File')
+                : 'File'
+            ,
+            $unitTest->getFileAndPath()
+        );
+    }
+
+    /**
+     * message block macro, line 03, cover/annotation line
+     *
+     * @param string $coverLine
+     * @return string
+     */
+    private function getMacroCoverInfo($coverLine)
+    {
+        $lineCoverMacro = '%s%s%s: %s%s';
+        return sprintf($lineCoverMacro,
+            PHP_EOL,
+            $this->setIndent(self::MACRO_DETAIL_LINE_INDENT),
+            (false === $this->preventAnsiColors)
+                ? Color::tplDarkGrayColor('Annotation')
+                : 'Annotation'
+            ,
+            $coverLine,
+            PHP_EOL
+        );
+    }
+
+    /**
+     * message block macro, line 04, error message
+     *
+     * @param CoverFishError $mappingError
+     *
+     * @return string
+     */
+    private function getMacroCoverErrorMessage(CoverFishError $mappingError)
+    {
+        $lineMessageMacro = '%s%s %s ';
+        if ($this->outputLevel > 1) {
+            $lineMessageMacro = '%s%s %s (ErrorCode: %s)';
+        }
+
+        return sprintf($lineMessageMacro,
+            $this->setIndent(self::MACRO_DETAIL_LINE_INDENT),
+            (false === $this->preventAnsiColors)
+                ? Color::tplDarkGrayColor('Message')
+                : 'Message',
+
+            $mappingError->getTitle(),
+            $mappingError->getErrorCode()
+        );
+    }
+
+    /**
      * @param CoverFishResult      $coverFishResult
      * @param CoverFishPHPUnitTest $unitTest
      * @param CoverFishMapping     $coverMapping
@@ -247,12 +349,11 @@ class CoverFishOutput
         CoverFishMapping $coverMapping
     )
     {
-        /** @var int $lineIndent */
-        $lineIndent = 3;
         /** @var CoverFishError $mappingError */
         foreach ($coverMapping->getValidatorResult()->getErrors() as $mappingError) {
 
             $coverFishResult->addFailureCount();
+
             $coverLine = $mappingError->getErrorStreamTemplate($coverMapping, $this->preventAnsiColors);
             $this->writeJsonFailureStream($coverFishResult, $unitTest, $mappingError, $coverLine);
 
@@ -263,68 +364,13 @@ class CoverFishOutput
 
             $coverFishResult->addFailureToStream(PHP_EOL);
 
-            // *** message block, line 01, message title
-            $lineInfoMacro = '%sError #%s in method "%s" (L:~%s)';
-            if ($this->outputLevel > 1) {
-                $lineInfoMacro = '%sError #%s in method "%s", Line ~%s';
-            }
-
-            $lineInfo = sprintf($lineInfoMacro,
-                $this->setIndent($lineIndent),
-                (false === $this->preventAnsiColors)
-                    ? Color::tplWhiteColor($coverFishResult->getFailureCount()) // colored version
-                    : $coverFishResult->getFailureCount(), // normal (no-ansi) version
-                (false === $this->preventAnsiColors)
-                    ? Color::tplWhiteColor($unitTest->getName())
-                    : $unitTest->getName(),
-                (false === $this->preventAnsiColors)
-                    ? Color::tplWhiteColor($unitTest->getLine())
-                    : $unitTest->getLine(),
-                PHP_EOL
-            );
-
-            // *** message block, line 02, cover/annotation line
-            $fileInfoMacro = '%s%s%s: %s';
-            $fileInfo = sprintf($fileInfoMacro,
-                PHP_EOL,
-                $this->setIndent($lineIndent),
-                (false === $this->preventAnsiColors)
-                    ? Color::tplDarkGrayColor('File')
-                    : 'File'
-                ,
-                $unitTest->getFileAndPath()
-            );
-
-            // *** message block, line 02, cover/annotation line
-            $lineCoverMacro = '%s%s%s: %s%s';
-            $lineCover = sprintf($lineCoverMacro,
-                PHP_EOL,
-                $this->setIndent($lineIndent),
-                (false === $this->preventAnsiColors)
-                    ? Color::tplDarkGrayColor('Annotation')
-                    : 'Annotation'
-                ,
-                $coverLine,
-                PHP_EOL
-            );
-
-            // *** message block, line 03, error message
-            $lineMessageMacro = '%s%s %s ';
-            if ($this->outputLevel > 1) {
-                $lineMessageMacro = '%s%s %s (ErrorCode: %s)';
-            }
-
-            $lineMessage = sprintf($lineMessageMacro,
-                $this->setIndent($lineIndent),
-                (false === $this->preventAnsiColors)
-                    ? Color::tplDarkGrayColor('Message')
-                    : 'Message',
-
-                $mappingError->getTitle(),
-                $mappingError->getErrorCode()
-            );
+            $lineInfo = $this->getMacroLineInfo($coverFishResult->getFailureCount(), $unitTest);
+            $fileInfo = $this->getMacroFileInfo($unitTest);
+            $lineCover = $this->getMacroCoverInfo($coverLine);
+            $lineMessage = $this->getMacroCoverErrorMessage($mappingError);
 
             $coverFishResult->addFailureToStream($lineInfo);
+
             if ($this->outputLevel > 1) {
                 $coverFishResult->addFailureToStream($fileInfo);
             }
