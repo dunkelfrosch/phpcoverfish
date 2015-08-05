@@ -110,6 +110,8 @@ class CoverFishOutput
         $this->writeFileName($coverFishUnitFile);
         $this->writeJsonResult($coverFishUnitFile);
 
+        $coverFishResult->addFileCount();
+
         /** @var CoverFishPHPUnitTest $coverFishTest */
         foreach ($coverFishUnitFile->getTests() as $coverFishTest) {
 
@@ -137,11 +139,13 @@ class CoverFishOutput
     ) {
         /** @var CoverFishMapping $coverMappings */
         foreach ($coverFishTest->getCoverMappings() as $coverMappings) {
-
+            $coverFishResult->addTestCount();
             if (false === $coverMappings->getValidatorResult()->isPass()) {
+                $this->scanFailure = true;
                 $this->writeFailureStream($coverFishResult, $coverFishTest, $coverMappings);
                 $this->writeFailure();
             } else {
+                $coverFishResult->addPassCount();
                 $this->writePass();
             }
         }
@@ -158,31 +162,25 @@ class CoverFishOutput
     {
         /** @var CoverFishPHPUnitFile $coverFishUnitFile */
         foreach ($coverFishResult->getUnits() as $coverFishUnitFile) {
-            $this->resetSingleTestResult($coverFishResult);
+            $this->scanFailure = false;
+            $coverFishResult->setFailureStream(null);
+
             $this->writeSingleTestResult($coverFishUnitFile, $coverFishResult);
             $this->writeFinalCheckResults($coverFishResult);
         }
 
-        return $this->outputResult();
+        return $this->outputResult($coverFishResult);
     }
 
-    /**
-     * reset failureStream and failureCount for current scanned file
-     *
-     * @param CoverFishResult $coverFishResult
-     */
-    private function resetSingleTestResult(CoverFishResult $coverFishResult)
-    {
-        $coverFishResult->setFailureStream(null);
-        $coverFishResult->setFailureCount(0);
-    }
+
 
     /**
      * @param CoverFishResult $coverFishResult
      */
     private function writeFinalCheckResults(CoverFishResult $coverFishResult)
     {
-        if (0 === $coverFishResult->getFailureCount()) {
+        // weazL
+        if (false === $this->scanFailure) {
             $this->writeFilePass();
         } else {
             $this->writeFileFail($coverFishResult);
@@ -519,8 +517,6 @@ class CoverFishOutput
      */
     private function writeFileFail(CoverFishResult $coverFishResult)
     {
-        $this->scanFailure = true;
-
         if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
             return null;
         }
@@ -592,18 +588,24 @@ class CoverFishOutput
      *
      * write scan pass results
      */
-    private function writeScanPass()
+    private function writeScanPassStatistic(CoverFishResult $coverFishResult)
     {
-        $output = 'scan succeeded, no problems found.';
+        $passStatistic = '%s files and %s methods scanned, scan succeeded, no problems found.%s';
+        $passStatistic = sprintf($passStatistic,
+            $coverFishResult->getFileCount(),
+            $coverFishResult->getTestCount(),
+            PHP_EOL
+        );
 
-        $scanResultMacro = '%s%s%s%s';
+        $scanResultMacro = '%s%s%s';
         $scanResult = sprintf($scanResultMacro,
-            PHP_EOL,
+            ($this->outputLevel === 0)
+                ? PHP_EOL
+                : null,
             PHP_EOL,
             (false === $this->preventAnsiColors)
-                ? Color::tplGreenColor($output)
-                : $output,
-            PHP_EOL
+                ? Color::tplGreenColor($passStatistic)
+                : $passStatistic
         );
 
         echo $scanResult;
@@ -614,21 +616,57 @@ class CoverFishOutput
      *
      * write scan fail result
      */
-    private function writeScanFail()
+    private function writeScanFailStatistic(CoverFishResult $coverFishResult)
     {
-        $output = 'scan failed, coverage problems found!';
-
-        $scanResultMacro = '%s%s%s%s';
-        $scanResult = sprintf($scanResultMacro,
-            PHP_EOL,
-            PHP_EOL,
-            (false === $this->preventAnsiColors)
-                ? Color::tplRedColor($output)
-                : $output,
+        $errorStatistic = '%s files and %s methods scanned, coverage failed: %s cover annotation problems found!%s';
+        $errorStatistic = sprintf($errorStatistic,
+            $coverFishResult->getFileCount(),
+            $coverFishResult->getTestCount(),
+            $coverFishResult->getFailureCount(),
             PHP_EOL
         );
 
+        $scanResultMacro = '%s%s%s%s';
+        $scanResult = sprintf($scanResultMacro,
+            ($this->outputLevel === 0)
+                ? PHP_EOL
+                : null,
+            PHP_EOL,
+            (false === $this->preventAnsiColors)
+                ? Color::tplRedColor($errorStatistic)
+                : $errorStatistic,
+            $this->getScanFailPassStatistic($coverFishResult)
+        );
+
+
         echo $scanResult;
+    }
+
+    /**
+     * @todo: print out more detailed information about the final scan success result
+     *
+     * write scan fail result
+     */
+    private function getScanFailPassStatistic(CoverFishResult $coverFishResult)
+    {
+        $errorPercent = round($coverFishResult->getTestCount() / 100 * $coverFishResult->getFailureCount(),2);
+        $passPercent = 100 - $errorPercent;
+        $errorStatistic = '%s %% failure rate%s%s %% pass rate%s';
+        $errorStatistic = sprintf($errorStatistic,
+            $errorPercent,
+            PHP_EOL,
+            $passPercent,
+            PHP_EOL
+        );
+
+        $scanResultMacro = '%s';
+        $scanResult = sprintf($scanResultMacro,
+            (false === $this->preventAnsiColors)
+                ? Color::tplRedColor($errorStatistic)
+                : $errorStatistic
+        );
+
+        return $scanResult;
     }
 
     /**
@@ -636,16 +674,14 @@ class CoverFishOutput
      *
      * @return null|string
      */
-    public function outputResult()
+    public function outputResult(CoverFishResult $coverFishResult)
     {
         if (false === $this->outputFormatJson) {
 
-            if ($this->outputLevel === 0 && (bool)$this->scanFailure === true) {
-                $this->writeScanFail();
-            }
-
-            if ($this->outputLevel === 0 && (bool)$this->scanFailure === false) {
-                $this->writeScanPass();
+            if ($coverFishResult->getFailureCount() > 0) {
+                $this->writeScanFailStatistic($coverFishResult);
+            } else {
+                $this->writeScanPassStatistic($coverFishResult);
             }
 
             return null;
