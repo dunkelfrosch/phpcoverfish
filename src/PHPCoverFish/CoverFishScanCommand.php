@@ -35,6 +35,11 @@ class CoverFishScanCommand extends Command
                 InputArgument::REQUIRED,
                 'the source path of your corresponding phpunit test files or a specific testFile (e.g. tests/ or tests/mySampleClassTest.php)'
             )
+            ->addArgument(
+                'autoload-file',
+                InputArgument::REQUIRED,
+                'your application autoload file and path (e.g. ../app/autoload.php for running in symfony context)'
+            )
             ->addOption(
                 'output-format',
                 'f',
@@ -180,6 +185,17 @@ class CoverFishScanCommand extends Command
             'out_no_ansi' => $input->getOption('no-ansi'),
             'out_no_echo' => $input->getOption('output-prevent-echo'),
         );
+
+        if ($autoloadFile = $input->getArgument('autoload-file')) {
+
+            if (false === file_exists($autoloadFile)) {
+                $output->writeln(sprintf('<error> autoload file "%s" not found! </error> <comment>please define your autoload.php file to use (e.g. ../app/autoload.php in symfony2)</comment>', $autoloadFile));
+                exit(1);
+            }
+
+            include_once($autoloadFile);
+
+        }
 
         if ($testPathOrFile = $input->getArgument('scan-path')) {
             $scanner = new CoverFishScanner($cliOptions, $outOptions);
