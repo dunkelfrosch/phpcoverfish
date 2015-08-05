@@ -18,6 +18,11 @@ class CoverFishResult
     /**
      * @var int
      */
+    private $passCount = 0;
+
+    /**
+     * @var int
+     */
     private $failureCount = 0;
 
     /**
@@ -69,6 +74,30 @@ class CoverFishResult
      * @var string
      */
     private $warningStream = null;
+
+    /**
+     * @return int
+     */
+    public function getPassCount()
+    {
+        return $this->passCount;
+    }
+
+    /**
+     * @param int $passCount
+     */
+    public function setPassCount($passCount)
+    {
+        $this->passCount = $passCount;
+    }
+
+    /**
+     * @return int
+     */
+    public function addPassCount()
+    {
+        return $this->passCount++;
+    }
 
     /**
      * @return int
@@ -139,7 +168,7 @@ class CoverFishResult
      */
     public function addTestCount()
     {
-        return $this->fileCount++;
+        return $this->testCount++;
     }
 
     /**
