@@ -114,7 +114,8 @@ class CoverFishOutput
         foreach ($coverFishUnitFile->getTests() as $coverFishTest) {
 
             if ($this->outputLevel > 1) {
-                $this->write(sprintf('-> %s %s : ',
+                $this->write(sprintf('%s-> %s %s : ',
+                    PHP_EOL,
                     (false === $this->preventAnsiColors)
                         ? Color::tplDarkGrayColor($coverFishTest->getVisibility())
                         : $coverFishTest->getVisibility()
@@ -424,7 +425,7 @@ class CoverFishOutput
 
         $output = '.';
         if ($this->outputLevel > 1) {
-            $output = 'pass';
+            $output = '+';
         }
 
         if (false === $this->preventAnsiColors) {
@@ -529,8 +530,12 @@ class CoverFishOutput
             $output = 'file/test failure';
         }
 
-        $fileResultMacro = '%s %s%s%s';
+        $fileResultMacro = '%s%s %s%s%s';
         $fileResult = sprintf($fileResultMacro,
+            ($this->outputLevel > 1)
+                ? PHP_EOL
+                : null
+            ,
             ($this->outputLevel > 1)
                 ? '=>'
                 : null
@@ -560,8 +565,12 @@ class CoverFishOutput
             $output = 'file/test okay';
         }
 
-        $fileResultMacro = '%s %s%s';
+        $fileResultMacro = '%s%s %s%s';
         $fileResult = sprintf($fileResultMacro,
+            ($this->outputLevel > 1)
+                ? PHP_EOL
+                : null
+            ,
             ($this->outputLevel > 1)
                 ? '=>'
                 : null
