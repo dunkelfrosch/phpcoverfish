@@ -3,7 +3,7 @@
 namespace DF\PHPCoverFish\Common;
 
 /**
- * Class CoverFishColor, color definition for cli output, based on the work on of \Bart\EscapeColors Benjamin VanEvery
+ * Class CoverFishColor, color definition for cli output, based on the work on of "\Bart\EscapeColors Benjamin VanEvery"
  *
  * @package   DF\PHP\CoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>

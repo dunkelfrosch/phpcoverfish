@@ -2,7 +2,7 @@
 
 namespace DF\PHPCoverFish\Common;
 
-use DF\PHPCoverFish\Common\Base\CoverFishOutPut as BaseCoverFishOutPut;
+use DF\PHPCoverFish\Common\Base\CoverFishOutPut as BaseCoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
 
 /**
@@ -15,8 +15,9 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
  * @version    0.9.2
+ * @todo       refactoring!
  */
-class CoverFishOutput extends BaseCoverFishOutPut
+class CoverFishOutput extends BaseCoverFishOutput
 {
     /**
      * @const MACRO_DETAIL_LINE_INDENT set line indent for detailed error message block
@@ -123,7 +124,6 @@ class CoverFishOutput extends BaseCoverFishOutPut
      */
     private function writeFinalCheckResults(CoverFishResult $coverFishResult)
     {
-        // weazL
         if (false === $this->scanFailure) {
             $this->writeFilePass();
         } else {
@@ -492,7 +492,7 @@ class CoverFishOutput extends BaseCoverFishOutPut
      */
     private function writeScanPassStatistic(CoverFishResult $coverFishResult)
     {
-        $passStatistic = '%s files and %s methods scanned, scan succeeded, no problems found.%s';
+        $passStatistic = '%s file(s) and %s method(s) scanned, scan succeeded, no problems found.%s';
         $passStatistic = sprintf($passStatistic,
             $coverFishResult->getFileCount(),
             $coverFishResult->getTestCount(),
@@ -520,7 +520,7 @@ class CoverFishOutput extends BaseCoverFishOutPut
      */
     private function writeScanFailStatistic(CoverFishResult $coverFishResult)
     {
-        $errorStatistic = '%s files and %s methods scanned, coverage failed: %s cover annotation problems found!%s';
+        $errorStatistic = '%s file(s) and %s method(s) scanned, coverage failed: %s cover annotation problem(s) found!%s';
         $errorStatistic = sprintf($errorStatistic,
             $coverFishResult->getFileCount(),
             $coverFishResult->getTestCount(),
