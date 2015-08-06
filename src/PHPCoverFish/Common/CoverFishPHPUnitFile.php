@@ -9,7 +9,7 @@ namespace DF\PHPCoverFish\Common;
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @copyright 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @license   http://www.opensource.org/licenses/MIT
- * @link      http://github.com/dunkelfrosch/dfphpcoverfish/tree
+ * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
  * @version   0.9.0
  */
@@ -50,11 +50,12 @@ final class CoverFishPHPUnitFile
      */
     private $tests;
 
-
     /**
+     * collector for cover annotation used in unit test class file class phpdoc
+     *
      * @var ArrayCollection
      */
-    private $covers;
+    private $classCovers;
 
     /**
      * @var \DateTime
@@ -69,25 +70,25 @@ final class CoverFishPHPUnitFile
     /**
      * @return ArrayCollection
      */
-    public function getCovers()
+    public function getClassCovers()
     {
-        return $this->covers;
+        return $this->classCovers;
     }
 
     /**
      * @param string $cover
      */
-    public function addCover($cover)
+    public function addClassCover($cover)
     {
-        $this->covers->add($cover);
+        $this->classCovers->add($cover);
     }
 
     /**
      * @param string $cover
      */
-    public function removeCover($cover)
+    public function removeClassCover($cover)
     {
-        $this->covers->remove($cover);
+        $this->classCovers->remove($cover);
     }
 
     /**

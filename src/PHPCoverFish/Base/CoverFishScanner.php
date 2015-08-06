@@ -18,7 +18,7 @@ use SebastianBergmann\FinderFacade\FinderFacade;
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @copyright 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @license   http://www.opensource.org/licenses/MIT
- * @link      http://github.com/dunkelfrosch/dfphpcoverfish/tree
+ * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
  * @version   0.9.2
  */
@@ -58,6 +58,11 @@ class CoverFishScanner
      * @var CoverFishPHPUnitFile
      */
     protected $phpUnitFile;
+
+    /**
+     * @var CoverFishPHPUnitTest
+     */
+    protected $phpUnitTest;
 
     /**
      * @var CoverFishHelper
@@ -161,10 +166,9 @@ class CoverFishScanner
      *
      * @return CoverFishPHPUnitFile
      */
-    protected function setPHPUnitTestMetaDetails($className, $classData)
+    protected function setPHPUnitTestMetaData($className, $classData)
     {
-        $this->phpUnitFile
-            ->setClassName($className);
+        $this->phpUnitFile->setClassName($className);
 
         $this->phpUnitFile
             ->setFile($this->coverFishHelper
@@ -190,10 +194,28 @@ class CoverFishScanner
             ->setCoversDefaultClass($this->coverFishHelper->getCoversDefaultClassUsable(
                 $this->coverFishHelper
                     ->getAnnotationByKey($classData['docblock'], 'coversDefaultClass')
-            )
-            );
+            ));
 
         return $this->phpUnitFile;
+    }
+
+    /**
+     * @param array $methodData
+     *
+     * @return CoverFishPHPUnitTest
+     */
+    protected function setPHPUnitTestData(array $methodData)
+    {
+        $this->phpUnitTest = new CoverFishPHPUnitTest();
+        $this->phpUnitTest->setSignature($methodData['signature']);
+        $this->phpUnitTest->setName(str_replace('()', null, $this->phpUnitTest->getSignature()));
+        $this->phpUnitTest->setVisibility($methodData['visibility']);
+        $this->phpUnitTest->setLine($methodData['startLine']);
+        $this->phpUnitTest->setFileAndPath($methodData['classFile']);
+        $this->phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($methodData['classFile']));
+        $this->phpUnitTest->setLoc($this->coverFishHelper->getLocOfTestMethod($methodData));
+
+        return $this->phpUnitTest;
     }
 
     /**

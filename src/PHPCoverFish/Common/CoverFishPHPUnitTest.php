@@ -9,7 +9,7 @@ namespace DF\PHPCoverFish\Common;
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @copyright 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @license   http://www.opensource.org/licenses/MIT
- * @link      http://github.com/dunkelfrosch/dfphpcoverfish/tree
+ * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
  * @version   0.9.2
  */
@@ -82,6 +82,7 @@ class CoverFishPHPUnitTest
     }
 
     /**
+     * @deprecated in version 0.9.3, signature will be used instead
      * @return string
      */
     public function getName()
@@ -90,6 +91,7 @@ class CoverFishPHPUnitTest
     }
 
     /**
+     * @deprecated in version 0.9.3, signature will be used instead
      * @param string $name
      */
     public function setName($name)
@@ -263,5 +265,6 @@ class CoverFishPHPUnitTest
     public function __construct()
     {
         $this->coverMappings = new ArrayCollection();
+        $this->coverAnnotations = new ArrayCollection();
     }
 }
