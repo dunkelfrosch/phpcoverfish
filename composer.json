@@ -5,7 +5,7 @@
     "time": "2015-08-08",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/dunkelfrosch/dfphpcoverfish/issues",
+        "issues": "https://github.com/dunkelfrosch/phpcoverfish/issues",
         "email": "coverfish.support@gmail.com"
     },
     "authors": [
@@ -25,14 +25,14 @@
         "phpunit/phpunit": "~4.7"
     },    
     "autoload": {
-       "psr-4": {
+        "psr-4": {
             "DF\\PHPCoverFish\\": "src/PHPCoverFish/",
             "DF\\PHPCoverFish\\Tests\\Data\\Src\\": "tests/data/src/",
             "DF\\PHPCoverFish\\Tests\\Data\\Tests\\": "tests/data/tests/"
         }
     },
     "bin": [
-      "coverfish"
+       "coverfish"
     ],
     "extra": {
         "branch-alias": {
