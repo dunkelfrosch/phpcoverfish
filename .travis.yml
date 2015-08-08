@@ -14,7 +14,7 @@ before_install:
 
 install: composer update --prefer-dist --no-interaction
 
-script: phpunit --debug --configuration ./phpunit.xml
+script: phpunit --debug --configuration ./tests/phpunit.xml
 
 notifications:
   email:
