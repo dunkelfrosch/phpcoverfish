@@ -106,7 +106,7 @@ around this project :)
 - mastering coverfish documentation
 
 
-## Screenshots, phpCoveFish in use
+## Screenshots, phpCoveFish at work
 
 depends on choosen --output-level option coverfish will provide different output of test results
 
