@@ -97,13 +97,13 @@ around this project :)
 depends on choosen --output-level option coverfish will provide different output of test results
 
 ### Level 0 (—ouput-level **0**)
-![https://dl.dropbox.com/s/7b6nptkbyiowrx4/ss-output-level-0.png?raw=1]()
+![https://dl.dropbox.com/s/7b6nptkbyiowrx4/ss-output-level-0.png]
 
 ### Level 1 (—ouput-level **1**)
-![https://dl.dropbox.com/s/xk43g0gu1ccqtlw/ss-output-level-1.png?raw=1]()
+![https://dl.dropbox.com/s/xk43g0gu1ccqtlw/ss-output-level-1.png]
 
 ### Level 2 (—ouput-level **2**)
-![https://dl.dropbox.com/s/voyqmf5g9q42ana/ss-output-level-2.png?raw=1]()
+![https://dl.dropbox.com/s/voyqmf5g9q42ana/ss-output-level-2.png]
 
 
 
