@@ -7,7 +7,7 @@ use DF\PHPCoverFish\Common\CoverFishResult;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
 
 /**
- * Class CoverFishOutput
+ * Class BaseCoverFishOutput
  *
  * @package    DF\PHPCoverFish
  * @author     Patrick Paechnatz <patrick.paechnatz@gmail.com>
