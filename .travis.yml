@@ -1,7 +1,12 @@
 language: php
 
 php:
+  - 5.4
   - 5.5
+
+install:
+   - composer selfupdate
+   - composer install
 
 script: phpunit --testdox --configuration phpunit.xml
 
