@@ -9,10 +9,24 @@ phpCoverFish is an open source php cli code coverage preprocessor, used to valid
 
 if you use Composer to manage the dependencies of your project, edit your projects composer.json file and add a dependency on df/phpcoverfisch. lines down below you can find find a minimal example of a composer.json file that just defines a *dev-time* dependency on PHPCoverFish:
 
+    ...
     {
         "require-dev": {
             "df/phpcoverfish": "0.9.*"
     }
+    ...
+    
+or just execute this composer command into your console
+
+    composer require df/php-coverfish
+
+you've take down minimum-stability key in your composer.json file (set "alpha"), to use the alpha version of current coverfish release
+place this line above your "extra" property key:
+
+    ...
+    "minimum-stability": "alpha",
+    "extra": {
+    ...
 
 after that, just call composer install "df/phpcoverfish=0.9.*" or simply composer update and create (optional) a symbolic link from *vendor/df/coverfish/bin/coverfish.php* to your web application tool directory.
 
