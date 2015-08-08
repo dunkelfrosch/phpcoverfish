@@ -6,7 +6,7 @@ php:
 install:
    - composer install
 
-script: phpunit --testdox --configuration phpunit.xml
+script: phpunit --debug
 
 notifications:
   email:
