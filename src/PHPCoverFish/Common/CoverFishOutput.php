@@ -2,7 +2,6 @@
 
 namespace DF\PHPCoverFish\Common;
 
-use DF\PHPCoverFish\Common\Base\CoverFishOutPut as BaseCoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
 
 /**
@@ -16,12 +15,77 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @since      class available since Release 0.9.0
  * @version    0.9.3
  */
-class CoverFishOutput extends BaseCoverFishOutput
+class CoverFishOutputs
 {
     /**
      * @const MACRO_DETAIL_LINE_INDENT set line indent for detailed error message block
      */
     const MACRO_DETAIL_LINE_INDENT = 3;
+
+    /**
+     * @var CoverFishHelper
+     */
+    protected $coverFishHelper;
+
+    /**
+     * @var CoverFishResult
+     */
+    protected $coverFishResult;
+
+    /**
+     * @var CoverFishPHPUnitFile
+     */
+    protected $coverFishUnitFile;
+
+    /**
+     * @var bool
+     */
+    protected $verbose = false;
+
+    /**
+     * @var string
+     */
+    protected $outputFormat;
+
+    /**
+     * @var string
+     */
+    protected $outputLevel;
+
+    /**
+     * @var bool
+     */
+    protected $preventAnsiColors = false;
+
+    /**
+     * @var bool
+     */
+    protected $preventEcho = false;
+
+    /**
+     * @var bool
+     */
+    protected $outputFormatJson = false;
+
+    /**
+     * @var bool
+     */
+    protected $outputFormatText = true;
+
+    /**
+     * @var array
+     */
+    protected $jsonResult = array();
+
+    /**
+     * @var array
+     */
+    protected $jsonResults = array();
+
+    /**
+     * @var bool
+     */
+    protected $scanFailure;
 
     /**
      * @param array $outputOptions
@@ -596,4 +660,49 @@ class CoverFishOutput extends BaseCoverFishOutput
 
         return null;
     }
+
+    /**
+     * @param $content
+     *
+     * @return null on json
+     */
+    protected function writeLine($content)
+    {
+        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
+            return null;
+        }
+
+        echo sprintf('%s%s', $content, PHP_EOL);
+    }
+
+    /**
+     * @param $content
+     *
+     * @return null on json
+     */
+    protected function write($content)
+    {
+        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
+            return null;
+        }
+
+        echo sprintf('%s', $content);
+    }
+
+    /**
+     * @param int    $count
+     * @param string $char
+     *
+     * @return null|string
+     */
+    protected function setIndent($count, $char = ' ')
+    {
+        $outChar = null;
+        for ($i = 1; $i <= $count; $i++) {
+            $outChar .= $char;
+        }
+
+        return $outChar;
+    }
+
 }
