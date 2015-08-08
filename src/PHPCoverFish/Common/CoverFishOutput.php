@@ -2,7 +2,7 @@
 
 namespace DF\PHPCoverFish\Common;
 
-use DF\PHPCoverFish\Common\Base\BaseCoverFishOutput;;
+use DF\PHPCoverFish\Common\Base\BaseCoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
 
 /**
