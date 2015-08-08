@@ -4,7 +4,6 @@ namespace DF\PHPCoverFish;
 
 use DF\PHPCoverFish\Base\CoverFishScanner as CoverFishScannerBase;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
-use DF\PHPCoverFish\Common\CoverFishPHPUnitTest;
 use DF\PHPCoverFish\Validator\ValidatorClassName;
 use DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess;
 use DF\PHPCoverFish\Validator\ValidatorClassNameMethodName;

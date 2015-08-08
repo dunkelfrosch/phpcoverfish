@@ -15,7 +15,7 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @since      class available since Release 0.9.0
  * @version    0.9.3
  */
-class CoverFishOutputs
+class CoverFishOutput
 {
     /**
      * @const MACRO_DETAIL_LINE_INDENT set line indent for detailed error message block
