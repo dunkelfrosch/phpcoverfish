@@ -4,6 +4,7 @@ phpCoverFish is an open source php cli code coverage preprocessor, used to valid
 
 *The alpha version of phpCoverFish wont be as functional as the coming beta version. Specific commands like coverage warning features, including corresponding threshold breaks and stop-on-error/stop-on-failure parameters are not fully functional yet.*
 
+[![Build Status](https://travis-ci.org/dunkelfrosch/phpcoverfish.svg?branch=master)](https://travis-ci.org/dunkelfrosch/phpcoverfish)
 
 ## Installation
 
