@@ -53,7 +53,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassFQNameFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassFQNameFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -81,7 +81,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassFQNamePassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassFQNamePassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -102,7 +102,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -130,7 +130,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNamePassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNamePassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -151,7 +151,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorDefaultCoverClassFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorDefaultCoverClassFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -178,7 +178,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorDefaultCoverClassPassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorDefaultCoverClassPassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -198,7 +198,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorGlobalMethodFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorGlobalMethodFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -225,7 +225,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorGlobalMethodPassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorGlobalMethodPassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -245,7 +245,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameMethodNameFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNameFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -273,7 +273,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameMethodNamePassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNamePassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -293,7 +293,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameMethodNameClassFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNameClassFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -321,7 +321,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameMethodNameClassPassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNameClassPassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -341,7 +341,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorPrivateFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorPrivateFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -368,7 +368,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameMethodNameClassPassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNameClassPassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -388,7 +388,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorPublicFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorPublicFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -415,7 +415,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorPublicPassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorPublicPassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -435,7 +435,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorProtectedFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorProtectedFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -462,7 +462,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorProtectedPassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorProtectedPassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -482,7 +482,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorNoNotPublicFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPublicFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -510,7 +510,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorNoNotPublicPassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPublicPassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -530,7 +530,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorNoNotProtectedFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotProtectedFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -558,7 +558,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorNoNotProtectedPassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotProtectedPassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -578,7 +578,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorNoNotPrivateFailTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPrivateFailTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 
@@ -606,7 +606,7 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/Data/Tests/ValidatorClassNameAccessorNoNotPrivatePassTest.php', __DIR__)),
+            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPrivatePassTest.php', __DIR__)),
             $this->getDefaultOutputOptions()
         );
 

@@ -15,7 +15,7 @@
     <testsuites>
         <testsuite name="PHPCoverFish base test suite">
             <directory>.</directory>
-            <exclude>./Data/Tests</exclude>
+            <exclude>./data/tests</exclude>
         </testsuite>
     </testsuites>
 </phpunit>
