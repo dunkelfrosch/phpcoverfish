@@ -10,12 +10,12 @@
          stopOnFailure="true"
          stopOnIncomplete="false"
          stopOnSkipped="false"
-         bootstrap="vendor/autoload.php"
+         bootstrap="./vendor/autoload.php"
 >
     <testsuites>
         <testsuite name="PHPCoverFish base test suite">
-            <directory>tests/</directory>
-            <exclude>tests/data/tests</exclude>
+            <directory>./tests/</directory>
+            <exclude>./tests/data/tests</exclude>
         </testsuite>
     </testsuites>
     <php>
