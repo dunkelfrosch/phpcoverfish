@@ -17,7 +17,7 @@ use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
  * @since      class available since Release 0.9.2
  * @version    0.9.3
  */
-abstract class CoverFishOutputBase
+abstract class CoverFishOutput
 {
     /**
      * @var CoverFishHelper
