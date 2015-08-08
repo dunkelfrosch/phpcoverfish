@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.2
+ * @version   0.9.3
  */
 class CoverFishScanCommand extends Command
 {
@@ -33,7 +33,7 @@ class CoverFishScanCommand extends Command
             ->addArgument(
                 'scan-path',
                 InputArgument::REQUIRED,
-                'the source path of your corresponding phpunit test files or a specific testFile (e.g. tests/ or tests/mySampleClassTest.php)'
+                'the source path of your corresponding phpunit test files or a specific testFile (e.g. tests/)'
             )
             ->addArgument(
                 'autoload-file',
@@ -98,11 +98,8 @@ class CoverFishScanCommand extends Command
     public function getHelpOutput()
     {
         $help  = PHP_EOL.'The <comment>alpha</comment> version of <info>phpCoverFish</info> wont be as functional as the coming beta version.'.PHP_EOL;
-        $help .= 'Specific commands like choosable output-detail-level and coverage warning features,'.PHP_EOL;
-        $help .= 'including corresponding threshold break warnings, aren\'t functional yet. This version'.PHP_EOL;
-        $help .= 'will be validate the three major coverage annotation usages: "<comment>ClassName::methodName</comment>",'.PHP_EOL;
-        $help .= '"<comment>ClassName</comment>" and "<comment>::methodName</comment>", the beta version will handle all annotation set\'s'.PHP_EOL;
-        $help .= 'provided in phpunit documentation.'. PHP_EOL . PHP_EOL;
+        $help .= 'Specific commands coverage warning features, including corresponding threshold break'.PHP_EOL;
+        $help .= 'and stop-on-error/stop-on-failure parameters not functional yet.'. PHP_EOL . PHP_EOL;
         $help .= '';
 
         return $help;
@@ -134,7 +131,7 @@ class CoverFishScanCommand extends Command
     protected function showExecTitle(OutputInterface $output)
     {
         $output->writeln(sprintf('<info>%s</info> <comment>%s</comment>', CoverFishScanner::APP_RELEASE_NAME, $this->getLongVersion()));
-        $output->writeln(sprintf('%s%s','*** developer preview ***', PHP_EOL));
+        $output->writeln(sprintf('%s%s','*** community preview ***', PHP_EOL));
     }
 
     /**
