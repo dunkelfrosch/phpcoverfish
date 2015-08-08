@@ -3,8 +3,16 @@ language: php
 php:
   - 5.5
 
-install:
-   - composer install
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+sudo: false
+
+before_install:
+  - composer selfupdate
+
+install: composer update --prefer-dist --no-interaction
 
 script: phpunit --debug
 
