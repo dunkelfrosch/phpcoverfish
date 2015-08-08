@@ -32,7 +32,7 @@
         }
     },
     "bin": [
-       "coverfish"
+       "bin/coverfish.php"
     ],
     "extra": {
         "branch-alias": {
