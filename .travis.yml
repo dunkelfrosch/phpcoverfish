@@ -1,0 +1,11 @@
+language: php
+
+php:
+  - 5.5
+
+script: phpunit --testdox --configuration phpunit.xml
+
+notifications:
+  email:
+    - patrick.paechnatz@gmail.com
+    - dunkelfrosch.net@gmail.com
