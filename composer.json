@@ -27,7 +27,7 @@
     "autoload": {
         "psr-4": {
             "DF\\PHPCoverFish\\": "src/PHPCoverFish/",
-            "DF\\PHPCoverFish\\Tests": "src/PHPCoverFish/tests/",
+            "DF\\PHPCoverFish\\Tests\\": "src/PHPCoverFish/tests/",
             "DF\\PHPCoverFish\\Tests\\Data\\Src\\": "tests/data/src/",
             "DF\\PHPCoverFish\\Tests\\Data\\Tests\\": "tests/data/tests/"
         }
