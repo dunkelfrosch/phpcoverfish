@@ -9,7 +9,7 @@ use DF\PHPCoverFish\Validator\Base\CoverFishValidator;
 /**
  * Class ValidatorClassNameMethodName, validate that the annotated test method covers the specified method (Class::Method)
  *
- * @package   DF\PHP\CoverFish
+ * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @copyright 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @license   http://www.opensource.org/licenses/MIT

@@ -10,7 +10,7 @@ use DF\PHPCoverFish\Validator\Base\CoverFishValidator;
  * Class ValidatorClassNameMethodAccess, validate that the annotated test method covers methods visibility
  * in given class (Class::<public>, Class::<protected>, Class::<private>)
  *
- * @package   DF\PHP\CoverFish
+ * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @copyright 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @license   http://www.opensource.org/licenses/MIT
