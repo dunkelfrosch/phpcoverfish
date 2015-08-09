@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.3
+ * @version   0.9.4
  */
 class CoverFishScanCommand extends Command
 {
@@ -88,6 +88,13 @@ class CoverFishScanCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'numbers of allowed warnings before scan will be stopped (not available in alpha)',
                 99
+            )
+            ->addOption(
+                'exclude-path',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'exclude a specific path from planned scan',
+                null
             )
         ;
     }
@@ -169,6 +176,7 @@ class CoverFishScanCommand extends Command
 
         $cliOptions = array(
             'sys_scan_source' => $input->getArgument('scan-path'),
+            'sys_exclude_path' => $input->getOption('exclude-path'),
             'sys_debug' => $input->getOption('debug'),
             'sys_stop_on_error' => $input->getOption('stop-on-error'),
             'sys_stop_on_failure' => $input->getOption('stop-on-failure'),
