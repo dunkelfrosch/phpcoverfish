@@ -53,7 +53,6 @@ class ValidatorMethodName extends BaseCoverFishValidator
      */
     public function getMapping(CoverFishPHPUnitFile $phpUnitFile)
     {
-        $type = null;
         $method = $this->getResult()['method'];
         $classFQN = $phpUnitFile->getCoversDefaultClass();
         $class = $this->coverFishHelper->getClassNameFromClassFQN($classFQN);

@@ -96,7 +96,7 @@ class CoverFishOutput extends BaseCoverFishOutput
             }
         }
 
-        if (count($coverFishTest->getCoverMappings())===0) {
+        if (count($coverFishTest->getCoverMappings()) === 0) {
             $this->writeNoCoverFound();
         }
     }
@@ -187,8 +187,8 @@ class CoverFishOutput extends BaseCoverFishOutput
         return sprintf($lineInfoMacro,
             $this->setIndent(self::MACRO_DETAIL_LINE_INDENT),
             (false === $this->preventAnsiColors)
-                ? Color::tplWhiteColor($failureCount) // colored version
-                : $failureCount,                      // normal version (--no-ansi)
+                ? Color::tplWhiteColor($failureCount)
+                : $failureCount,
             (false === $this->preventAnsiColors)
                 ? Color::tplWhiteColor($unitTest->getSignature())
                 : $unitTest->getSignature(),
@@ -274,8 +274,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      *
      * @return null
      */
-    public function writeFailureStream
-    (
+    public function writeFailureStream(
         CoverFishResult $coverFishResult,
         CoverFishPHPUnitTest $unitTest,
         CoverFishMapping $coverMapping
@@ -320,7 +319,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      */
     public function writeNoCoverFound()
     {
-        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
+        if (true === $this->outputFormatJson) {
             return null;
         }
 
@@ -345,7 +344,7 @@ class CoverFishOutput extends BaseCoverFishOutput
     {
         $this->jsonResult['pass'] = true;
 
-        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
+        if (true === $this->outputFormatJson) {
             return null;
         }
 
@@ -370,7 +369,7 @@ class CoverFishOutput extends BaseCoverFishOutput
     {
         $this->jsonResult['pass'] = false;
 
-        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
+        if (true === $this->outputFormatJson) {
             return null;
         }
 
@@ -395,7 +394,7 @@ class CoverFishOutput extends BaseCoverFishOutput
     {
         $this->jsonResult['pass'] = false;
 
-        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
+        if (true === $this->outputFormatJson) {
             return null;
         }
 
@@ -577,7 +576,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      */
     private function getScanFailPassStatistic(CoverFishResult $coverFishResult)
     {
-        $errorPercent = round($coverFishResult->getTestCount() / 100 * $coverFishResult->getFailureCount(),2);
+        $errorPercent = round($coverFishResult->getTestCount() / 100 * $coverFishResult->getFailureCount(), 2);
         $passPercent = 100 - $errorPercent;
         $errorStatistic = '%s %% failure rate%s%s %% pass rate%s';
         $errorStatistic = sprintf($errorStatistic,

@@ -76,8 +76,8 @@ final class CoverFishError
     private $exceptionMessage = null;
 
     /**
-     * @param null $errorCode
-     * @param null $exceptionMessage
+     * @param null        $errorCode
+     * @param null|string $exceptionMessage
      *
      * @throws \Exception
      */
@@ -87,7 +87,6 @@ final class CoverFishError
         $this->exceptionMessage = $exceptionMessage;
 
         if ($errorCode === null) {
-            $this->type = 'about:blank';
             $this->errorMessageToken = 'Unknown Error-Code!';
         } else {
             if (!isset(self::$errorMessageTokens[$errorCode])) {
@@ -106,11 +105,11 @@ final class CoverFishError
         $coverLine = null;
         switch ($this->errorCode) {
             case self::PHPUNIT_REFLECTION_CLASS_NOT_FOUND:
-                $coverLine = sprintf('@covers %s::%s',$coverMapping->getClassFQN(), $coverMapping->getMethod());
+                $coverLine = sprintf('@covers %s::%s', $coverMapping->getClassFQN(), $coverMapping->getMethod());
                 if (!$noAnsiColors) {
                     $coverLine  = Color::tplNormalColor('@covers ');
                     $coverLine .= Color::tplMarkFailure($coverMapping->getClassFQN());
-                    $coverLine .= Color::tplYellowColor('::'.$coverMapping->getMethod());
+                    $coverLine .= Color::tplYellowColor('::' . $coverMapping->getMethod());
                 }
 
                 if (null === $coverMapping->getMethod()) {
@@ -120,10 +119,10 @@ final class CoverFishError
                 break;
 
             case self::PHPUNIT_REFLECTION_METHOD_NOT_FOUND:
-                $coverLine = sprintf('@covers %s::%s',$coverMapping->getClassFQN(), $coverMapping->getMethod());
+                $coverLine = sprintf('@covers %s::%s', $coverMapping->getClassFQN(), $coverMapping->getMethod());
                 if (!$noAnsiColors) {
                     $coverLine  = Color::tplNormalColor('@covers ');
-                    $coverLine .= Color::tplYellowColor($coverMapping->getClassFQN().'::');
+                    $coverLine .= Color::tplYellowColor($coverMapping->getClassFQN() . '::');
                     $coverLine .= Color::tplMarkFailure($coverMapping->getMethod());
                 }
 
@@ -148,7 +147,7 @@ final class CoverFishError
                 $coverLine = sprintf('@covers %s::<%s>', $coverMapping->getClassFQN(), $coverMapping->getAccessor());
                 if (!$noAnsiColors) {
                     $coverLine  = Color::tplNormalColor('@covers ');
-                    $coverLine .= Color::tplYellowColor($coverMapping->getClassFQN().'::<');
+                    $coverLine .= Color::tplYellowColor($coverMapping->getClassFQN() . '::<');
                     $coverLine .= Color::tplMarkFailure($coverMapping->getAccessor());
                     $coverLine .= Color::tplYellowColor('>');
                 }

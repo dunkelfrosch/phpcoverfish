@@ -51,8 +51,6 @@ class ValidatorClassName extends BaseCoverFishValidator
      */
     public function getMapping(CoverFishPHPUnitFile $phpUnitFile)
     {
-        $type = null;
-        $method = null;
         $class = $this->getResult()['class'];
         // fqn detected? fully qualified classNames will be used directly without any kind of counterCheck
         // against use statement(s) - otherwise classFQN will be taken from use statement directly.
@@ -65,7 +63,7 @@ class ValidatorClassName extends BaseCoverFishValidator
 
         $mappingOptions = array(
             'coverToken' => $this->coversToken,
-            'coverMethod' => $method,
+            'coverMethod' => null,
             'coverAccessor' => null,
             'coverClass' => $class,
             'coverClassFQN' => $classFQN,
