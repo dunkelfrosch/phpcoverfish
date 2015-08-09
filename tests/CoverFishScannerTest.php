@@ -37,7 +37,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     }
 
     /**
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::checkPath
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::checkPath
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getRegexPath
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::removeExcludedPath
      */
