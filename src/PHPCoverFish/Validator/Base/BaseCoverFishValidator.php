@@ -10,7 +10,7 @@ use DF\PHPCoverFish\Common\CoverFishMappingResult;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
 
 /**
- * Class CoverFishValidator
+ * Class BaseCoverFishValidator
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
@@ -18,9 +18,9 @@ use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.4
  */
-class BaseCoverFishValidator implements CoverFishValidatorInterface
+class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 {
     /**
      * @var ArrayCollection

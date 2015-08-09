@@ -4,7 +4,7 @@ namespace DF\PHPCoverFish\Validator;
 
 use DF\PHPCoverFish\Common\CoverFishMapping;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
-use DF\PHPCoverFish\Validator\Base\CoverFishValidator;
+use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator;
 
 /**
  * Class ValidatorClassNameMethodName, validate that the annotated test method covers the specified method (Class::Method)
@@ -15,9 +15,9 @@ use DF\PHPCoverFish\Validator\Base\CoverFishValidator;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.4
  */
-class ValidatorClassNameMethodName extends CoverFishValidator
+class ValidatorClassNameMethodName extends BaseCoverFishValidator
 {
     /**
      * @return array

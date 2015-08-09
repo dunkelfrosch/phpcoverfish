@@ -3,7 +3,7 @@
 namespace DF\PHPCoverFish\Validator;
 
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
-use DF\PHPCoverFish\Validator\Base\CoverFishValidator;
+use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator;
 
 /**
  * Class ValidatorClassName, validate that the annotated Class exists (Class)
@@ -14,9 +14,9 @@ use DF\PHPCoverFish\Validator\Base\CoverFishValidator;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.4
  */
-class ValidatorClassName extends CoverFishValidator
+class ValidatorClassName extends BaseCoverFishValidator
 {
     /**
      * @return array
