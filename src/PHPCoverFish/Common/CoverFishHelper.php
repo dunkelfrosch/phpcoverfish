@@ -47,7 +47,7 @@ class CoverFishHelper
             return $fqnBlock;
         }
 
-        return $fqnBlock[count($fqnBlock)-1];
+        return $fqnBlock[count($fqnBlock) - 1];
     }
 
     /**
@@ -116,8 +116,7 @@ class CoverFishHelper
     {
         $useResult = array();
         $content = $this->getFileContent($classFile);
-        // alternative regex a: "use\s+((?:\w+\\?)+);", b: "/(use )(.*)(;)/"
-        if (preg_match_all('/(use\s+)(.*)(;)/', $content, $useResult) && 4 === count($useResult )) {
+        if (preg_match_all('/(use\s+)(.*)(;)/', $content, $useResult) && 4 === count($useResult)) {
             // @todo: use keyName based result check instead of index!
             return ($useResult[2]);
         }
@@ -172,6 +171,32 @@ class CoverFishHelper
     }
 
     /**
+     * @param string $path
+     *
+     * @return string|false
+     */
+    public function checkPath($path)
+    {
+        $path = realpath($path);
+
+        return ($path !== false && is_dir($path)) ? $path : false;
+    }
+
+    /**
+     * @param string $fileOrPath
+     *
+     * @return bool
+     */
+    public function checkFileOrPath($fileOrPath)
+    {
+        if (false === $this->checkPath($fileOrPath)) {
+            return file_exists($fileOrPath);
+        }
+
+        return true;
+    }
+
+    /**
      * @param string $docBlock
      *
      * @return array
@@ -188,7 +213,7 @@ class CoverFishHelper
         }
         array_walk_recursive(
             $annotations,
-            function (&$element) {
+            function(&$element) {
                 if (substr($element, 0, 1) === '\\') {
                     $element = substr($element, 1);
                 }
