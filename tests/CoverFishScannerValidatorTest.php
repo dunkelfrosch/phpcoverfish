@@ -3,51 +3,31 @@
 namespace DF\PHPCoverFish\Tests;
 
 use DF\PHPCoverFish\CoverFishScanner;
+use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
+
 
 /**
- * Class CoverageScanner
+ * Class CoverFishScannerTest
+ *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @copyright 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.2
+ * @version   0.9.4
  */
-class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
+class CoverFishScannerTest extends BaseCoverFishScannerTestCase
 {
     /**
-     * @param string $testFile
-     *
-     * @return array
-     */
-    public function getDefaultCLIOptions($testFile)
-    {
-        return array(
-            'sys_scan_source' => $testFile,
-            'sys_debug' => false,
-            'sys_stop_on_error' => false,
-            'sys_stop_on_failure' => false,
-            'sys_warning_threshold' => 99,
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getDefaultOutputOptions()
-    {
-        return array(
-            'out_verbose' => false,
-            'out_format' => 'json',
-            'out_level' => 1,
-            'out_no_ansi' => true,
-            'out_no_echo' => true,
-        );
-    }
-
-    /**
      * check for covered className (FQN) annotation "class missing"
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::<public>
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::setMapping
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateMapping
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateReflectionClass
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::checkClassHasFQN
      */
     public function testCoverClassFullyQualifiedNameValidatorCheckForValidClassFail()
     {
@@ -76,6 +56,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered className (FQN) annotation "class found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::<public>
      */
     public function testCoverClassFullyQualifiedNameValidatorCheckForValidClassPass()
     {
@@ -97,6 +80,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered className annotation "class missing"
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::<public>
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::getReflectionClass
      */
     public function testCoverClassNameValidatorCheckForValidClassFail()
     {
@@ -125,6 +111,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered className annotation "class found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::<public>
      */
     public function testCoverClassNameValidatorCheckForValidClassPass()
     {
@@ -146,6 +135,10 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ::method annotation "defaultCoverClass not found", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorMethodName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorMethodName::<public>
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateReflectionMethod
      */
     public function testCoverGlobalMethodNameValidatorCheckForDefaultCoverClassFail()
     {
@@ -173,6 +166,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ::method annotation "defaultCoverClass found", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorMethodName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorMethodName::<public>
      */
     public function testCoverGlobalMethodNameValidatorCheckForDefaultCoverClassPass()
     {
@@ -193,6 +189,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ::method annotation "method not found", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorMethodName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorMethodName::<public>
      */
     public function testCoverGlobalMethodNameValidatorCheckMethodFail()
     {
@@ -220,6 +219,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ::method annotation "method found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorMethodName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorMethodName::<public>
      */
     public function testCoverGlobalMethodNameValidatorCheckMethodPass()
     {
@@ -240,6 +242,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::method annotation "method not found", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodName::<public>
      */
     public function testCoverClassNameValidatorCheckMethodNameFail()
     {
@@ -268,6 +273,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ::method annotation "method found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodName::<public>
      */
     public function testCoverClassNameValidatorCheckMethodNamePass()
     {
@@ -288,6 +296,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::method annotation "class not found", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodName::<public>
      */
     public function testCoverClassNameValidatorCheckClassNameFail()
     {
@@ -316,6 +327,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::method annotation "class found", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodName::<public>
      */
     public function testCoverClassNameValidatorCheckClassNamePass()
     {
@@ -336,6 +350,10 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<private> annotation "no private methods", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateReflectionClassForAccessorVisibility
      */
     public function testCoverClassNameAccessorPrivateMethodsFail()
     {
@@ -363,6 +381,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<private> annotation "private methods found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorPrivateMethodsPass()
     {
@@ -383,6 +404,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<public> annotation "no public methods", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorPublicMethodsFail()
     {
@@ -410,6 +434,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<public> annotation "public methods found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorPublicMethodsPass()
     {
@@ -430,6 +457,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<protected> annotation "no protected methods", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorProtectedMethodsFail()
     {
@@ -457,6 +487,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<protected> annotation "protected methods found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorProtectedMethodsPass()
     {
@@ -477,6 +510,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<!public> annotation "no not public methods", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorNoNotPublicMethodsFail()
     {
@@ -505,6 +541,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<!public> annotation "no not public methods found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorNoNotPublicMethodsPass()
     {
@@ -525,6 +564,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<!protected> annotation "no not protected methods", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorNoNotProtectedMethodsFail()
     {
@@ -553,6 +595,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<!protected> annotation "no not protected methods found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorNoNotProtectedMethodsPass()
     {
@@ -573,6 +618,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<!private> annotation "no not private methods", cover is invalid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorNoNotPrivateMethodsFail()
     {
@@ -601,6 +649,9 @@ class CoverFishScannerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check for covered ClassName::<!private> annotation "no not private methods found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess::<public>
      */
     public function testCoverClassNameAccessorNoNotPrivateMethodsPass()
     {

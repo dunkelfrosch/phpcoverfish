@@ -20,7 +20,7 @@ use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
  * @since     class available since Release 0.9.0
  * @version   0.9.0
  */
-class CoverFishValidator implements CoverFishValidatorInterface
+class BaseCoverFishValidator implements CoverFishValidatorInterface
 {
     /**
      * @var ArrayCollection
