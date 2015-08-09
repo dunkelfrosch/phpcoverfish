@@ -14,7 +14,7 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
- * @version    0.9.3
+ * @version    0.9.4
  */
 class CoverFishOutput extends BaseCoverFishOutput
 {
@@ -459,7 +459,7 @@ class CoverFishOutput extends BaseCoverFishOutput
 
         $output = 'OK';
         if ($this->outputLevel > 1) {
-            $output = 'file/test okay';
+            $output = 'cover test(s) succeeded';
         }
 
         $fileResultMacro = '%s%s %s%s';
