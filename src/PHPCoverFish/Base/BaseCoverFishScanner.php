@@ -8,9 +8,7 @@ use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitTest;
 use DF\PHPCoverFish\Common\CoverFishResult;
 use DF\PHPCoverFish\Common\CoverFishHelper;
-
 use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidatorInterface as CoverFishValidatorInterface;
-
 use SebastianBergmann\FinderFacade\FinderFacade;
 
 /**
@@ -189,10 +187,10 @@ class BaseCoverFishScanner
                 ->getAttributeByKey('namespace', $classData['package'])
             );
 
-        $this->phpUnitFile
-            ->setUsedClasses($this->coverFishHelper
-                ->getUsedClassesInClass($this->phpUnitFile->getFile())
-            );
+        $usedClassesInFile = $this->coverFishHelper->getUsedClassesInClass($this->phpUnitFile->getFile());
+        if (is_array($usedClassesInFile)) {
+            $this->phpUnitFile->setUsedClasses($usedClassesInFile);
+        }
 
         $this->phpUnitFile
             ->setParentClass($this->coverFishHelper
@@ -201,8 +199,7 @@ class BaseCoverFishScanner
 
         $this->phpUnitFile
             ->setCoversDefaultClass($this->coverFishHelper->getCoversDefaultClassUsable(
-                $this->coverFishHelper
-                    ->getAnnotationByKey($classData['docblock'], 'coversDefaultClass')
+                $this->coverFishHelper->getAnnotationByKey($classData['docblock'], 'coversDefaultClass')
             ));
 
         return $this->phpUnitFile;
@@ -224,18 +221,6 @@ class BaseCoverFishScanner
         $this->phpUnitTest->setLoc($this->coverFishHelper->getLocOfTestMethod($methodData));
 
         return $this->phpUnitTest;
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return bool
-     */
-    private function checkPath($path)
-    {
-        $path = realpath($path);
-
-        return ($path !== false && is_dir($path)) ? $path : false;
     }
 
     /**
@@ -262,7 +247,7 @@ class BaseCoverFishScanner
     {
         $finalPath = array();
 
-        if (true === empty($excludePath) || false === $this->checkPath($excludePath)) {
+        if (true === empty($excludePath) || false === $this->coverFishHelper->checkPath($excludePath)) {
             return $files;
         }
 
