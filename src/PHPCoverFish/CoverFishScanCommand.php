@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use DF\PHPCoverFish\Common\CoverFishHelper;
 
 /**
  * Class CoverFishScanCommand
@@ -21,6 +22,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CoverFishScanCommand extends Command
 {
+    /**
+     * @var CoverFishHelper
+     */
+    protected $coverFishHelper;
+
     /**
      * additional options and arguments for our cli application
      */
@@ -104,9 +110,9 @@ class CoverFishScanCommand extends Command
      */
     public function getHelpOutput()
     {
-        $help  = PHP_EOL.'The <comment>alpha</comment> version of <info>phpCoverFish</info> wont be as functional as the coming beta version.'.PHP_EOL;
-        $help .= 'Specific commands coverage warning features, including corresponding threshold break'.PHP_EOL;
-        $help .= 'and stop-on-error/stop-on-failure parameters not functional yet.'. PHP_EOL . PHP_EOL;
+        $help  = PHP_EOL . 'The <comment>alpha</comment> version of <info>phpCoverFish</info> wont be as functional as the coming beta version.' . PHP_EOL;
+        $help .= 'Specific commands coverage warning features, including corresponding threshold break' . PHP_EOL;
+        $help .= 'and stop-on-error/stop-on-failure parameters not functional yet.' . PHP_EOL . PHP_EOL;
         $help .= '';
 
         return $help;
@@ -138,7 +144,7 @@ class CoverFishScanCommand extends Command
     protected function showExecTitle(OutputInterface $output)
     {
         $output->writeln(sprintf('<info>%s</info> <comment>%s</comment>', CoverFishScanner::APP_RELEASE_NAME, $this->getLongVersion()));
-        $output->writeln(sprintf('%s%s','*** community preview ***', PHP_EOL));
+        $output->writeln(sprintf('%s%s', '*** community preview ***', PHP_EOL));
     }
 
     /**
@@ -154,7 +160,7 @@ class CoverFishScanCommand extends Command
         }
 
         $result = array();
-        preg_match_all('/\d+/',$input , $result, PREG_SET_ORDER);
+        preg_match_all('/\d+/', $input , $result, PREG_SET_ORDER);
         if (false === empty($result) ) {
             return $input === '1' ? true : false;
         }
@@ -169,10 +175,20 @@ class CoverFishScanCommand extends Command
      * @param OutputInterface $output
      *
      * @return string
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->showExecTitle($output);
+
+        // include main autoload file, will be obsolete in future version (we'll use phpunit.xml file directly)
+        if (false === file_exists($autoloadFile = $input->getArgument('autoload-file'))) {
+            throw new \Exception(sprintf('autoload file "%s" not found! please define your autoload.php file to use (e.g. ../app/autoload.php in symfony2)', $autoloadFile));
+        }
+
+        include($autoloadFile);
+
+        $this->coverFishHelper = new CoverFishHelper();
 
         $cliOptions = array(
             'sys_scan_source' => $input->getArgument('scan-path'),
@@ -191,20 +207,12 @@ class CoverFishScanCommand extends Command
             'out_no_echo' => $input->getOption('output-prevent-echo'),
         );
 
-        if ($autoloadFile = $input->getArgument('autoload-file')) {
-
-            if (false === file_exists($autoloadFile)) {
-                $output->writeln(sprintf('<error> autoload file "%s" not found! </error> <comment>please define your autoload.php file to use (e.g. ../app/autoload.php in symfony2)</comment>', $autoloadFile));
-                exit(1);
-            }
-
-            include_once($autoloadFile);
-
+        $testPathOrFile = $input->getArgument('scan-path');
+        if (false === $this->coverFishHelper->checkFileOrPath($testPathOrFile)) {
+            throw new \Exception(sprintf('test path/file "%s" not found! please define test file path (e.g. tests/)', $testPathOrFile));
         }
 
-        if ($testPathOrFile = $input->getArgument('scan-path')) {
-            $scanner = new CoverFishScanner($cliOptions, $outOptions);
-            $scanner->analysePHPUnitFiles();
-        }
+        $scanner = new CoverFishScanner($cliOptions, $outOptions);
+        $scanner->analysePHPUnitFiles();
     }
 }
