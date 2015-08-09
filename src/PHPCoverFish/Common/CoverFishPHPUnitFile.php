@@ -270,6 +270,5 @@ final class CoverFishPHPUnitFile
     {
         $this->scanStartAt = new \DateTime();
         $this->tests = new ArrayCollection();
-        $this->covers = new ArrayCollection();
     }
 }
