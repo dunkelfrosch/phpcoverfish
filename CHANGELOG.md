@@ -12,6 +12,7 @@ This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09)
 
 ### Added
 
+- Added "no cover found" progress char ("N") in result output
 - Added php code coverage annotation for all our tests
 - Added `--exclude-path` option to exclude a specific path from planned scan 
 
