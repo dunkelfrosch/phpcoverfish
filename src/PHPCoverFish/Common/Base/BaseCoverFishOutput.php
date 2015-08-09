@@ -45,7 +45,7 @@ abstract class BaseCoverFishOutput
     protected $outputFormat;
 
     /**
-     * @var string
+     * @var int
      */
     protected $outputLevel;
 
@@ -85,13 +85,13 @@ abstract class BaseCoverFishOutput
     protected $scanFailure;
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return null on json
      */
     protected function writeLine($content)
     {
-        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
+        if (true === $this->outputFormatJson) {
             return null;
         }
 
@@ -99,13 +99,13 @@ abstract class BaseCoverFishOutput
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return null on json
      */
     protected function write($content)
     {
-        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
+        if (true === $this->outputFormatJson) {
             return null;
         }
 
