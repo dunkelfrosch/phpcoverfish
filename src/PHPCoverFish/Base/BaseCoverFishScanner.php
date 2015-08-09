@@ -217,7 +217,6 @@ class BaseCoverFishScanner
     {
         $this->phpUnitTest = new CoverFishPHPUnitTest();
         $this->phpUnitTest->setSignature($methodData['signature']);
-        $this->phpUnitTest->setName(str_replace('()', null, $this->phpUnitTest->getSignature()));
         $this->phpUnitTest->setVisibility($methodData['visibility']);
         $this->phpUnitTest->setLine($methodData['startLine']);
         $this->phpUnitTest->setFileAndPath($methodData['classFile']);

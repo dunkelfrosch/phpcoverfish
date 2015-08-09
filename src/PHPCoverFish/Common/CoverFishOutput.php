@@ -95,6 +95,10 @@ class CoverFishOutput extends BaseCoverFishOutput
                 $this->writePass();
             }
         }
+
+        if (count($coverFishTest->getCoverMappings())===0) {
+            $this->writeNoCoverFound();
+        }
     }
 
     /**
@@ -150,7 +154,7 @@ class CoverFishOutput extends BaseCoverFishOutput
         $this->jsonResult['errorMessage'] = $mappingError->getTitle();
         $this->jsonResult['errorCode'] = $mappingError->getErrorCode();
         $this->jsonResult['cover'] = $coverLine;
-        $this->jsonResult['method'] = $unitTest->getName();
+        $this->jsonResult['method'] = $unitTest->getSignature();
         $this->jsonResult['line'] = $unitTest->getLine();
         $this->jsonResult['file'] = $unitTest->getFile();
     }
@@ -186,8 +190,8 @@ class CoverFishOutput extends BaseCoverFishOutput
                 ? Color::tplWhiteColor($failureCount) // colored version
                 : $failureCount,                      // normal version (--no-ansi)
             (false === $this->preventAnsiColors)
-                ? Color::tplWhiteColor($unitTest->getName())
-                : $unitTest->getName(),
+                ? Color::tplWhiteColor($unitTest->getSignature())
+                : $unitTest->getSignature(),
             (false === $this->preventAnsiColors)
                 ? Color::tplWhiteColor($unitTest->getLine())
                 : $unitTest->getLine(),
@@ -307,6 +311,29 @@ class CoverFishOutput extends BaseCoverFishOutput
             $coverFishResult->addFailureToStream($lineMessage);
             $coverFishResult->addFailureToStream(PHP_EOL);
         }
+    }
+
+    /**
+     * write (colored) progress for no cover found "n"|"N"
+     *
+     * @return null
+     */
+    public function writeNoCoverFound()
+    {
+        if (true === $this->outputFormatJson || -1 === $this->outputLevel) {
+            return null;
+        }
+
+        $output = 'n';
+        if ($this->outputLevel > 1) {
+            $output = 'N';
+        }
+
+        if (false === $this->preventAnsiColors) {
+            $output = "\033[33;40m$output\033[0m";
+        }
+
+        echo $output;
     }
 
     /**
