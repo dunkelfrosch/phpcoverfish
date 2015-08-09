@@ -2,7 +2,7 @@
 
 namespace DF\PHPCoverFish;
 
-use DF\PHPCoverFish\Base\CoverFishScanner as CoverFishScannerBase;
+use DF\PHPCoverFish\Base\BaseCoverFishScanner;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
 use DF\PHPCoverFish\Validator\ValidatorClassName;
 use DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess;
@@ -12,7 +12,7 @@ use DF\PHPCoverFish\Common\CoverFishOutput;
 use \PHP_Token_Stream;
 
 /**
- * Class CoverFishScanner
+ * Class BaseCoverFishScanner
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
@@ -20,16 +20,16 @@ use \PHP_Token_Stream;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.3
+ * @version   0.9.4
  */
-class CoverFishScanner extends CoverFishScannerBase
+class CoverFishScanner extends BaseCoverFishScanner
 {
     const APP_RELEASE_NAME = 'PHPCoverFish';
     const APP_RELEASE_STATE = 'alpha';
 
     const APP_VERSION_MAJOR = 0;
     const APP_VERSION_MINOR = 9;
-    const APP_VERSION_BUILD = 3;
+    const APP_VERSION_BUILD = 4;
 
     /**
      * @param array $cliOptions

@@ -7,8 +7,9 @@ use DF\PHPCoverFish\Common\CoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitTest;
 use DF\PHPCoverFish\Common\CoverFishResult;
-use DF\PHPCoverFish\Validator\Base\CoverFishValidatorInterface;
 use DF\PHPCoverFish\Common\CoverFishHelper;
+
+use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidatorInterface as CoverFishValidatorInterface;
 
 use SebastianBergmann\FinderFacade\FinderFacade;
 
@@ -20,14 +21,19 @@ use SebastianBergmann\FinderFacade\FinderFacade;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.3
+ * @version   0.9.4
  */
-class CoverFishScanner
+class BaseCoverFishScanner
 {
     /**
      * @var string
      */
     protected $testSourcePath;
+
+    /**
+     * @var String
+     */
+    protected $testExcludePath;
 
     /**
      * @var bool
@@ -116,8 +122,11 @@ class CoverFishScanner
      */
     public function __construct(array $cliOptions)
     {
-        $this->testSourcePath = $cliOptions['sys_scan_source'];
         $this->debug = $cliOptions['sys_debug'];
+
+        $this->testSourcePath = $cliOptions['sys_scan_source'];
+        $this->testExcludePath = $cliOptions['sys_exclude_path'];
+
         $this->stopOnError = $cliOptions['sys_stop_on_error'];
         $this->stopOnFailure = $cliOptions['sys_stop_on_failure'];
         $this->warningThreshold = $cliOptions['sys_warning_threshold'];
@@ -219,6 +228,56 @@ class CoverFishScanner
     }
 
     /**
+     * @param string $path
+     *
+     * @return bool
+     */
+    private function checkPath($path)
+    {
+        $path = realpath($path);
+
+        return ($path !== false && is_dir($path)) ? $path : false;
+    }
+
+    /**
+     * @param string $inputPath
+     *
+     * @return string
+     */
+    private function getRegexPath($inputPath)
+    {
+        $path = str_replace('/', '\/', $inputPath);
+
+        return sprintf('/%s/', $path);
+    }
+
+    /**
+     * workaround for missing/buggy path exclude in symfony finder class
+     *
+     * @param array  $files
+     * @param string $excludePath
+     *
+     * @return array
+     */
+    public function removeExcludedPath(array $files, $excludePath)
+    {
+        $finalPath = array();
+
+        if (true === empty($excludePath) || false === $this->checkPath($excludePath)) {
+            return $files;
+        }
+
+        foreach ($files as $filePath) {
+            preg_match_all($this->getRegexPath($excludePath), $filePath, $result, PREG_SET_ORDER);
+            if (true === empty($result)) {
+                $finalPath[] = $filePath;
+            }
+        }
+
+        return $finalPath;
+    }
+
+    /**
      * scan all files by given path recursively, if one php file will be provided within given path,
      * this file will be returned in finder format
      *
@@ -226,7 +285,7 @@ class CoverFishScanner
      *
      * @return array
      */
-    protected function scanFilesInPath($sourcePath)
+    public function scanFilesInPath($sourcePath)
     {
         $filePattern = $this->baseFilePattern;
         if (strpos($sourcePath, str_replace('*', null, $filePattern))) {
@@ -237,9 +296,10 @@ class CoverFishScanner
             array($sourcePath),
             $this->baseFilePatternExclude,
             array($filePattern),
+            array(),
             array()
         );
 
-        return $facade->findFiles();
+        return $this->removeExcludedPath($facade->findFiles(), $this->testExcludePath);
     }
 }
