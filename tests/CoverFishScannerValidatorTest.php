@@ -5,9 +5,8 @@ namespace DF\PHPCoverFish\Tests;
 use DF\PHPCoverFish\CoverFishScanner;
 use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
 
-
 /**
- * Class CoverFishScannerTest
+ * Class CoverFishScannerValidatorTest
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
@@ -17,7 +16,7 @@ use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
  * @since     class available since Release 0.9.0
  * @version   0.9.4
  */
-class CoverFishScannerTest extends BaseCoverFishScannerTestCase
+class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
 {
     /**
      * check for covered className (FQN) annotation "class missing"
@@ -28,6 +27,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateMapping
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateReflectionClass
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::checkClassHasFQN
+     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::validateAndReturnMapping
      */
     public function testCoverClassFullyQualifiedNameValidatorCheckForValidClassFail()
     {
