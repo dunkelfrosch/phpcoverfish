@@ -121,7 +121,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
         $mappingResult = new CoverFishMappingResult();
         $mappingResult->setPass(true);
 
-        // @todo: place this in separate validationSubMethod!
         // 1 - check for classFQN/DefaultCoverClass mapping validation-error
         if (empty($coverMapping->getClassFQN()) && empty($coverMapping->getClass())) {
             $mappingResult->setPass(false);
@@ -132,7 +131,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
             return $mappingResult;
         }
 
-        // @todo: place this in separate validationSubMethod!
         // 2 - check for classFQN mapping validation-error
         if (empty($coverMapping->getClassFQN())) {
             $mappingResult->setPass(false);
@@ -141,7 +139,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
             return $mappingResult;
         }
 
-        // @todo: place this in separate validationSubMethod!
         // 3 - check for invalid classFQN validation-error
         $classReflectionResult = $this->validateReflectionClass($coverMapping->getClassFQN());
         // @todo: mappingResult could be false, set special coverFishError here ...
@@ -152,7 +149,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
             return $mappingResult;
         }
 
-        // @todo: place this in separate validationSubMethod!
         // 4 - check for invalid accessor validation-error
         $methodReflectionResult = $this->validateReflectionClassForAccessorVisibility($coverMapping->getClassFQN(), $coverMapping->getAccessor());
         if ($methodReflectionResult instanceof CoverFishError) {
@@ -162,7 +158,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
             return $mappingResult;
         }
 
-        // @todo: place this in separate validationSubMethod!
         // 5 - check for invalid method validation-error
         $methodReflectionResult = $this->validateReflectionMethod($coverMapping->getClassFQN(), $coverMapping->getMethod());
         if ($methodReflectionResult instanceof CoverFishError) {
@@ -178,7 +173,7 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     /**
      * @param string $classFQN
      *
-     * @return CoverFishError|\ReflectionClass
+     * @return CoverFishError
      */
     public function validateReflectionClass($classFQN)
     {
@@ -189,7 +184,7 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
      * @param string $classFQN
      * @param string $method
      *
-     * @return CoverFishError|\ReflectionMethod
+     * @return CoverFishError|\ReflectionMethod|false
      */
     public function validateReflectionMethod($classFQN, $method)
     {
@@ -298,7 +293,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 
             default:
                 return false;
-                break;
         }
 
         return true;
