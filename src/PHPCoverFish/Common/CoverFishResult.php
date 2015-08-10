@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.5
  */
 class CoverFishResult
 {
@@ -216,7 +216,7 @@ class CoverFishResult
      */
     public function removeUnit(CoverFishPHPUnitFile $file)
     {
-        $this->units->remove($file);
+        $this->units->removeElement($file);
     }
 
     /**

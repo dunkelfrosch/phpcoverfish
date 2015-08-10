@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.2
+ * @version   0.9.5
  */
 class CoverFishPHPUnitTest
 {
@@ -184,7 +184,7 @@ class CoverFishPHPUnitTest
      */
     public function removeCoverMapping(CoverFishMapping $coverMapping)
     {
-        $this->coverMappings->remove($coverMapping);
+        $this->coverMappings->removeElement($coverMapping);
     }
 
     /*
@@ -216,7 +216,7 @@ class CoverFishPHPUnitTest
      */
     public function removeCoverAnnotation($annotation)
     {
-        $this->coverAnnotations->remove($annotation);
+        $this->coverAnnotations->removeElement($annotation);
     }
 
     /*
