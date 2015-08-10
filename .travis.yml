@@ -12,9 +12,11 @@ sudo: false
 before_install:
   - composer selfupdate
 
-install: composer update --prefer-dist --no-interaction
+install:
+    - composer update --prefer-dist --no-interaction
 
-script: phpunit --testdox --configuration ./tests/phpunit.xml
+script:
+    - cd bin/scripts && sh ./travis_phpunit.sh && ./travis_coverage.sh && ./scrutinizer_ccup.sh && cd ../../
 
 notifications:
   email:
