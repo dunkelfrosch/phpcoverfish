@@ -18,4 +18,14 @@
             <exclude>./data/tests</exclude>
         </testsuite>
     </testsuites>
+
+    <filter>
+        <blacklist>
+            <directory suffix=".php">../tests/data</directory>
+        </blacklist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../src</directory>
+        </whitelist>
+    </filter>
+
 </phpunit>
