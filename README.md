@@ -107,6 +107,7 @@ around this project :)
 *We are currently working on*: 
 
 - config file support (well known from PHPUnit)
+- fully support of phpunit.xml as alternative to current manual scan-path and autoload argument(s)
 - raw scan mode;  currently php reflection ability is used to identify code coverage errors - in future versions a raw scan mode to scan files outside the autoload context will be provided 
 - coverage warnings implementation; identify coverage problems or misconfiguration issues in use of phpunit code coverage
 - refactoring of coverFish's output module; this module is just "meh!"
