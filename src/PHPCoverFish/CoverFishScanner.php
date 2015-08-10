@@ -54,7 +54,7 @@ class CoverFishScanner extends BaseCoverFishScanner
         $this->addValidator(new ValidatorMethodName($coverToken));
         // covers ClassName
         $this->addValidator(new ValidatorClassName($coverToken));
-        // covers ClassName::<public|protected|private|!public|!protected|!private>
+        // covers ClassName::accessor (for public, protected, private, !public, !protected, !private)
         $this->addValidator(new ValidatorClassNameMethodAccess($coverToken));
         // save used coverToken inside cover annotation collection for each phpUnitTest
         $this->phpUnitTest->addCoverAnnotation($coverToken);
@@ -110,7 +110,7 @@ class CoverFishScanner extends BaseCoverFishScanner
             $this->validatorCollection->clear();
 
             // transfer classFile information to methodData
-            $methodData['classFile'] = $classData['classFile'];
+            $methodData['classFile'] = (string) $classData['classFile'];
             // generate our phpUnitTest data structure
             $this->phpUnitTest = $this->setPHPUnitTestData($methodData);
             /** @var array $annotations */

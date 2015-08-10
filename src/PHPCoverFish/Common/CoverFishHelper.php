@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.5
  */
 class CoverFishHelper
 {
@@ -72,40 +72,6 @@ class CoverFishHelper
     }
 
     /**
-     * fetch annotation key value(s) as array from corresponding class docBlock directly
-     *
-     * @param string $docBlock
-     * @param string $key
-     *
-     * @return array|null
-     */
-    public function getAnnotationByKey($docBlock, $key)
-    {
-        /** @var array $classAnnotations */
-        $classAnnotations = $this->parseMethodDocBlock($docBlock);
-        if (!array_key_exists($key, $classAnnotations)) {
-            return array();
-        }
-
-        return $classAnnotations[$key];
-    }
-
-    /**
-     * @param string $key
-     * @param array  $classData
-     *
-     * @return string|null
-     */
-    public function getAttributeByKey($key, array $classData)
-    {
-        if (true === array_key_exists($key, $classData)) {
-            return $classData[$key];
-        }
-
-        return null;
-    }
-
-    /**
      * return all in file use statement defined classes
      *
      * @param string $classFile absolute path of readable class file
@@ -122,36 +88,6 @@ class CoverFishHelper
         }
 
         return $useResult;
-    }
-
-    /**
-     * @param string $file absolute path of readable class file
-     *
-     * @return null|string
-     */
-    public function getFileContent($file)
-    {
-        if (!is_readable($file)) {
-            return null;
-        }
-
-        return file_get_contents($file);
-    }
-
-    /**
-     * in case of (wrong) multiple annotation, get the last defined coversDefaultClass from class docBlock
-     *
-     * @param array $coversDefaultClass
-     *
-     * @return mixed
-     */
-    public function getCoversDefaultClassUsable(array $coversDefaultClass)
-    {
-        if (true === empty($coversDefaultClass)) {
-            return null;
-        }
-
-        return $coversDefaultClass[count($coversDefaultClass) - 1];
     }
 
     /**
@@ -194,6 +130,70 @@ class CoverFishHelper
         }
 
         return true;
+    }
+
+    /**
+     * @param string $file absolute path of readable class file
+     *
+     * @return null|string
+     */
+    public function getFileContent($file)
+    {
+        if (!is_readable($file)) {
+            return null;
+        }
+
+        return file_get_contents($file);
+    }
+
+    /**
+     * in case of (wrong) multiple annotation, get the last defined coversDefaultClass from class docBlock
+     *
+     * @param array $coversDefaultClass
+     *
+     * @return string
+     */
+    public function getCoversDefaultClassUsable(array $coversDefaultClass)
+    {
+        if (true === empty($coversDefaultClass)) {
+            return null;
+        }
+
+        return $coversDefaultClass[count($coversDefaultClass) - 1];
+    }
+
+    /**
+     * fetch annotation key value(s) as array from corresponding class docBlock directly
+     *
+     * @param string $docBlock
+     * @param string $key
+     *
+     * @return array|null
+     */
+    public function getAnnotationByKey($docBlock, $key)
+    {
+        /** @var array $classAnnotations */
+        $classAnnotations = $this->parseMethodDocBlock($docBlock);
+        if (!array_key_exists($key, $classAnnotations)) {
+            return array();
+        }
+
+        return $classAnnotations[$key];
+    }
+
+    /**
+     * @param string $key
+     * @param array  $classData
+     *
+     * @return string|null
+     */
+    public function getAttributeByKey($key, array $classData)
+    {
+        if (true === array_key_exists($key, $classData)) {
+            return $classData[$key];
+        }
+
+        return null;
     }
 
     /**
