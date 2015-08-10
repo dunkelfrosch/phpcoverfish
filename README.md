@@ -6,6 +6,7 @@ phpCoverFish is an open source php cli code coverage preprocessor, used to valid
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![Build Status](https://travis-ci.org/dunkelfrosch/phpcoverfish.svg?branch=master)](https://travis-ci.org/dunkelfrosch/phpcoverfish)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/?branch=master)
 [![Dependency Status](https://gemnasium.com/dunkelfrosch/phpcoverfish.svg)](https://gemnasium.com/dunkelfrosch/phpcoverfish)
 
 ## Installation
@@ -19,7 +20,7 @@ Below you can find find a minimal example of a composer.json file that just defi
             "df/phpcoverfish": "0.9.*"
     }
     ...
-    
+ 
 You can also execute this composer command in your console:
 
     composer require df/php-coverfish
