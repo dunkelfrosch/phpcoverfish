@@ -14,7 +14,7 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
- * @version    0.9.4
+ * @version    0.9.5
  */
 class CoverFishOutput extends BaseCoverFishOutput
 {
@@ -539,8 +539,6 @@ class CoverFishOutput extends BaseCoverFishOutput
     }
 
     /**
-     * @todo: print out more detailed information about the final scan success result
-     *
      * write scan fail result
      */
     private function writeScanFailStatistic(CoverFishResult $coverFishResult)
@@ -570,8 +568,6 @@ class CoverFishOutput extends BaseCoverFishOutput
     }
 
     /**
-     * @todo: print out more detailed information about the final scan success result
-     *
      * write scan fail result
      */
     private function getScanFailPassStatistic(CoverFishResult $coverFishResult)

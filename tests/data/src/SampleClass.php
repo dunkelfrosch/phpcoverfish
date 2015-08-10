@@ -4,6 +4,7 @@ namespace DF\PHPCoverFish\Tests\Data\Src;
 
 /**
  * Class SampleClass
+ *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @copyright 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>

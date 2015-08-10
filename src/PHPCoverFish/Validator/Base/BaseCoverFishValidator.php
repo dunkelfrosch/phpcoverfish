@@ -18,7 +18,7 @@ use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.4
+ * @version   0.9.5
  */
 class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 {
@@ -173,7 +173,7 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     /**
      * @param string $classFQN
      *
-     * @return CoverFishError
+     * @return CoverFishError|\ReflectionClass
      */
     public function validateReflectionClass($classFQN)
     {
