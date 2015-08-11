@@ -185,15 +185,15 @@ class CoverFishHelper
      * @param string $key
      * @param array  $classData
      *
-     * @return array
+     * @return string
      */
     public function getAttributeByKey($key, array $classData)
     {
         if (false === array_key_exists($key, $classData)) {
-            return array();
+            return '';
         }
 
-        return $classData[$key];
+        return (string) $classData[$key];
     }
 
     /**
