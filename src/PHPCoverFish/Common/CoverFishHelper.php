@@ -168,13 +168,13 @@ class CoverFishHelper
      * @param string $docBlock
      * @param string $key
      *
-     * @return array|null
+     * @return array
      */
     public function getAnnotationByKey($docBlock, $key)
     {
         /** @var array $classAnnotations */
         $classAnnotations = $this->parseMethodDocBlock($docBlock);
-        if (!array_key_exists($key, $classAnnotations)) {
+        if (false === array_key_exists($key, $classAnnotations)) {
             return array();
         }
 
@@ -185,15 +185,15 @@ class CoverFishHelper
      * @param string $key
      * @param array  $classData
      *
-     * @return string|null
+     * @return string
      */
     public function getAttributeByKey($key, array $classData)
     {
-        if (true === array_key_exists($key, $classData)) {
-            return $classData[$key];
+        if (false === array_key_exists($key, $classData)) {
+            return array();
         }
 
-        return null;
+        return $classData[$key];
     }
 
     /**
