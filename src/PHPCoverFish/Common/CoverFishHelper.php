@@ -39,7 +39,7 @@ class CoverFishHelper
      * @param string $fqn
      * @param string $delimiter
      *
-     * @return array
+     * @return string
      */
     public function getLastItemInFQNBlock($fqn, $delimiter)
     {

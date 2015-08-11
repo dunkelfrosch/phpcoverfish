@@ -208,7 +208,6 @@ class CoverFishOutput extends BaseCoverFishOutput
      */
     private function getMacroFileInfo(CoverFishPHPUnitTest $unitTest)
     {
-        $fileInfo = null;
         $fileInfoMacro = '%s%s%s: %s';
         return sprintf($fileInfoMacro,
             PHP_EOL,
@@ -421,14 +420,15 @@ class CoverFishOutput extends BaseCoverFishOutput
             return null;
         }
 
+        $file = $this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile());
         $fileNameLine = sprintf('%s%s%s',
             (false === $this->preventAnsiColors)
                 ? Color::tplNormalColor(($this->outputLevel > 1) ? 'scan file ' : null)
                 : 'scan file'
             ,
             (false === $this->preventAnsiColors)
-                ? Color::tplYellowColor($this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile()))
-                : $this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile())
+                ? Color::tplYellowColor($file)
+                : $file
             ,
             ($this->outputLevel > 1) ? PHP_EOL : ' '
         );

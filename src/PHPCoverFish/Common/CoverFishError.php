@@ -165,7 +165,7 @@ final class CoverFishError
             case self::PHPUNIT_VALIDATOR_PROBLEM:
                 break;
 
-            default;
+            default:
                 break;
         }
 

@@ -197,10 +197,14 @@ class BaseCoverFishScanner
                 ->getAttributeByKey('parent', $classData)
             );
 
-        $this->phpUnitFile
-            ->setCoversDefaultClass($this->coverFishHelper->getCoversDefaultClassUsable(
-                $this->coverFishHelper->getAnnotationByKey($classData['docblock'], 'coversDefaultClass')
-            ));
+        $coversDefaultClass = $this->coverFishHelper->getAnnotationByKey($classData['docblock'], 'coversDefaultClass');
+        if (is_array($coversDefaultClass)) {
+            $this->phpUnitFile
+                ->setCoversDefaultClass($this->coverFishHelper->getCoversDefaultClassUsable(
+                    $coversDefaultClass
+                ));
+        }
+
 
         return $this->phpUnitFile;
     }
