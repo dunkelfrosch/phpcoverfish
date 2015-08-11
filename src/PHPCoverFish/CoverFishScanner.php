@@ -29,7 +29,7 @@ class CoverFishScanner extends BaseCoverFishScanner
 
     const APP_VERSION_MAJOR = 0;
     const APP_VERSION_MINOR = 9;
-    const APP_VERSION_BUILD = 4;
+    const APP_VERSION_BUILD = 5;
 
     /**
      * @param array $cliOptions
