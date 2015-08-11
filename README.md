@@ -82,6 +82,7 @@ To call the PHPCoverFish help page use:
     -l / --output-level      detail of scan result output (0=minimal, 1=normal(default), 2=detailed)
     --output-prevent-echo    if you fetch results in json format, you can hide direct output and analyse results as as a json object directly,
                              this parameter is mainly used for testing purposes
+    --exclude-path           exclude a specific path from your planned scan
     --no-ansi                prevent colorul output of rendering results
     
 ### Parameters (in development, not yet available in alpha)    
@@ -90,7 +91,6 @@ To call the PHPCoverFish help page use:
     --stop-on-error          stop on first application error
     --stop-on-failure        stop on first detected coverFish failure 
     --warning-threshold-stop set a warning threshold value, application will break on reaching this number
-    --exclude-path           exclude a specific path from your planned scan
 
 ### Parameters (deprecated, will be removed in future version(s))
 
