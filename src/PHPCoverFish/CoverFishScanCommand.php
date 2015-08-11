@@ -161,7 +161,7 @@ class CoverFishScanCommand extends Command
 
         $result = array();
         preg_match_all('/\d+/', $input, $result, PREG_SET_ORDER);
-        if (false === empty($result) ) {
+        if (false === empty($result)) {
             return $input === '1' ? true : false;
         }
 

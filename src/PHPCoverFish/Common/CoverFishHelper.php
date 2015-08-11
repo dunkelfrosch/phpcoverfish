@@ -47,7 +47,7 @@ class CoverFishHelper
             return $fqnBlock;
         }
 
-        return $fqnBlock[count($fqnBlock) - 1];
+        return (string) $fqnBlock[count($fqnBlock) - 1];
     }
 
     /**
@@ -185,7 +185,7 @@ class CoverFishHelper
      * @param string $key
      * @param array  $classData
      *
-     * @return string
+     * @return array
      */
     public function getAttributeByKey($key, array $classData)
     {
