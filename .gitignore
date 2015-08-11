@@ -6,5 +6,5 @@ composer.lock
 *.log
 ./tmp/*
 ./tmp
-
+/bin/scripts/ocular.phar
 coverage.clover.xml
