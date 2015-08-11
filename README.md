@@ -58,6 +58,9 @@ For example
     cd /www/SymfonySampleApp
     php vendor/df/coverfish/bin/coverfish.php scan tests/ app/autoload.php
 
+if you bound coverfish in your symfony application, composer will be create a symbolic link inside your bin/ directory 
+so you can call this tool like others (phpunit, ...) from this path directly.
+
 
 ## PHPCoverfish arguments and parameter
 
