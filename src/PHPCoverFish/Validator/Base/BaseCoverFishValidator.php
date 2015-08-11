@@ -308,7 +308,7 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 
             $reflectionClass = new \ReflectionClass($classFQN);
 
-        } catch(\ReflectionException $re) {
+        } catch (\ReflectionException $re) {
             return new CoverFishError(CoverFishError::PHPUNIT_REFLECTION_CLASS_NOT_FOUND, $classFQN);
         }
 
