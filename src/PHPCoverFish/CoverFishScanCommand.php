@@ -2,6 +2,7 @@
 
 namespace DF\PHPCoverFish;
 
+use DF\PHPCoverFish\Exception\CoverFishFailExit;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -212,7 +213,13 @@ class CoverFishScanCommand extends Command
             throw new \Exception(sprintf('test path/file "%s" not found! please define test file path (e.g. tests/)', $testPathOrFile));
         }
 
-        $scanner = new CoverFishScanner($cliOptions, $outOptions);
-        $scanner->analysePHPUnitFiles();
+        try {
+
+            $scanner = new CoverFishScanner($cliOptions, $outOptions);
+            $scanner->analysePHPUnitFiles();
+
+        } catch (CoverFishFailExit $e) {
+            /* do nothing */
+        }
     }
 }

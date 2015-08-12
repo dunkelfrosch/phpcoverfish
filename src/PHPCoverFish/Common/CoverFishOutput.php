@@ -4,6 +4,7 @@ namespace DF\PHPCoverFish\Common;
 
 use DF\PHPCoverFish\Common\Base\BaseCoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
+use DF\PHPCoverFish\Exception\CoverFishFailExit;
 
 /**
  * Class CoverFishOutput
@@ -76,6 +77,8 @@ class CoverFishOutput extends BaseCoverFishOutput
     }
 
     /**
+     * output mapping/scanning result of each scanned file
+     *
      * @param CoverFishPHPUnitTest $coverFishTest
      * @param CoverFishResult      $coverFishResult
      */
@@ -433,7 +436,6 @@ class CoverFishOutput extends BaseCoverFishOutput
             ($this->outputLevel > 1) ? PHP_EOL : ' '
         );
 
-
         $this->write($fileNameLine);
     }
 
@@ -563,8 +565,9 @@ class CoverFishOutput extends BaseCoverFishOutput
             $this->getScanFailPassStatistic($coverFishResult)
         );
 
-
         echo $scanResult;
+
+        throw new CoverFishFailExit();
     }
 
     /**

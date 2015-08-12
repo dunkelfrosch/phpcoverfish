@@ -13,7 +13,7 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.0
+ * @version   0.9.6
  */
 final class CoverFishError
 {
