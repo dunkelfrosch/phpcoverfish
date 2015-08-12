@@ -1,6 +1,6 @@
 # PHPCoverFish
 
-phpCoverFish is an open source php cli code coverage preprocessor, used to validate all of your @covers annotations inside your test files before the big code coverage train will run through all of your tests and may collide with bad coverage annotations scattered along the rails.
+phpCoverFish is an open source php(cli) code coverage pre-processor, used to validate all of your @covers annotations inside your test files before the big code coverage train will run through all of your tests and may collide with bad coverage annotations scattered along the rails.
 
 *This alpha version of phpCoverFish won't be as functional as the coming beta version. Specific commands like coverage warning features, including corresponding threshold breaks and stop-on-error/stop-on-failure parameters are not fully functional yet.*
 
@@ -81,6 +81,7 @@ To call the PHPCoverFish help page use:
 
 ### Parameters (optional)
 
+    -p / --phpunit-config    phpUnit config file
     -f / --output-format     json, text (default) - rendering of scan result output format (json or text)
     -l / --output-level      detail of scan result output (0=minimal, 1=normal(default), 2=detailed)
     --output-prevent-echo    if you fetch results in json format, you can hide direct output and analyse results as as a json object directly,
