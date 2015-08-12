@@ -22,7 +22,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     /**
      * check for covered className (FQN) annotation "class missing"
      *
-     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute2
      * @covers DF\PHPCoverFish\Validator\ValidatorClassName::<public>
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::setMapping
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateMapping
