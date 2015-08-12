@@ -3,6 +3,7 @@
 namespace DF\PHPCoverFish\Tests;
 
 use DF\PHPCoverFish\CoverFishScanner;
+use DF\PHPCoverFish\Common\CoverFishError;
 use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
 
 /**
@@ -14,7 +15,7 @@ use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.4
+ * @version   0.9.6
  */
 class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
 {
@@ -50,7 +51,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(1000, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_CLASS_NOT_FOUND, $errorCode);
         }
     }
 
@@ -105,7 +106,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(1000, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_CLASS_NOT_FOUND, $errorCode);
         }
     }
 
@@ -160,7 +161,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(9001, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_VALIDATOR_MISSING_DEFAULT_COVER_CLASS_PROBLEM, $errorCode);
         }
     }
 
@@ -213,7 +214,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(2000, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_METHOD_NOT_FOUND, $errorCode);
         }
     }
 
@@ -267,7 +268,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(2000, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_METHOD_NOT_FOUND, $errorCode);
         }
     }
 
@@ -321,7 +322,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(1000, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_CLASS_NOT_FOUND, $errorCode);
         }
     }
 
@@ -375,7 +376,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(2003, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_NO_PRIVATE_METHODS_FOUND, $errorCode);
         }
     }
 
@@ -428,7 +429,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(2001, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_NO_PUBLIC_METHODS_FOUND, $errorCode);
         }
     }
 
@@ -481,7 +482,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(2002, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_NO_PROTECTED_METHODS_FOUND, $errorCode);
         }
     }
 
@@ -535,7 +536,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(2004, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_NO_NOT_PUBLIC_METHODS_FOUND, $errorCode);
         }
     }
 
@@ -589,7 +590,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(2005, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_NO_NOT_PROTECTED_METHODS_FOUND, $errorCode);
         }
     }
 
@@ -643,7 +644,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $error = (bool) $result->error;
 
             $this->assertTrue($error);
-            $this->assertEquals(2006, $errorCode);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_NO_NOT_PRIVATE_METHODS_FOUND, $errorCode);
         }
     }
 
