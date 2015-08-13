@@ -17,6 +17,12 @@ This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09)
 - Added coverfish self-scan to available unitTests
 - Added blind exception throw on any kind of scan failure
 
+### Fixed
+
+- Fixed color output problem in progress echo
+- Fixed travis issue, disable color out on coverfish self scan
+- Fixed travis issue, enable exit code based command chain
+
 ### Changes
 
 - phpDoc additions
