@@ -15,4 +15,10 @@ namespace DF\PHPCoverFish\Exception;
  */
 class CoverFishFailExit extends \Exception
 {
+    // validator based scan fail detected
+    const RETURN_CODE_SCAN_FAIL = 1;
+    // exception based scan fail detected
+    const RETURN_CODE_SCAN_ERROR = 2;
+    // internal error detected
+    const RETURN_CODE_INTERNAL_FAIL = 1;
 }
