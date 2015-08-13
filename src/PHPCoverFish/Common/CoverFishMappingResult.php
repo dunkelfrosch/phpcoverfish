@@ -11,7 +11,9 @@ namespace DF\PHPCoverFish\Common;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
- * @version    0.9.5
+ * @version    0.9.6
+ *
+ * @codeCoverageIgnore
  */
 class CoverFishMappingResult
 {
