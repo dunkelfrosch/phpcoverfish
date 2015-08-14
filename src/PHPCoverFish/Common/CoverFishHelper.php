@@ -36,6 +36,16 @@ class CoverFishHelper
     }
 
     /**
+     * @param string $namespace
+     *
+     * @return string
+     */
+    public function getPathFromFileNameAndPath($namespace)
+    {
+        return (string) str_replace($this->getFileNameFromPath($namespace), null, $namespace);
+    }
+
+    /**
      * @param string $fqn
      * @param string $delimiter
      *
