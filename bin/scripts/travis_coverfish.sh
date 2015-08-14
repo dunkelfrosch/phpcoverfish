@@ -3,8 +3,11 @@
 # travis call for phpunit code coverage generation
 #
 
-echo "== sys::_travis, execute phpCoverFish scan ...";
-cd ../../ && php ./bin/coverfish scan tests/ vendor/autoload.php --exclude-path tests/data --output-level 1
-cd ./bin/scripts
+php ../../bin/coverfish scan --raw-scan-path ../../tests/ --raw-autoload-file ../../vendor/autoload.php --raw-exclude-path tests/data --output-level 1 --no-ansi
 
-exit 0;
+if [ $? -eq 0 ]
+then
+  echo "\nCoverFish run succeeded"
+else
+  echo "\nCoverFish run failed" >&2
+fi

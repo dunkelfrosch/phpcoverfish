@@ -3,8 +3,11 @@
 # travis call for phpunit check
 #
 
-echo "== sys::_travis, execute phpUnit tests ...";
-cd ../../ && phpunit --testdox --configuration ./tests/phpunit.xml
-cd ./bin/scripts
+cd ../.. && phpunit -c tests/phpunit.xml --testdox && cd ./bin/scripts
 
-exit 0;
+if [ $? -eq 0 ]
+then
+  echo "\nPHPUnit run succeeded"
+else
+  echo "\nPHPUnit run failed" >&2
+fi
