@@ -10,18 +10,18 @@
          stopOnFailure="true"
          stopOnIncomplete="false"
          stopOnSkipped="false"
-         bootstrap="./bootstrap.php"
+         bootstrap="bootstrap.php"
 >
     <testsuites>
-        <testsuite name="PHPCoverFish base test suite">
+        <testsuite name="PHPCoverFish">
             <directory>.</directory>
-            <exclude>./data/tests</exclude>
+            <exclude>./data</exclude>
         </testsuite>
     </testsuites>
 
     <filter>
         <blacklist>
-            <directory suffix=".php">../tests/data</directory>
+            <directory suffix=".php">./data</directory>
         </blacklist>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../src</directory>
