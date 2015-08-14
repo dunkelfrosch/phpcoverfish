@@ -17,9 +17,9 @@ install:
     - composer update --prefer-dist --no-interaction
 
 script:
-    - sh ./bin/scripts/travis_phpunit.sh
-    - sh ./bin/scripts/travis_coverfish.sh
-    - sh ./bin/scripts/travis_coverage.sh
+    - cd ./bin/scripts && sh travis_phpunit.sh
+    - cd ./bin/scripts && sh travis_coverfish.sh
+    - cd ./bin/scripts && sh travis_coverage.sh
     # - sh ./bin/scripts/scrutinizer_ccup.sh
 
 notifications:
