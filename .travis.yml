@@ -2,6 +2,7 @@ language: php
 
 php:
   - 5.5
+  # - 5.6
 
 cache:
   directories:
@@ -16,7 +17,10 @@ install:
     - composer update --prefer-dist --no-interaction
 
 script:
-    - cd bin/scripts && sh ./travis_phpunit.sh && ./travis_coverfish.sh && ./travis_coverage.sh && ./scrutinizer_ccup.sh && cd ../../
+    - sh ./bin/scripts/travis_phpunit.sh
+    - sh ./bin/scripts/travis_coverfish.sh
+    - sh ./bin/scripts/travis_coverage.sh
+    # - sh ./bin/scripts/scrutinizer_ccup.sh
 
 notifications:
   email:
