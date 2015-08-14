@@ -17,10 +17,11 @@ install:
     - composer update --prefer-dist --no-interaction
 
 script:
-    - cd ./bin/scripts && sh travis_phpunit.sh
-    - cd ./bin/scripts && sh travis_coverfish.sh
-    - cd ./bin/scripts && sh travis_coverage.sh
-    # - sh ./bin/scripts/scrutinizer_ccup.sh
+    - cd ./bin/scripts
+    - sh travis_phpunit.sh
+    - sh travis_coverfish.sh
+    - sh travis_coverage.sh
+    - cd ../../
 
 notifications:
   email:
