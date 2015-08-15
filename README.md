@@ -1,8 +1,8 @@
 # PHPCoverFish
 
-phpCoverFish (hereinafter refererred to as coverfish) is an open source php(cli) code coverage pre-processor, used to validate all of your @covers annotations inside your test files before the big code coverage train will run through all of your tests and may collide with bad coverage annotations scattered along the rails.
+phpCoverFish is an open source php(cli) code coverage pre-processor, used to validate all of your @covers annotations inside your test files before the big code coverage train will run through all of your tests and may collide with bad coverage annotations scattered along the rails.
 
-*This alpha version of phpCoverFish won't be as functional as the coming beta version. Specific commands like coverage warning features, including corresponding threshold breaks and stop-on-error/stop-on-failure parameters are not fully functional yet.*
+*This alpha version of phpCoverFish won't be as functional as the coming beta version. Specific commands like coverage warning features, including corresponding threshold breaks and stop-on-error/stop-on-failure parameters are not fully functional yet. As coverfish is still actively  under development, it is a slight possibility that some  options and parameter are not fully working as expected or may have undergone changes in recent versions.*
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![Build Status](https://travis-ci.org/dunkelfrosch/phpcoverfish.svg?branch=master)](https://travis-ci.org/dunkelfrosch/phpcoverfish)
@@ -49,17 +49,43 @@ As soon as coverfish will reach it's stable state we will not only provide an ad
 
 ## Usage
 
-To call coverfish from your shell after installation use the following basic syntax:
+To call coverfish from your shell after installation use the following two mode's:
+*if you bound coverfish in your symfony application, composer will be create a symbolic link inside your bin/ directory 
+so you can call this tool like others (phpunit, ...) from this path directly.*
 
-    php <path/to/your/coverfish/vendor/>bin/coverfish.php *scan* <path/to/your/phpunit>/tests <path/to/your/autoload.php>
+**PHPUnit-Mode** scan (recommended scan mode), using existing phpunit.xml instead of "raw" parameter for scan-path, exclude-path and autoload-file: 
 
-For example
+    php ./bin/coverfish scan tests/phpunit.xml \
+            --phpunit-config-suite "PHPCoverFish Suite" \ 
+            --output-level 1 \
+            --no-ansi
 
-    cd /www/SymfonySampleApp
-    php vendor/df/coverfish/bin/coverfish.php scan tests/ app/autoload.php
+for example (using phpunit.xml without any test suite name will take first test suite configuration for this scan) :    
+    
+    php ./bin/coverfish scan tests/phpunit.xml --output-level 1 --no-ansi
 
-if you bound coverfish in your symfony application, composer will be create a symbolic link inside your bin/ directory 
-so you can call this tool like others (phpunit, ...) from this path directly.
+or (using phpunit test suite name "PHPCoverFish Suite" ):
+
+    php ./bin/coverfish scan tests/phpunit.xml --phpunit-config-suite "PHPCoverFish Suite" --output-level 1 --no-ansi   
+
+the result should be:
+
+![phpunit mode result](https://dl.dropbox.com/s/371ea9arp1yvdb9/ss-sample-normal-mode-result-1.png)
+
+**RAW-Mode** scan (alternative scan mode), using additional parameters for required scan-path, autoload-file (exclude path will be used optinal here)
+
+    php <path/to/your/coverfish/vendor/>bin/coverfish.php *scan* \
+            --raw-scan-path "<path/to/your/phpunit/tests>" \
+            --raw-autoload-file "<path/to/your/autoload.php>" \
+            --raw-exclude-path "<path/to/your/excluded/test/files>"
+    
+for example:
+
+    php ./bin/coverfish scan --raw-scan-path tests/ --raw-autoload-file "vendor/autoload.php" --raw-exclude-path "tests/data" --output-level 1 --no-ansi
+
+the result should looking like:
+
+![raw mode result](https://dl.dropbox.com/s/cpr6tp341asxylu/ss-sample-raw-mode-result-1.png)
 
 
 ## PHPCoverfish arguments and parameter
@@ -71,22 +97,19 @@ To call the PHPCoverFish help page use:
 ### Arguments
 
     scan                     scan/analyze command (currently the only available mode of coverfish)
-
-### Parameters (required)
-
-    scan-path                path to your target php unit class test files or a single test file
-    exclude-path             path to excluded test classes 
-    autoload-file            your application used autoload file (psr-0/psr-4 standard)
-                             will be replaced by phpunit.xml file in our upcoming beta version
-
+    phpunit-config           path to your project phpunit.xml config file (e.g. tests/phpunit.xml)
+                             this argument override all raw- parameter (raw-scan-path, raw-autoload-path ...)
+    
 ### Parameters (optional)
 
-    -p / --phpunit-config    phpUnit config file
+    raw-scan-path            path to your target php unit class test files or a single test file
+    raw-exclude-path         exclude a specific path from your planned scan 
+    raw-autoload-file        your application used autoload file (psr-0/psr-4 standard)
+                             will be replaced by phpunit.xml file in our upcoming beta version
     -f / --output-format     json, text (default) - rendering of scan result output format (json or text)
     -l / --output-level      detail of scan result output (0=minimal, 1=normal(default), 2=detailed)
     --output-prevent-echo    if you fetch results in json format, you can hide direct output and analyse results as as a json object directly,
                              this parameter is mainly used for testing purposes (deprecated, will be replaced by --quiet/-q in beta version)
-    --exclude-path           exclude a specific path from your planned scan
     --no-ansi                prevent colorful output of rendering results
     
 ### Parameters (in development, not yet available in alpha)    
@@ -110,12 +133,10 @@ around this project :)
 
 *We are currently working on*: 
 
-- config file support (well known from PHPUnit)
-- fully support of phpunit.xml as alternative to current manual scan-path and autoload argument(s)
 - raw scan mode;  currently php reflection ability is used to identify code coverage errors - in future versions a raw scan mode to scan files outside the autoload context will be provided 
 - coverage warnings implementation; identify coverage problems or misconfiguration issues in use of phpunit code coverage
 - refactoring of coverFish's output module; this module is just "meh!"
-- mastering coverfish documentation
+- mastering coverfish documentation and build up a useful wiki
 
 
 ## Screenshots, phpCoverFish at work
