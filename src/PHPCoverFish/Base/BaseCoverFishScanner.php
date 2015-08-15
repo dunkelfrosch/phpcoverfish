@@ -20,10 +20,25 @@ use SebastianBergmann\FinderFacade\FinderFacade;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.5
+ * @version   0.9.7
  */
 class BaseCoverFishScanner
 {
+    /**
+     * @var string
+     */
+    protected $phpUnitConfigPath;
+
+    /**
+     * @var string
+     */
+    protected $phpUnitConfigFile;
+
+    /**
+     * @var string
+     */
+    protected $phpUnitConfigTestSuite;
+
     /**
      * @var string
      */
@@ -33,6 +48,11 @@ class BaseCoverFishScanner
      * @var String
      */
     protected $testExcludePath;
+
+    /**
+     * @var String
+     */
+    protected $testAutoloadPath;
 
     /**
      * @var bool
@@ -117,22 +137,246 @@ class BaseCoverFishScanner
     );
 
     /**
+     * @return ArrayCollection
+     */
+    public function getValidatorCollection()
+    {
+        return $this->validatorCollection;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhpUnitConfigPath()
+    {
+        return $this->phpUnitConfigPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhpUnitConfigFile()
+    {
+        return $this->phpUnitConfigFile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhpUnitConfigTestSuite()
+    {
+        return $this->phpUnitConfigTestSuite;
+    }
+
+    /**
+     * @todo rename this variable to (get)TestSourcePathOrFile
+     *
+     * @return string
+     */
+    public function getTestSourcePath()
+    {
+        return $this->testSourcePath;
+    }
+
+    /**
+     * @return String
+     */
+    public function getTestExcludePath()
+    {
+        return $this->testExcludePath;
+    }
+
+    /**
+     * @return String
+     */
+    public function getTestAutoloadPath()
+    {
+        return $this->testAutoloadPath;
+    }
+
+    /**
+     * @return CoverFishPHPUnitFile
+     */
+    public function getPhpUnitFile()
+    {
+        return $this->phpUnitFile;
+    }
+
+    /**
+     * @return CoverFishPHPUnitTest
+     */
+    public function getPhpUnitTest()
+    {
+        return $this->phpUnitTest;
+    }
+
+    /**
+     * @return CoverFishHelper
+     */
+    public function getCoverFishHelper()
+    {
+        return $this->coverFishHelper;
+    }
+
+    /**
      * @param array $cliOptions
      */
     public function __construct(array $cliOptions)
     {
         $this->debug = $cliOptions['sys_debug'];
 
-        $this->testSourcePath = $cliOptions['sys_scan_source'];
-        $this->testExcludePath = $cliOptions['sys_exclude_path'];
+        $this->phpUnitConfigFile = $cliOptions['sys_phpunit_config'];
+        $this->phpUnitConfigTestSuite = $cliOptions['sys_phpunit_config_test_suite'];
+
+        // fetch all necessary coverfish parameter by optional given raw-data first
+        $this->testAutoloadPath = $cliOptions['raw_scan_autoload_file'];
+        $this->testSourcePath = $cliOptions['raw_scan_source'];
+        $this->testExcludePath = $cliOptions['raw_scan_exclude_path'];
 
         $this->stopOnError = $cliOptions['sys_stop_on_error'];
         $this->stopOnFailure = $cliOptions['sys_stop_on_failure'];
         $this->warningThreshold = $cliOptions['sys_warning_threshold'];
 
+        $this->validatorCollection = new ArrayCollection();
         $this->coverFishHelper = new CoverFishHelper();
         $this->coverFishResult = new CoverFishResult();
-        $this->validatorCollection = new ArrayCollection();
+
+        if (true === $this->coverFishHelper->checkFileExist($this->phpUnitConfigFile)) {
+            $this->setConfigFromPHPUnitConfigFile();
+        }
+
+        if (true === $this->checkSourceAutoload($this->testAutoloadPath)) {
+            include(sprintf('%s', $this->testAutoloadPath));
+        }
+    }
+
+    /**
+     * check existence of given autoload file (raw/psr-0/psr-4)
+     *
+     * @param string $autoloadFile
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public function checkSourceAutoload($autoloadFile)
+    {
+        if (false === $this->coverFishHelper->checkFileExist($autoloadFile)) {
+            throw new \Exception(sprintf('autoload file "%s" not found! please define your autoload.php file to use (e.g. ../app/autoload.php in symfony)', $autoloadFile));
+        }
+
+        return true;
+    }
+
+    /**
+     * get a testSuite main attribute of given phpunit xml file (like name, bootstrap ...)
+     *
+     * @param string            $attribute
+     * @param \SimpleXMLElement $xmlDocument
+     *
+     * @return bool|string
+     */
+    public function getAttributeFromXML($attribute, \SimpleXMLElement $xmlDocument)
+    {
+        /** @var \SimpleXMLElement $value */
+        foreach ($xmlDocument->attributes() as $key => $value) {
+            /** @var \SimpleXMLElement $attribute */
+            if ($attribute === $key) {
+                return (string) ($this->xmlToArray($value)[0]);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * function will return the first testSuite directory found in testSuites node-block.
+     * if no "$this->phpUnitConfigTestSuite" provided, first testSuite will be returned!
+     *
+     * @param \SimpleXMLElement $xmlDocumentNodes
+     *
+     * @return bool|\SimpleXMLElement
+     */
+    public function getTestSuiteNodeFromXML(\SimpleXMLElement $xmlDocumentNodes) {
+
+        /** @var \SimpleXMLElement $suite */
+        foreach ($xmlDocumentNodes->testsuites->testsuite as $suite) {
+
+            if (false === $suiteName = $this->getAttributeFromXML('name', $suite)) {
+                continue;
+            }
+
+            if ((true === empty($this->phpUnitConfigTestSuite)) || ($suiteName === $this->phpUnitConfigTestSuite)) {
+                return $suite;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * get a specific property from named testSuite node (like "exclude" or "directory")
+     *
+     * @param string            $property
+     * @param \SimpleXMLElement $xmlDocumentNodes
+     *
+     * @return bool|string
+     */
+    public function getTestSuitePropertyFromXML($property, \SimpleXMLElement $xmlDocumentNodes)
+    {
+        /** @var \SimpleXMLElement $suite */
+        $suite = $this->getTestSuiteNodeFromXML($xmlDocumentNodes);
+        if (false === empty($suite)) {
+            return (string) ($this->xmlToArray($suite->$property)[0]);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \SimpleXMLElement|array $xmlObject
+     * @param array                   $output
+     *
+     * @return array
+     */
+    public function xmlToArray($xmlObject, $output = array())
+    {
+        foreach ((array) $xmlObject as $index => $node ) {
+            $output[$index] = (is_object ($node) || is_array($node))
+                ? $this->xmlToArray($node)
+                : $node;
+        }
+
+        return $output;
+    }
+
+    /**
+     * update/set configuration using phpunit xml file
+     */
+    public function setConfigFromPHPUnitConfigFile()
+    {
+        try {
+
+            /** @var \SimpleXMLElement $xmlDocument */
+            $xmlDocument = simplexml_load_file($this->phpUnitConfigFile);
+
+            $this->phpUnitConfigPath = $this->coverFishHelper->getPathFromFileNameAndPath($this->phpUnitConfigFile);
+            $this->testAutoloadPath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getAttributeFromXML('bootstrap', $xmlDocument));
+            $this->testSourcePath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getTestSuitePropertyFromXML('directory', $xmlDocument));
+            $this->testExcludePath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getTestSuitePropertyFromXML('exclude', $xmlDocument));
+
+            echo sprintf('using phpunit config file "%s"%s%s', $this->phpUnitConfigFile, PHP_EOL, PHP_EOL);
+            echo sprintf('- autoload file: %s%s', $this->testAutoloadPath, PHP_EOL);
+            echo sprintf('- test source path for scan: %s%s', $this->testSourcePath, PHP_EOL);
+            echo sprintf('- exclude test source path: %s%s%s', $this->testExcludePath, PHP_EOL, PHP_EOL);
+
+        } catch (\Exception $e) {
+
+            echo sprintf('parse error loading phpunit config file "%s"!%s -> message: %s',
+                $this->phpUnitConfigFile,
+                PHP_EOL,
+                $e->getMessage());
+        }
     }
 
     /**
@@ -140,7 +384,7 @@ class BaseCoverFishScanner
      *
      * @return ArrayCollection
      */
-    protected function addValidator(CoverFishValidatorInterface $validator)
+    public function addValidator(CoverFishValidatorInterface $validator)
     {
         $this->validatorCollection->add($validator);
     }
@@ -174,7 +418,7 @@ class BaseCoverFishScanner
      *
      * @return CoverFishPHPUnitFile
      */
-    protected function setPHPUnitTestMetaData($className, $classData)
+    public function setPHPUnitTestMetaData($className, $classData)
     {
         $this->phpUnitFile->setClassName($className);
 
@@ -254,7 +498,7 @@ class BaseCoverFishScanner
     {
         $finalPath = array();
 
-        if (true === empty($excludePath) || false === $this->coverFishHelper->checkPath($excludePath)) {
+        if (true === empty($excludePath)) {
             return $files;
         }
 
