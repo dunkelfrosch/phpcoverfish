@@ -11,10 +11,29 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.5
+ * @version   0.9.7
  */
 class CoverFishHelper
 {
+    /**
+     * @param string $file
+     *
+     * @return bool
+     */
+    public function checkFileExist($file)
+    {
+        return (true === $this->checkParamNotEmpty($file) && true === file_exists($file));
+    }
+
+    /**
+     * @param $param
+     * @return bool
+     */
+    public function checkParamNotEmpty($param)
+    {
+        return ((null !== $param) && ('' !== $param));
+    }
+
     /**
      * @param string $namespace
      *
