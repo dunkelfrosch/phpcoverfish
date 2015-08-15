@@ -3,7 +3,7 @@
 # travis call for phpunit check
 #
 
-cd ../.. && phpunit -c tests/phpunit.xml --testdox && cd ./bin/scripts
+cd ../.. && phpunit -c tests/phpunit.xml --testdox && cd bin/scripts
 
 if [ $? -eq 0 ]
 then
