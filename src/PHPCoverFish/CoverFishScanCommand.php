@@ -19,7 +19,7 @@ use DF\PHPCoverFish\Common\CoverFishHelper;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.4
+ * @version   0.9.7
  */
 class CoverFishScanCommand extends Command
 {
@@ -38,14 +38,34 @@ class CoverFishScanCommand extends Command
             ->setDescription('open source php code coverage preprocessor')
             ->setHelp($this->getHelpOutput())
             ->addArgument(
-                'scan-path',
-                InputArgument::REQUIRED,
-                'the source path of your corresponding phpunit test files or a specific testFile (e.g. tests/)'
+                'phpunit-config',
+                InputArgument::OPTIONAL,
+                'the source path of your corresponding phpunit xml config file (e.g. ./tests/phpunit.xml)'
             )
-            ->addArgument(
-                'autoload-file',
-                InputArgument::REQUIRED,
-                'your application autoload file and path (e.g. ../app/autoload.php for running in symfony context)'
+            ->addOption(
+                'phpunit-config-suite',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'name of the target test suite inside your php config xml file, this test suite will be scanned'
+            )
+            ->addOption(
+                'raw-scan-path',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'raw mode option: the source path of your corresponding phpunit test files or a specific testFile (e.g. tests/), this option will always override all arguments from phpunit.xml!'
+            )
+            ->addOption(
+                'raw-autoload-file',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'raw-mode option: your application autoload file and path (e.g. ../app/autoload.php for running in symfony context), this option will always override all arguments from phpunit.xml!'
+            )
+            ->addOption(
+                'raw-exclude-path',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'raw-mode option: exclude a specific path from planned scan',
+                null
             )
             ->addOption(
                 'output-format',
@@ -96,13 +116,6 @@ class CoverFishScanCommand extends Command
                 'numbers of allowed warnings before scan will be stopped (not available in alpha)',
                 99
             )
-            ->addOption(
-                'exclude-path',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'exclude a specific path from planned scan',
-                null
-            )
         ;
     }
 
@@ -149,28 +162,7 @@ class CoverFishScanCommand extends Command
     }
 
     /**
-     * @param $input
-     *
-     * @return bool
-     */
-    protected function getBoolFromInput($input)
-    {
-        // define empty option argument as true flagged option
-        if (true === empty($input)) {
-            return true;
-        }
-
-        $result = array();
-        preg_match_all('/\d+/', $input, $result, PREG_SET_ORDER);
-        if (false === empty($result)) {
-            return $input === '1' ? true : false;
-        }
-
-        return $input === 'true' ? true : false;
-    }
-
-    /**
-     * execute command "scan"
+     * exec command "scan"
      *
      * @param InputInterface  $input
      * @param OutputInterface $output
@@ -181,19 +173,14 @@ class CoverFishScanCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->showExecTitle($output);
-
-        // include main autoload file, will be obsolete in future version (we'll use phpunit.xml file directly)
-        if (false === file_exists($autoloadFile = $input->getArgument('autoload-file'))) {
-            throw new \Exception(sprintf('autoload file "%s" not found! please define your autoload.php file to use (e.g. ../app/autoload.php in symfony2)', $autoloadFile));
-        }
-
-        include($autoloadFile);
-
-        $this->coverFishHelper = new CoverFishHelper();
+        $this->prepareExecute($input);
 
         $cliOptions = array(
-            'sys_scan_source' => $input->getArgument('scan-path'),
-            'sys_exclude_path' => $input->getOption('exclude-path'),
+            'sys_phpunit_config' => $input->getArgument('phpunit-config'),
+            'sys_phpunit_config_test_suite' => $input->getOption('phpunit-config-suite'),
+            'raw_scan_source' => $input->getOption('raw-scan-path'),
+            'raw_scan_autoload_file' => $input->getOption('raw-autoload-file'),
+            'raw_scan_exclude_path' => $input->getOption('raw-exclude-path'),
             'sys_debug' => $input->getOption('debug'),
             'sys_stop_on_error' => $input->getOption('stop-on-error'),
             'sys_stop_on_failure' => $input->getOption('stop-on-failure'),
@@ -208,18 +195,33 @@ class CoverFishScanCommand extends Command
             'out_no_echo' => $input->getOption('output-prevent-echo'),
         );
 
-        $testPathOrFile = $input->getArgument('scan-path');
-        if (false === $this->coverFishHelper->checkFileOrPath($testPathOrFile)) {
-            throw new \Exception(sprintf('test path/file "%s" not found! please define test file path (e.g. tests/)', $testPathOrFile));
-        }
-
         try {
-
             $scanner = new CoverFishScanner($cliOptions, $outOptions);
             $scanner->analysePHPUnitFiles();
-
         } catch (CoverFishFailExit $e) {
-            /* do nothing */
+            die(CoverFishFailExit::RETURN_CODE_SCAN_FAIL);
+        }
+    }
+
+    /**
+     * prepare exec of command "scan"
+     *
+     * @param InputInterface $input
+     *
+     * @throws \Exception
+     */
+    public function prepareExecute(InputInterface $input)
+    {
+        $this->coverFishHelper = new CoverFishHelper();
+
+        $phpUnitConfigFile = $input->getArgument('phpunit-config');
+        if (false === empty($phpUnitConfigFile) && false === $this->coverFishHelper->checkFileOrPath($phpUnitConfigFile)) {
+            throw new \Exception(sprintf('phpunit config file "%s" not found! please define your phpunit.xml config file to use (e.g. tests/phpunit.xml)', $phpUnitConfigFile));
+        }
+
+        $testPathOrFile = $input->getOption('raw-scan-path');
+        if (false === empty($testPathOrFile) && false === $this->coverFishHelper->checkFileOrPath($testPathOrFile)) {
+            throw new \Exception(sprintf('test path/file "%s" not found! please define test file path (e.g. tests/)', $testPathOrFile));
         }
     }
 }
