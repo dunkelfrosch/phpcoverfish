@@ -1,7 +1,26 @@
-# Changes in PHPCoverFish 0.9.6
+# Changes in PHPCoverFish 0.9.7
 
 All notable changes of the PHPCoverFish release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09).
+
+
+## [0.9.7] - 2015-08-15
+
+### Fixed
+
+- Fixed some errors in used method access types in baseScanner class
+
+### Added
+
+- Added phpunit.xml config file argument input support `--phpunit-config`
+- Added phpunit.xml test suite select parameter input support `--phpunit-config-suite`
+- Added additional unit tests for coverFishHelper and (base) coverFishScanner class
+- Added raw-mode arguments/parameter
+
+### Changes
+
+- prefix current autoload, scan-path and exclude path argument/options in raw mode parameter
+- improve documentation
 
 ## [0.9.6] - 2015-08-12
 
@@ -12,7 +31,7 @@ This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09)
 
 ### Added
 
-- Added phpunit.xml direct input support as parameter `--phpunit-config`
+- Added minor phpunit.xml input support as parameter `--phpunit-config`
 - Added additional UnitTests to improve codeCoverage
 - Added coverfish self-scan to available unitTests
 - Added blind exception throw on any kind of scan failure
