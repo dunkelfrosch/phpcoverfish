@@ -41,12 +41,15 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
     public function getDefaultCLIOptions($testSource, $excludePath = null)
     {
         return array(
-            'sys_scan_source' => $testSource,
-            'sys_exclude_path' => $excludePath,
+            'raw_scan_source' => $testSource,
+            'raw_scan_autoload_file' => 'vendor/autoload.php',
+            'raw_scan_exclude_path' => $excludePath,
             'sys_debug' => false,
             'sys_stop_on_error' => false,
             'sys_stop_on_failure' => false,
             'sys_warning_threshold' => 99,
+            'sys_phpunit_config' => null,
+            'sys_phpunit_config_test_suite' => null,
         );
     }
 

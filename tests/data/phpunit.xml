@@ -9,11 +9,11 @@
     <testsuites>
         <testsuite name="PHPCoverFishTestSuiteA">
             <directory>.</directory>
-            <exclude>data/tests</exclude>
+            <exclude>tests/exclude</exclude>
         </testsuite>
         <testsuite name="PHPCoverFishTestSuiteB">
-            <directory>tests</directory>
-            <exclude>tests/exclude</exclude>
+            <directory>.</directory>
+            <exclude>tests/exclude2</exclude>
         </testsuite>
     </testsuites>
 

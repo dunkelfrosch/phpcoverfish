@@ -13,15 +13,15 @@
          bootstrap="bootstrap.php"
 >
     <testsuites>
-        <testsuite name="PHPCoverFish">
+        <testsuite name="PHPCoverFish Suite">
             <directory>.</directory>
-            <exclude>./data</exclude>
+            <exclude>data/</exclude>
         </testsuite>
     </testsuites>
 
     <filter>
         <blacklist>
-            <directory suffix=".php">./data</directory>
+            <directory suffix=".php">data/</directory>
         </blacklist>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../src</directory>
