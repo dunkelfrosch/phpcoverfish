@@ -19,7 +19,7 @@ install:
 script:
     - cd ./bin/scripts
     - sh travis_phpunit.sh
-    # - sh travis_coverfish.sh
+    - sh travis_coverfish.sh
     - sh travis_coverage.sh
     - cd ../../
 
