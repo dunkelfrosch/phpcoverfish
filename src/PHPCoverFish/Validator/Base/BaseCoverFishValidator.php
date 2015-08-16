@@ -18,7 +18,7 @@ use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.6
+ * @version   0.9.7
  */
 class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 {
@@ -100,8 +100,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
         return $coverMapping;
     }
 
-
-
     /**
      * @return bool
      */
@@ -111,8 +109,156 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
-     * main validator mapping "engine"
-     * @todo: (heavy) refactoring required!
+     * @param CoverFishMappingResult $mappingResult
+     *
+     * @return CoverFishMappingResult
+     */
+    public function clearValidationErrors(CoverFishMappingResult $mappingResult)
+    {
+        $mappingResult->setPass(true);
+        $mappingResult->clearErrors();
+
+        return $mappingResult;
+    }
+
+    /**
+     * @param CoverFishMappingResult $mappingResult
+     * @param int                    $errorCode
+     * @param string|null            $errorMessage
+     *
+     * @return CoverFishMappingResult
+     */
+    public function setValidationError(CoverFishMappingResult $mappingResult, $errorCode, $errorMessage = null)
+    {
+        $mappingResult->setPass(false);
+        $mappingResult->addError(new CoverFishError($errorCode, $errorMessage));
+
+        return $mappingResult;
+    }
+
+    /**
+     * @param CoverFishMapping       $coverMapping
+     * @param CoverFishMappingResult $mappingResult
+     *
+     * @return CoverFishMappingResult
+     */
+    public function validateDefaultCoverClassMapping(CoverFishMapping $coverMapping, CoverFishMappingResult $mappingResult)
+    {
+        // skip validation if incoming mapping result is already invalid!
+        if (false === $mappingResult->isPass()) {
+            return $mappingResult;
+        }
+
+        if (empty($coverMapping->getClassFQN()) && empty($coverMapping->getClass())) {
+            $mappingResult = $this->setValidationError(
+                $mappingResult,
+                CoverFishError::PHPUNIT_VALIDATOR_MISSING_DEFAULT_COVER_CLASS_PROBLEM
+            );
+        }
+
+        return $mappingResult;
+    }
+
+    /**
+     * @param CoverFishMapping       $coverMapping
+     * @param CoverFishMappingResult $mappingResult
+     *
+     * @return CoverFishMappingResult
+     */
+    public function validateClassFQNExistence(CoverFishMapping $coverMapping, CoverFishMappingResult $mappingResult)
+    {
+        // skip validation if incoming mapping result is already invalid!
+        if (false === $mappingResult->isPass()) {
+            return $mappingResult;
+        }
+
+        if (empty($coverMapping->getClassFQN())) {
+            $mappingResult = $this->setValidationError(
+                $mappingResult,
+                CoverFishError::PHPUNIT_REFLECTION_CLASS_NOT_DEFINED
+            );
+        }
+
+        return $mappingResult;
+    }
+
+    /**
+     * @todo: mappingResult could be false, set special coverFishError here ...
+     *
+     * @param CoverFishMapping       $coverMapping
+     * @param CoverFishMappingResult $mappingResult
+     *
+     * @return CoverFishMappingResult
+     */
+    public function validateClassFQNMapping(CoverFishMapping $coverMapping, CoverFishMappingResult $mappingResult)
+    {
+        // skip validation if incoming mapping result is already invalid!
+        if (false === $mappingResult->isPass()) {
+            return $mappingResult;
+        }
+
+        $classReflectionResult = $this->validateReflectionClass($coverMapping->getClassFQN());
+        if ($classReflectionResult instanceof CoverFishError) {
+            $mappingResult = $this->setValidationError(
+                $mappingResult,
+                $classReflectionResult->getErrorCode()
+            );
+        }
+
+        return $mappingResult;
+    }
+
+    /**
+     * @param CoverFishMapping       $coverMapping
+     * @param CoverFishMappingResult $mappingResult
+     *
+     * @return CoverFishMappingResult
+     */
+    public function validateClassAccessorVisibility(CoverFishMapping $coverMapping, CoverFishMappingResult $mappingResult)
+    {
+        // skip validation if incoming mapping result is already invalid!
+        if (false === $mappingResult->isPass()) {
+            return $mappingResult;
+        }
+
+        $methodReflectionResult = $this->validateReflectionClassForAccessorVisibility($coverMapping->getClassFQN(), $coverMapping->getAccessor());
+        if ($methodReflectionResult instanceof CoverFishError) {
+            $mappingResult = $this->setValidationError(
+                $mappingResult,
+                $methodReflectionResult->getErrorCode()
+            );
+        }
+
+        return $mappingResult;
+    }
+
+    /**
+     * @param CoverFishMapping       $coverMapping
+     * @param CoverFishMappingResult $mappingResult
+     *
+     * @return CoverFishMappingResult
+     */
+    public function validateClassMethod(CoverFishMapping $coverMapping, CoverFishMappingResult $mappingResult)
+    {
+        // skip validation if incoming mapping result is already invalid!
+        if (false === $mappingResult->isPass()) {
+            return $mappingResult;
+        }
+
+        $methodReflectionResult = $this->validateReflectionMethod($coverMapping->getClassFQN(), $coverMapping->getMethod());
+        if ($methodReflectionResult instanceof CoverFishError) {
+            $mappingResult = $this->setValidationError(
+                $mappingResult,
+                $methodReflectionResult->getErrorCode()
+            );
+        }
+
+        return $mappingResult;
+    }
+
+    /**
+     * main validator mapping "engine", if any of our cover validator checks will fail,
+     * return corresponding result immediately ...
      *
      * @param CoverFishMapping $coverMapping
      *
@@ -122,53 +268,18 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     {
         /** @var CoverFishMappingResult $mappingResult */
         $mappingResult = new CoverFishMappingResult();
-        $mappingResult->setPass(true);
+        $mappingResult = $this->clearValidationErrors($mappingResult);
 
-        // 1 - check for classFQN/DefaultCoverClass mapping validation-error
-        if (empty($coverMapping->getClassFQN()) && empty($coverMapping->getClass())) {
-            $mappingResult->setPass(false);
-            $mappingResult->addError(new CoverFishError(
-                CoverFishError::PHPUNIT_VALIDATOR_MISSING_DEFAULT_COVER_CLASS_PROBLEM, null)
-            );
-
-            return $mappingResult;
-        }
-
-        // 2 - check for classFQN mapping validation-error
-        if (empty($coverMapping->getClassFQN())) {
-            $mappingResult->setPass(false);
-            $mappingResult->addError(new CoverFishError(CoverFishError::PHPUNIT_REFLECTION_CLASS_NOT_DEFINED, null));
-
-            return $mappingResult;
-        }
-
-        // 3 - check for invalid classFQN validation-error
-        $classReflectionResult = $this->validateReflectionClass($coverMapping->getClassFQN());
-        // @todo: mappingResult could be false, set special coverFishError here ...
-        if ($classReflectionResult instanceof CoverFishError) {
-            $mappingResult->setPass(false);
-            $mappingResult->addError($classReflectionResult);
-
-            return $mappingResult;
-        }
-
-        // 4 - check for invalid accessor validation-error
-        $methodReflectionResult = $this->validateReflectionClassForAccessorVisibility($coverMapping->getClassFQN(), $coverMapping->getAccessor());
-        if ($methodReflectionResult instanceof CoverFishError) {
-            $mappingResult->setPass(false);
-            $mappingResult->addError($methodReflectionResult);
-
-            return $mappingResult;
-        }
-
-        // 5 - check for invalid method validation-error
-        $methodReflectionResult = $this->validateReflectionMethod($coverMapping->getClassFQN(), $coverMapping->getMethod());
-        if ($methodReflectionResult instanceof CoverFishError) {
-            $mappingResult->setPass(false);
-            $mappingResult->addError($methodReflectionResult);
-
-            return $mappingResult;
-        }
+        // 01: check for classFQN/DefaultCoverClass mapping validation-error
+        $mappingResult = $this->validateDefaultCoverClassMapping($coverMapping, $mappingResult);
+        // 02: check for classFQN existence validation-error
+        $mappingResult = $this->validateClassFQNExistence($coverMapping, $mappingResult);
+        // 03: check for invalid classFQN validation-error
+        $mappingResult = $this->validateClassFQNMapping($coverMapping, $mappingResult);
+        // 04: check for invalid accessor validation-error
+        $mappingResult = $this->validateClassAccessorVisibility($coverMapping, $mappingResult);
+        // 05: check for invalid method validation-error
+        $mappingResult = $this->validateClassMethod($coverMapping, $mappingResult);
 
         return $mappingResult;
     }
