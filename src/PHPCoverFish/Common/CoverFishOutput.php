@@ -427,7 +427,7 @@ class CoverFishOutput extends BaseCoverFishOutput
         $fileNameLine = sprintf('%s%s%s',
             (false === $this->preventAnsiColors)
                 ? Color::tplNormalColor(($this->outputLevel > 1) ? 'scan file ' : null)
-                : 'scan file'
+                : 'scan file '
             ,
             (false === $this->preventAnsiColors)
                 ? Color::tplYellowColor($file)
