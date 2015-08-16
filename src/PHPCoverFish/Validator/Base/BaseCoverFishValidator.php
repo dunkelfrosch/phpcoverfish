@@ -199,6 +199,7 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     {
         /** @var CoverFishMappingResult $mappingResult */
         $mappingResult = new CoverFishMappingResult();
+        // cleanUp validation mapping result for current scan
         $mappingResult = $this->clearValidationErrors($mappingResult);
 
         // 01: check for classFQN/DefaultCoverClass existence/mapping validation-error
