@@ -19,7 +19,7 @@ use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
 class CoverFishHelperTest extends BaseCoverFishScannerTestCase
 {
     /**
-     * @covers DF\PHPCoverFish\Common\CoverFishHelper::checkFileExists
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::checkFileExist
      */
     public function testCheckFileExist()
     {
