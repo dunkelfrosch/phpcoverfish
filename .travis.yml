@@ -14,12 +14,15 @@ before_install:
   - composer selfupdate
 
 install:
-    - composer update --prefer-dist --no-interaction
+  - composer update --prefer-dist --no-interaction
 
 script:
-    - cd ./bin/scripts
-    - sh travis_phpunit.sh && sh travis_coverfish.sh && sh travis_coverage.sh && sh scrutinizer_ccup.sh
-    - cd ../../
+  - cd ./bin/scripts \
+    && sh travis_phpunit.sh \
+    && sh travis_coverfish.sh \
+    && sh travis_coverage.sh \
+    && sh scrutinizer_ccup.sh \
+    && cd ../../
 
 notifications:
   email:
