@@ -20,7 +20,7 @@ final class CoverFishColor
     /**
      * @var array
      */
-    private static $foreground = array(
+    private static $colorTable = array(
         'gray' => '0;0',
         'black' => '0;30',
         'dark_gray' => '1;30',
@@ -38,20 +38,14 @@ final class CoverFishColor
         'bold_cyan' => '1;36',
         'white' => '1;37',
         'bold_gray' => '0;37',
-    );
-
-    /**
-     * @var array
-     */
-    private static $background = array(
-        'black' => '40',
-        'red' => '41',
-        'magenta' => '45',
-        'yellow' => '43',
-        'green' => '42',
-        'blue' => '44',
-        'cyan' => '46',
-        'light_gray' => '47',
+        'bg_black' => '40',
+        'bg_red' => '41',
+        'bg_magenta' => '45',
+        'bg_yellow' => '43',
+        'bg_green' => '42',
+        'bg_blue' => '44',
+        'bg_cyan' => '46',
+        'bg_light_gray' => '47',
     );
 
     /**
@@ -63,33 +57,14 @@ final class CoverFishColor
      * @return string
      * @throws \Exception
      */
-    public static function fg_color($color, $string)
+    public static function setColor($color, $string)
     {
-        if (!isset(self::$foreground[$color]))
+        if (!isset(self::$colorTable[$color]))
         {
-            throw new \Exception('Foreground color is not defined');
+            throw new \Exception('ansi color is not defined');
         }
 
-        return "\033[" . self::$foreground[$color] . "m" . $string . "\033[0m";
-    }
-
-    /**
-     * Make string appear with background color
-     *
-     * @param string $color
-     * @param string $string
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public static function bg_color($color, $string)
-    {
-        if (!isset(self::$background[$color]))
-        {
-            throw new \Exception('Background color is not defined');
-        }
-
-        return "\033[" . self::$background[$color] . 'm' . $string . "\033[0m";
+        return sprintf("\033[%sm%s\033[0m", self::$colorTable[$color], $string);
     }
 
     /**
@@ -100,7 +75,7 @@ final class CoverFishColor
      */
     public static function tplWhiteColor($content)
     {
-        return self::fg_color('white', $content);
+        return self::setColor('white', $content);
     }
 
     /**
@@ -111,7 +86,7 @@ final class CoverFishColor
      */
     public static function tplRedColor($content)
     {
-        return self::fg_color('red', $content);
+        return self::setColor('red', $content);
     }
 
     /**
@@ -122,7 +97,7 @@ final class CoverFishColor
      */
     public static function tplGreenColor($content)
     {
-        return self::fg_color('green', $content);
+        return self::setColor('green', $content);
     }
 
     /**
@@ -133,7 +108,7 @@ final class CoverFishColor
      */
     public static function tplDarkGrayColor($content)
     {
-        return self::fg_color('dark_gray', $content);
+        return self::setColor('dark_gray', $content);
     }
 
     /**
@@ -144,7 +119,7 @@ final class CoverFishColor
      */
     public static function tplYellowColor($content)
     {
-        return self::fg_color('yellow', $content);
+        return self::setColor('yellow', $content);
     }
 
     /**
@@ -155,7 +130,7 @@ final class CoverFishColor
      */
     public static function tplNormalColor($content)
     {
-        return self::fg_color('gray', $content);
+        return self::setColor('gray', $content);
     }
 
     /**
@@ -166,6 +141,6 @@ final class CoverFishColor
      */
     public static function tplMarkFailure($content)
     {
-        return self::fg_color('yellow', self::bg_color('red', $content));
+        return self::setColor('yellow', self::setColor('red', $content));
     }
 }
