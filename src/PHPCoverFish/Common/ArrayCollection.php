@@ -191,6 +191,14 @@ class ArrayCollection implements Collection
     /**
      * {@inheritDoc}
      */
+    public function forAll(Closure $p)
+    {
+        return !$this->exists($p);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function indexOf($element)
     {
         return array_search($element, $this->elements, true);
@@ -278,20 +286,6 @@ class ArrayCollection implements Collection
     public function filter(Closure $p)
     {
         return new static(array_filter($this->elements, $p));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function forAll(Closure $p)
-    {
-        foreach ($this->elements as $key => $element) {
-            if (!$p($key, $element)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
