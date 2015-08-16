@@ -341,7 +341,7 @@ class BaseCoverFishScanner
      */
     public function xmlToArray($xmlObject, $output = array())
     {
-        foreach ((array) $xmlObject as $index => $node ) {
+        foreach ((array) $xmlObject as $index => $node) {
             $output[$index] = ($node instanceof \SimpleXMLElement || is_array($node))
                 ? $this->xmlToArray($node)
                 : $node;
