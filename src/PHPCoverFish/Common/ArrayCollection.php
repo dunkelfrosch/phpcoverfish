@@ -175,7 +175,10 @@ class ArrayCollection implements Collection
     }
 
     /**
-     * {@inheritDoc}
+     * Tests for the existence of an element that satisfies the given predicate.
+     *
+     * @param Closure $p The predicate.
+     * @return boolean TRUE if the predicate is TRUE for at least one element, FALSE otherwise.
      */
     public function exists(Closure $p)
     {
@@ -189,11 +192,15 @@ class ArrayCollection implements Collection
     }
 
     /**
-     * {@inheritDoc}
+     * Applies the given predicate p to all elements of this collection,
+     * returning true, if the predicate yields true for all elements.
+     *
+     * @param Closure $p The predicate.
+     * @return boolean TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.
      */
     public function forAll(Closure $p)
     {
-        return !$this->exists($p);
+        $this->exists($p);
     }
 
     /**
@@ -313,7 +320,7 @@ class ArrayCollection implements Collection
      */
     public function __toString()
     {
-        return __CLASS__ . '@' . spl_object_hash($this);
+        return sprintf('%s@%s', __CLASS__, spl_object_hash($this));
     }
 
     /**
