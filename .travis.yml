@@ -18,10 +18,7 @@ install:
 
 script:
     - cd ./bin/scripts
-    - sh travis_phpunit.sh
-    - sh travis_coverfish.sh
-    - sh travis_coverage.sh
-    - sh scrutinizer_ccup.sh
+    - sh travis_phpunit.sh && sh travis_coverfish.sh && sh travis_coverage.sh && sh scrutinizer_ccup.sh
     - cd ../../
 
 notifications:
