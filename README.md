@@ -137,7 +137,8 @@ around this project :)
 - coverage warnings implementation; identify coverage problems or misconfiguration issues in use of phpunit code coverage
 - refactoring of coverFish's output module; this module is just "meh!"
 - mastering coverfish documentation and build up a useful wiki
-
+- include @use statement check
+- improve scanner/analyzer speed
 
 ## Screenshots, phpCoverFish at work
 
