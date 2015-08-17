@@ -326,7 +326,7 @@ class BaseCoverFishScanner
     {
         /** @var \SimpleXMLElement $suite */
         $suite = $this->getTestSuiteNodeFromXML($xmlDocumentNodes);
-        if (false === empty($suite)) {
+        if (false === empty($suite) && property_exists($suite, $property)) {
             return (string) ($this->xmlToArray($suite->$property)[0]);
         }
 
@@ -458,7 +458,7 @@ class BaseCoverFishScanner
      *
      * @return CoverFishPHPUnitTest
      */
-    protected function setPHPUnitTestData(array $methodData)
+    public function setPHPUnitTestData(array $methodData)
     {
         /** @var string $classFileAndPath */
         $classFileAndPath = $methodData['classFile'];
@@ -472,18 +472,6 @@ class BaseCoverFishScanner
         $this->phpUnitTest->setLoc($this->coverFishHelper->getLocOfTestMethod($methodData));
 
         return $this->phpUnitTest;
-    }
-
-    /**
-     * @param string $inputPath
-     *
-     * @return string
-     */
-    private function getRegexPath($inputPath)
-    {
-        $path = str_replace('/', '\/', $inputPath);
-
-        return sprintf('/%s/', $path);
     }
 
     /**
@@ -503,7 +491,7 @@ class BaseCoverFishScanner
         }
 
         foreach ($files as $filePath) {
-            preg_match_all($this->getRegexPath($excludePath), $filePath, $result, PREG_SET_ORDER);
+            preg_match_all($this->coverFishHelper->getRegexPath($excludePath), $filePath, $result, PREG_SET_ORDER);
             if (true === empty($result)) {
                 $finalPath[] = $filePath;
             }
