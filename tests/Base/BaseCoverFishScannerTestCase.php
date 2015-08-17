@@ -89,4 +89,33 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
         && in_array('SampleClassOnlyProtectedMethods.php', $fileNames)
         && in_array('SampleClassOnlyPublicMethods.php', $fileNames);
     }
+
+    /**
+     * @param string $file
+     *
+     * @return array
+     */
+    public function getSampleClassData($file)
+    {
+        $classData = array();
+        $ts = new \PHP_Token_Stream($file);
+        foreach ($ts->getClasses() as $className => $classData) {
+            $classData['className'] = $className;
+            $classData['classFile'] = $file;
+        }
+
+        return $classData;
+    }
+
+    public function getSampleClassMethodData($file)
+    {
+        $classData = $this->getSampleClassData($file);
+        foreach ($classData['methods'] as $methodName => $methodData) {
+            // test class contained only one file, so leave iterator after first method found
+            $methodData['classFile'] = (string) $classData['classFile'];
+            return $methodData;
+        }
+
+        return null;
+    }
 }
