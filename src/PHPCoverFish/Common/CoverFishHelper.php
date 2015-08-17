@@ -226,6 +226,18 @@ class CoverFishHelper
     }
 
     /**
+     * @param string $inputPath
+     *
+     * @return string
+     */
+    public function getRegexPath($inputPath)
+    {
+        $path = str_replace('/', '\/', $inputPath);
+
+        return sprintf('/%s/', $path);
+    }
+
+    /**
      * @param string $docBlock
      *
      * @return array
