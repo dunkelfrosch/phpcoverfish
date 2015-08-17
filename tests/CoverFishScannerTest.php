@@ -2,6 +2,7 @@
 
 namespace DF\PHPCoverFish\Tests;
 
+use DF\PHPCoverFish\Common\CoverFishPHPUnitTest;
 use DF\PHPCoverFish\CoverFishScanner;
 use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
 use DF\PHPCoverFish\Validator\ValidatorMethodName;
@@ -20,16 +21,39 @@ use DF\PHPCoverFish\Validator\ValidatorMethodName;
 class CoverFishScannerTest extends BaseCoverFishScannerTestCase
 {
     /**
+     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::xmlToArray
+     */
+    public function testCheckXmlToArray()
+    {
+        $configArray = $this->getDefaultCLIOptions(null);
+        $configArray['sys_phpunit_config'] = sprintf('%s/data/phpunit.xml', __DIR__);
+        $configArray['sys_phpunit_config_test_suite'] = 'PHPCoverFishTestSuiteA';
+        /** @var CoverFishScanner $scanner */
+        $scanner = new CoverFishScanner($configArray, $this->getDefaultOutputOptions());
+        /** @var string $file */
+        $file = sprintf('%s/data/phpunit.xml', __DIR__);
+        /** @var \SimpleXMLElement $xmlDocument */
+        $xmlDocument = simplexml_load_file($file);
+        /** @var array $result */
+        $result = $scanner->xmlToArray($xmlDocument);
+
+        $this->assertArrayHasKey('@attributes', $result);
+        $this->assertArrayHasKey('testsuites', $result);
+        $this->assertArrayHasKey('backupGlobals', $result['@attributes']);
+        $this->assertArrayHasKey('bootstrap', $result['@attributes']);
+    }
+
+    /**
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setConfigFromPHPUnitConfigFile
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestAutoloadPath
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestExcludePath
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestSourcePath
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getAttributeFromXML
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestSuiteNodeFromXML
+     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getPhpUnitConfigPath
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestSuitePropertyFromXML
-     * @covers DF\PHPCoverFish\Common\CoverFishHelper::getPathFromFileNameAndPath
      */
-    public function testSetConfigFromUnitTestConfigFileUseFirstSuite()
+    public function testCheckSetConfigFromUnitTestConfigFileUseFirstSuite()
     {
         $configArray = $this->getDefaultCLIOptions(null);
         $configArray['sys_phpunit_config'] = sprintf('%s/data/phpunit.xml', __DIR__);
@@ -47,7 +71,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     /**
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setConfigFromPHPUnitConfigFile
      */
-    public function testSetConfigFromUnitTestConfigFileUseSecondSuite()
+    public function testCheckSetConfigFromUnitTestConfigFileUseSecondSuite()
     {
         $configArray = $this->getDefaultCLIOptions(null);
         $configArray['sys_phpunit_config'] = sprintf('%s/data/phpunit.xml', __DIR__);
@@ -65,7 +89,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::addValidator
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getValidatorCollection
      */
-    public function testAddValidator()
+    public function testCheckAddValidator()
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
@@ -78,9 +102,29 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     }
 
     /**
+     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setPHPUnitTestData
+     */
+    public function testCheckSetPHPUnitTestData()
+    {
+        $testFile = 'ValidatorGlobalMethodPassTest.php';
+        $methodData = $this->getSampleClassMethodData(sprintf('%s/data/tests/%s', __DIR__, $testFile));
+
+        $scanner = new CoverFishScanner(
+            $this->getDefaultCLIOptions(null, null),
+            $this->getDefaultOutputOptions()
+        );
+
+        /** @var CoverFishPHPUnitTest $unitTestFile */
+        $unitTestFile = $scanner->setPHPUnitTestData($methodData);
+
+        $this->assertTrue($unitTestFile instanceof CoverFishPHPUnitTest);
+        $this->assertEquals($testFile, $unitTestFile->getFile());
+    }
+
+    /**
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setPHPUnitTestMetaData
      */
-    public function testSetUnitFileTestMetaData()
+    public function testCheckSetUnitFileTestMetaData()
     {
         $scanner = new CoverFishScanner(
             $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassFQNameFailTest.php', __DIR__), null),
@@ -114,7 +158,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     /**
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::scanFilesInPath
      */
-    public function testScanFilesInPath()
+    public function testCheckScanFilesInPath()
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
@@ -133,7 +177,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getRegexPath
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::removeExcludedPath
      */
-    public function testScanFilesAndIgnoreExcludedPath()
+    public function testCheckScanFilesAndIgnoreExcludedPath()
     {
         /** @var CoverFishScanner $scanner */
         $scanner = new CoverFishScanner(
