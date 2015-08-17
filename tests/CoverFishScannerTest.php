@@ -174,7 +174,6 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     }
 
     /**
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getRegexPath
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::removeExcludedPath
      */
     public function testCheckScanFilesAndIgnoreExcludedPath()
