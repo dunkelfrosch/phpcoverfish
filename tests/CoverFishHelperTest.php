@@ -2,7 +2,6 @@
 
 namespace DF\PHPCoverFish\Tests;
 
-use DF\PHPCoverFish\CoverFishScanner;
 use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
 
 /**
@@ -18,6 +17,65 @@ use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
  */
 class CoverFishHelperTest extends BaseCoverFishScannerTestCase
 {
+    /**
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::getRegexPath
+     */
+    public function testCheckGetRegexPath()
+    {
+        $resultPath = $this->getCoverFishHelper()->getRegexPath('tests/data/exclude');
+        $this->assertEquals('/tests\/data\/exclude/', $resultPath);
+    }
+
+    /**
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::getPathFromFileNameAndPath
+     */
+    public function testCheckGetPathFromFileNameAndPath()
+    {
+        $resultPath = $this->getCoverFishHelper()->getPathFromFileNameAndPath('tests/data/src/SampleClass.php');
+        $this->assertEquals('tests/data/src/', $resultPath);
+    }
+
+    /**
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::parseMethodDocBlock
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::getAnnotationByKey
+     */
+    public function testCheckParseMethodDocBlock()
+    {
+        $classData = $this->getSampleClassData(sprintf('%s/data/tests/ValidatorDefaultCoverClassPassTest.php', __DIR__));
+
+        $annotationCheck = $this->getCoverFishHelper()->getAnnotationByKey($classData['docblock'], 'coversDefaultClass');
+        $this->assertTrue(is_array($annotationCheck));
+        $this->assertEquals($annotationCheck, array('DF\PHPCoverFish\Tests\Data\Src\SampleClass'));
+    }
+
+    /**
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::getAttributeByKey
+     *
+     */
+    public function testCheckGetAttributeByKey()
+    {
+        $testFile = 'ValidatorGlobalMethodPassTest.php';
+        $classData = $this->getSampleClassData(sprintf('%s/data/tests/%s', __DIR__, $testFile));
+
+        $namespaceCheck = $this->getCoverFishHelper()->getAttributeByKey('namespace', $classData['package']);
+        $fileCheck = $this->getCoverFishHelper()->getAttributeByKey('file', $classData);
+
+        $this->assertEquals('DF\PHPCoverFish\Tests\Data\Tests', $namespaceCheck);
+        $this->assertEquals($testFile, $this->getCoverFishHelper()->getFileNameFromPath($fileCheck));
+    }
+
+    /**
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::getLocOfTestMethod
+     */
+    public function testCheckGetLocOfTestMethod()
+    {
+        $testFile = 'ValidatorGlobalMethodPassTest.php';
+        $methodData = $this->getSampleClassMethodData(sprintf('%s/data/tests/%s', __DIR__, $testFile));
+        $loc = $this->getCoverFishHelper()->getLocOfTestMethod($methodData);
+
+        $this->assertEquals(4, $loc);
+    }
+
     /**
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::checkFileExist
      */
@@ -58,7 +116,7 @@ class CoverFishHelperTest extends BaseCoverFishScannerTestCase
     /**
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::getClassNameFromClassFQN
      */
-    public function testGetClassNameFromClassFullyQualifiedName()
+    public function testCheckGetClassNameFromClassFullyQualifiedName()
     {
         $this->assertEquals('SampleClass', $this->getCoverFishHelper()->getClassNameFromClassFQN('DF\PHPCoverFish\Tests\Data\Src\SampleClass'));
     }
@@ -66,7 +124,7 @@ class CoverFishHelperTest extends BaseCoverFishScannerTestCase
     /**
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::getFileNameFromPath
      */
-    public function testGetFileNameFromPath()
+    public function testCheckGetFileNameFromPath()
     {
         $this->assertEquals('SampleClassOnlyPublicMethods.php', $this->getCoverFishHelper()->getFileNameFromPath('tests/data/src/SampleClassOnlyPublicMethods.php'));
     }
@@ -74,7 +132,7 @@ class CoverFishHelperTest extends BaseCoverFishScannerTestCase
     /**
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::getLastItemInFQNBlock
      */
-    public function testGetLastItemInFQNBlock()
+    public function testCheckGetLastItemInFQNBlock()
     {
         $this->assertEquals('boo', $this->getCoverFishHelper()->getLastItemInFQNBlock('foo/make/boo', '/'));
     }
@@ -82,7 +140,7 @@ class CoverFishHelperTest extends BaseCoverFishScannerTestCase
     /**
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::getUsedClassesInClass
      */
-    public function testGetUsedClassesInClass()
+    public function testCheckGetUsedClassesInClass()
     {
         $usedClassesInFile = $this->getCoverFishHelper()->getUsedClassesInClass(
             sprintf('%s/data/tests/ValidatorClassNameFailTest.php', __DIR__)
@@ -95,7 +153,7 @@ class CoverFishHelperTest extends BaseCoverFishScannerTestCase
     /**
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::getFileContent
      */
-    public function testGetFileContent()
+    public function testCheckGetFileContent()
     {
         $content = $this->getCoverFishHelper()->getFileContent(sprintf('%s/data/src/SampleClass.php', __DIR__));
         $this->assertGreaterThanOrEqual(1100, strlen($content));
@@ -104,7 +162,7 @@ class CoverFishHelperTest extends BaseCoverFishScannerTestCase
     /**
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::getClassFromUse
      */
-    public function testGetClassFromUse()
+    public function testCheckGetClassFromUse()
     {
         $usedClassesInFile = $this->getCoverFishHelper()->getUsedClassesInClass(
             sprintf('%s/data/tests/ValidatorClassNameFailTest.php', __DIR__)
@@ -117,7 +175,7 @@ class CoverFishHelperTest extends BaseCoverFishScannerTestCase
     /**
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::getCoversDefaultClassUsable
      */
-    public function testGetCoversDefaultClassUsable()
+    public function testCheckGetCoversDefaultClassUsable()
     {
         $sampleCoverDefaultClasses = array(
             'DF\PHPCoverFish\Tests\Data\Src\SampleClassNoPrivateMethods',
