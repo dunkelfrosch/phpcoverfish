@@ -10,6 +10,7 @@ use DF\PHPCoverFish\Validator\ValidatorClassNameMethodName;
 use DF\PHPCoverFish\Validator\ValidatorMethodName;
 use DF\PHPCoverFish\Common\CoverFishOutput;
 use \PHP_Token_Stream;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class BaseCoverFishScanner
@@ -34,11 +35,13 @@ class CoverFishScanner extends BaseCoverFishScanner
     /**
      * @param array $cliOptions
      * @param array $outputOptions
+     *
+     * @codeCoverageIgnore
      */
-    public function __construct(array $cliOptions, array $outputOptions)
+    public function __construct(array $cliOptions, array $outputOptions, OutputInterface $output)
     {
         parent::__construct($cliOptions);
-        $this->coverFishOutput = new CoverFishOutput($outputOptions);
+        $this->coverFishOutput = new CoverFishOutput($outputOptions, $output);
     }
 
     /**
@@ -46,7 +49,7 @@ class CoverFishScanner extends BaseCoverFishScanner
      *
      * @param $coverToken
      */
-    private function validateCodeCoverage($coverToken)
+    public function validateCodeCoverage($coverToken)
     {
         // covers ClassName::methodName
         $this->addValidator(new ValidatorClassNameMethodName($coverToken));
