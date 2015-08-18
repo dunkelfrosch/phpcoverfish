@@ -5,6 +5,7 @@ namespace DF\PHPCoverFish\Common;
 use DF\PHPCoverFish\Common\Base\BaseCoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
 use DF\PHPCoverFish\Exception\CoverFishFailExit;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CoverFishOutput
@@ -26,9 +27,12 @@ class CoverFishOutput extends BaseCoverFishOutput
 
     /**
      * @param array $outputOptions
+     *
+     * @codeCoverageIgnore
      */
-    public function __construct(array $outputOptions)
+    public function __construct(array $outputOptions, OutputInterface $output)
     {
+
         $this->coverFishHelper = new CoverFishHelper();
         $this->scanFailure = false;
 
