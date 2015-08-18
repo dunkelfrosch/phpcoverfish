@@ -133,7 +133,8 @@ around this project :)
 
 *We are currently working on*: 
 
-- raw scan mode;  currently php reflection ability is used to identify code coverage errors - in future versions a raw scan mode to scan files outside the autoload context will be provided 
+- validator for global code coverage using @cover in class head annotation of testFile
+- raw scan mode, currently php reflection ability is used to identify code coverage errors - in future versions a raw scan mode to scan files outside the autoload context will be provided 
 - coverage warnings implementation; identify coverage problems or misconfiguration issues in use of phpunit code coverage
 - refactoring of coverFish's output module; this module is just "meh!"
 - mastering coverfish documentation and build up a useful wiki
