@@ -13,7 +13,7 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.6
+ * @version   0.9.7
  */
 final class CoverFishError
 {
@@ -71,9 +71,17 @@ final class CoverFishError
     private $errorMessageToken = null;
 
     /**
-     * @var
+     * @var string
      */
     private $exceptionMessage = null;
+
+    /**
+     * @return array
+     */
+    public static function getErrorMessageTokens()
+    {
+        return self::$errorMessageTokens;
+    }
 
     /**
      * @param null        $errorCode
@@ -97,9 +105,16 @@ final class CoverFishError
             }
 
             $this->title = self::$errorMessageTokens[$errorCode];
+            $this->errorMessageToken = $this->title;
         }
     }
 
+    /**
+     * @param CoverFishMapping $coverMapping
+     * @param bool|false       $noAnsiColors
+     *
+     * @return null|string
+     */
     public function getErrorStreamTemplate(CoverFishMapping $coverMapping, $noAnsiColors = false)
     {
         $coverLine = null;
@@ -172,8 +187,9 @@ final class CoverFishError
         return $coverLine;
     }
 
-
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getErrorMessageToken()
@@ -182,6 +198,8 @@ final class CoverFishError
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return int
      */
     public function getErrorCode()
@@ -190,6 +208,8 @@ final class CoverFishError
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getTitle()
@@ -198,6 +218,8 @@ final class CoverFishError
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return mixed
      */
     public function getExceptionMessage()
@@ -207,6 +229,8 @@ final class CoverFishError
 
     /**
      * @param mixed $exceptionMessage
+     *
+     * @codeCoverageIgnore
      */
     public function setExceptionMessage($exceptionMessage)
     {
