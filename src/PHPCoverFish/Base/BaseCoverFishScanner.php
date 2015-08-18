@@ -153,6 +153,8 @@ class BaseCoverFishScanner
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getPhpUnitConfigFile()
@@ -161,6 +163,8 @@ class BaseCoverFishScanner
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getPhpUnitConfigTestSuite()
@@ -171,6 +175,8 @@ class BaseCoverFishScanner
     /**
      * @todo rename this variable to (get)TestSourcePathOrFile
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getTestSourcePath()
@@ -179,6 +185,8 @@ class BaseCoverFishScanner
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return String
      */
     public function getTestExcludePath()
@@ -187,6 +195,8 @@ class BaseCoverFishScanner
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return String
      */
     public function getTestAutoloadPath()
@@ -195,6 +205,8 @@ class BaseCoverFishScanner
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return CoverFishPHPUnitFile
      */
     public function getPhpUnitFile()
@@ -203,6 +215,8 @@ class BaseCoverFishScanner
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return CoverFishPHPUnitTest
      */
     public function getPhpUnitTest()
@@ -211,6 +225,8 @@ class BaseCoverFishScanner
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return CoverFishHelper
      */
     public function getCoverFishHelper()
@@ -219,7 +235,19 @@ class BaseCoverFishScanner
     }
 
     /**
+     * @param CoverFishPHPUnitTest $phpUnitTest
+     *
+     * @codeCoverageIgnore
+     */
+    public function setPhpUnitTest($phpUnitTest)
+    {
+        $this->phpUnitTest = $phpUnitTest;
+    }
+
+    /**
      * @param array $cliOptions
+     *
+     * @codeCoverageIgnore
      */
     public function __construct(array $cliOptions)
     {
@@ -365,10 +393,10 @@ class BaseCoverFishScanner
             $this->testSourcePath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getTestSuitePropertyFromXML('directory', $xmlDocument));
             $this->testExcludePath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getTestSuitePropertyFromXML('exclude', $xmlDocument));
 
-            echo sprintf('using phpunit config file "%s"%s%s', $this->phpUnitConfigFile, PHP_EOL, PHP_EOL);
+            /*echo sprintf('using phpunit config file "%s"%s%s', $this->phpUnitConfigFile, PHP_EOL, PHP_EOL);
             echo sprintf('- autoload file: %s%s', $this->testAutoloadPath, PHP_EOL);
             echo sprintf('- test source path for scan: %s%s', $this->testSourcePath, PHP_EOL);
-            echo sprintf('- exclude test source path: %s%s%s', $this->testExcludePath, PHP_EOL, PHP_EOL);
+            echo sprintf('- exclude test source path: %s%s%s', $this->testExcludePath, PHP_EOL, PHP_EOL);*/
 
         } catch (\Exception $e) {
 

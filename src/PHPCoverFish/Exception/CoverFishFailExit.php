@@ -12,6 +12,8 @@ namespace DF\PHPCoverFish\Exception;
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
  * @version    0.9.6
+ *
+ * @codeCoverageIgnore
  */
 class CoverFishFailExit extends \Exception
 {

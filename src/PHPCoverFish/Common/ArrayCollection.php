@@ -7,12 +7,18 @@ use Closure;
 
 /**
  * ArrayCollection helper, based on the work on \Doctrine\Common\ArrayCollection of Benjamin Eberlei <kontakt@beberlei.de>,
- * Jonathan Wage <jonwage@gmail.com> and Roman Borschel <roman@code-factory.org>.
+ * Jonathan Wage <jonwage@gmail.com> and Roman Borschel <roman@code-factory.org>. minor changes and improvements by Patrick Paechnatz
+ *
+ * core:
  *
  * @since  2.0
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
  * @author Roman Borschel <roman@code-factory.org>
+ *
+ * changes/improvements:
+ *
+ * @author Patrick Paechnatz <patrick.paechnatz@gmail.com>
  */
 class ArrayCollection implements Collection
 {
@@ -27,6 +33,8 @@ class ArrayCollection implements Collection
      * Initializes a new ArrayCollection.
      *
      * @param array $elements
+     *
+     * @codeCoverageIgnore
      */
     public function __construct(array $elements = array())
     {
@@ -200,7 +208,7 @@ class ArrayCollection implements Collection
      */
     public function forAll(Closure $p)
     {
-        $this->exists($p);
+        return $this->exists($p);
     }
 
     /**
