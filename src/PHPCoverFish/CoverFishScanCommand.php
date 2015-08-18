@@ -196,11 +196,15 @@ class CoverFishScanCommand extends Command
         );
 
         try {
-            $scanner = new CoverFishScanner($cliOptions, $outOptions);
+
+            $scanner = new CoverFishScanner($cliOptions, $outOptions, $output);
             $scanner->analysePHPUnitFiles();
+
         } catch (CoverFishFailExit $e) {
-            die(CoverFishFailExit::RETURN_CODE_SCAN_FAIL);
+            return CoverFishFailExit::RETURN_CODE_SCAN_FAIL;
         }
+
+        return 0;
     }
 
     /**
