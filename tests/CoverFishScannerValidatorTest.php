@@ -29,14 +29,14 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateReflectionClass
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::checkClassHasFQN
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::validateAndReturnMapping
+     * @covers DF\PHPCoverFish\CoverFishScanner::analysePHPUnitFiles
+     * @covers DF\PHPCoverFish\CoverFishScanner::analyseClassesInFile
+     * @covers DF\PHPCoverFish\CoverFishScanner::analyseClass
      */
     public function testCoverClassFullyQualifiedNameValidatorCheckForValidClassFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassFQNameFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassFQNameFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -64,10 +64,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassFullyQualifiedNameValidatorCheckForValidClassPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassFQNamePassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassFQNamePassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -88,10 +85,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameValidatorCheckForValidClassFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -119,10 +113,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameValidatorCheckForValidClassPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNamePassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNamePassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -144,10 +135,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverGlobalMethodNameValidatorCheckForDefaultCoverClassFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorDefaultCoverClassFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorDefaultCoverClassFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -174,10 +162,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverGlobalMethodNameValidatorCheckForDefaultCoverClassPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorDefaultCoverClassPassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorDefaultCoverClassPassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -197,10 +182,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverGlobalMethodNameValidatorCheckMethodFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorGlobalMethodFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorGlobalMethodFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -227,10 +209,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverGlobalMethodNameValidatorCheckMethodPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorGlobalMethodPassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorGlobalMethodPassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -250,10 +229,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameValidatorCheckMethodNameFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNameFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameMethodNameFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -281,10 +257,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameValidatorCheckMethodNamePass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNamePassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameMethodNamePassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -304,10 +277,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameValidatorCheckClassNameFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNameClassFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameMethodNameClassFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -335,10 +305,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameValidatorCheckClassNamePass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNameClassPassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameMethodNameClassPassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -359,10 +326,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorPrivateMethodsFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorPrivateFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorPrivateFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -389,10 +353,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorPrivateMethodsPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameMethodNameClassPassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameMethodNameClassPassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -412,10 +373,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorPublicMethodsFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorPublicFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorPublicFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -442,10 +400,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorPublicMethodsPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorPublicPassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorPublicPassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -465,10 +420,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorProtectedMethodsFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorProtectedFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorProtectedFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -495,10 +447,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorProtectedMethodsPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorProtectedPassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorProtectedPassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -518,10 +467,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorNoNotPublicMethodsFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPublicFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPublicFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -549,10 +495,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorNoNotPublicMethodsPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPublicPassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPublicPassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -572,10 +515,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorNoNotProtectedMethodsFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotProtectedFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotProtectedFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -603,10 +543,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorNoNotProtectedMethodsPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotProtectedPassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotProtectedPassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -626,10 +563,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorNoNotPrivateMethodsFail()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPrivateFailTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPrivateFailTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());
@@ -657,10 +591,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
     public function testCoverClassNameAccessorNoNotPrivateMethodsPass()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = new CoverFishScanner(
-            $this->getDefaultCLIOptions(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPrivatePassTest.php', __DIR__)),
-            $this->getDefaultOutputOptions()
-        );
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassNameAccessorNoNotPrivatePassTest.php', __DIR__));
 
         /** @var array $jsonResult */
         $jsonResult = json_decode($scanner->analysePHPUnitFiles());

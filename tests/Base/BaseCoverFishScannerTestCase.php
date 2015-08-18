@@ -3,6 +3,9 @@
 namespace DF\PHPCoverFish\Tests\Base;
 
 use DF\PHPCoverFish\Common\CoverFishHelper;
+use DF\PHPCoverFish\CoverFishScanner;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class BaseCoverFishScannerTestCase
@@ -23,6 +26,32 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
     protected $coverFishHelper;
 
     /**
+     * @var OutputInterface
+     */
+    protected $output;
+
+    /**
+     * @return OutputInterface
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
+     * @param OutputInterface $output
+     */
+    public function setOutput($output)
+    {
+        $this->output = $output;
+    }
+
+    public function setUp()
+    {
+        $this->output = new ConsoleOutput();
+    }
+
+    /**
      * @return CoverFishHelper
      */
     public function getCoverFishHelper()
@@ -30,6 +59,33 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
         $this->coverFishHelper = new CoverFishHelper();
 
         return $this->coverFishHelper;
+    }
+
+    public function getDefaultCoverFishScanner($testSource = null, $excludePath = null)
+    {
+        return new CoverFishScanner(
+            $this->getDefaultCLIOptions($testSource, $excludePath),
+            $this->getDefaultOutputOptions(),
+            $this->output
+        );
+    }
+
+    public function getPHPUnitCoverFishScannerAlpha()
+    {
+        return new CoverFishScanner(
+            $this->getPHPUnitCLIOptionsAlpha(null),
+            $this->getDefaultOutputOptions(),
+            $this->output
+        );
+    }
+
+    public function getPHPUnitCoverFishScannerBeta()
+    {
+        return new CoverFishScanner(
+            $this->getPHPUnitCLIOptionsBeta(null),
+            $this->getDefaultOutputOptions(),
+            $this->output
+        );
     }
 
     /**
@@ -51,6 +107,36 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
             'sys_phpunit_config' => null,
             'sys_phpunit_config_test_suite' => null,
         );
+    }
+
+    /**
+     * @param string $testSource
+     * @param null   $excludePath
+     *
+     * @return array
+     */
+    public function getPHPUnitCLIOptionsAlpha($testSource, $excludePath = null)
+    {
+        $configArray = $this->getDefaultCLIOptions($testSource, $excludePath);
+        $configArray['sys_phpunit_config'] = sprintf('%s/../data/phpunit.xml', __DIR__);
+        $configArray['sys_phpunit_config_test_suite'] = 'PHPCoverFishTestSuiteA';
+
+        return $configArray;
+    }
+
+    /**
+     * @param string $testSource
+     * @param null   $excludePath
+     *
+     * @return array
+     */
+    public function getPHPUnitCLIOptionsBeta($testSource, $excludePath = null)
+    {
+        $configArray = $this->getDefaultCLIOptions($testSource, $excludePath);
+        $configArray['sys_phpunit_config'] = sprintf('%s/../data/phpunit.xml', __DIR__);
+        $configArray['sys_phpunit_config_test_suite'] = 'PHPCoverFishTestSuiteB';
+
+        return $configArray;
     }
 
     /**

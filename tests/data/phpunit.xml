@@ -4,7 +4,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
          backupGlobals="false"
-         bootstrap="vendor/autoload.php"
+         bootstrap="../data/vendor/autoload.php"
 >
     <testsuites>
         <testsuite name="PHPCoverFishTestSuiteA">
