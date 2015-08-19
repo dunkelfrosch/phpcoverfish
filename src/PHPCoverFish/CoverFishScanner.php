@@ -41,7 +41,7 @@ class CoverFishScanner extends BaseCoverFishScanner
      */
     public function __construct(array $cliOptions, array $outputOptions, OutputInterface $output)
     {
-        parent::__construct($cliOptions, $output);
+        parent::__construct($cliOptions);
 
         $this->coverFishOutput = new CoverFishOutput($outputOptions, $output, $this);
     }

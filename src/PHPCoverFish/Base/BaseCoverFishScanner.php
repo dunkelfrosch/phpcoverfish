@@ -9,7 +9,6 @@ use DF\PHPCoverFish\Common\CoverFishPHPUnitTest;
 use DF\PHPCoverFish\Common\CoverFishResult;
 use DF\PHPCoverFish\Common\CoverFishHelper;
 use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidatorInterface as CoverFishValidatorInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use SebastianBergmann\FinderFacade\FinderFacade;
 
 /**
@@ -25,11 +24,6 @@ use SebastianBergmann\FinderFacade\FinderFacade;
  */
 class BaseCoverFishScanner
 {
-    /**
-     * @var OutputInterface
-     */
-    protected $output;
-
     /**
      * @var string
      */
@@ -252,13 +246,11 @@ class BaseCoverFishScanner
 
     /**
      * @param array           $cliOptions
-     * @param OutputInterface $output
      *
      * @codeCoverageIgnore
      */
-    public function __construct(array $cliOptions, OutputInterface $output)
+    public function __construct(array $cliOptions)
     {
-        $this->output = $output;
         $this->debug = $cliOptions['sys_debug'];
 
         $this->phpUnitConfigFile = $cliOptions['sys_phpunit_config'];
@@ -401,17 +393,11 @@ class BaseCoverFishScanner
             $this->testSourcePath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getTestSuitePropertyFromXML('directory', $xmlDocument));
             $this->testExcludePath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getTestSuitePropertyFromXML('exclude', $xmlDocument));
 
-            /*$this->output->writeln(sprintf('using phpunit config file "%s"', $this->phpUnitConfigFile));
-            $this->output->writeln('');
-            $this->output->writeln(sprintf('- autoload file: %s', $this->testAutoloadPath));
-            $this->output->writeln(sprintf('- test source path for scan: %s', $this->testSourcePath));
-            $this->output->writeln(sprintf('- exclude test source path: %s', $this->testExcludePath));
-            $this->output->writeln('');*/
-
         } catch (\Exception $e) {
 
-            $this->output->writeln(sprintf('parse error loading phpunit config file "%s"!', $this->phpUnitConfigFile));
-            $this->output->writeln(sprintf('-> message: %s', $e->getMessage()));
+            echo (sprintf('parse error loading phpunit config file "%s"!', $this->phpUnitConfigFile));
+            echo (sprintf('-> message: %s', $e->getMessage()));
+
         }
     }
 
@@ -554,9 +540,7 @@ class BaseCoverFishScanner
         $facade = new FinderFacade(
             array($sourcePath),
             $this->baseFilePatternExclude,
-            array($filePattern),
-            array(),
-            array()
+            array($filePattern)
         );
 
         return $this->removeExcludedPath($facade->findFiles(), $this->testExcludePath);
