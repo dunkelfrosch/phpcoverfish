@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.7
+ * @version   0.9.8
  */
 class CoverFishScanner extends BaseCoverFishScanner
 {
@@ -30,18 +30,20 @@ class CoverFishScanner extends BaseCoverFishScanner
 
     const APP_VERSION_MAJOR = 0;
     const APP_VERSION_MINOR = 9;
-    const APP_VERSION_BUILD = 7;
+    const APP_VERSION_BUILD = 8;
 
     /**
-     * @param array $cliOptions
-     * @param array $outputOptions
+     * @param array           $cliOptions
+     * @param array           $outputOptions
+     * @param OutputInterface $output
      *
      * @codeCoverageIgnore
      */
     public function __construct(array $cliOptions, array $outputOptions, OutputInterface $output)
     {
-        parent::__construct($cliOptions);
-        $this->coverFishOutput = new CoverFishOutput($outputOptions, $output);
+        parent::__construct($cliOptions, $output);
+
+        $this->coverFishOutput = new CoverFishOutput($outputOptions, $output, $this);
     }
 
     /**
