@@ -40,11 +40,21 @@ class CoverFishOutput extends BaseCoverFishOutput
      */
     public function __construct(array $outputOptions, OutputInterface $output, CoverFishScanner $scanner)
     {
-        $this->coverFishHelper = new CoverFishHelper();
-        $this->scanFailure = false;
         $this->output = $output;
         $this->scanner = $scanner;
+        $this->coverFishHelper = new CoverFishHelper();
 
+        $this->initOutputConfig($outputOptions);
+    }
+
+    /**
+     * @param array $outputOptions
+     *
+     * @codeCoverageIgnore
+     */
+    private function initOutputConfig(array $outputOptions)
+    {
+        $this->scanFailure = false;
         $this->verbose = $outputOptions['out_verbose'];
         $this->outputFormat = $outputOptions['out_format'];
         $this->outputLevel = $outputOptions['out_level'];
@@ -65,7 +75,7 @@ class CoverFishOutput extends BaseCoverFishOutput
     /**
      * @return bool
      */
-    public function writeResultHeadlines()
+    private function writeResultHeadlines()
     {
         if ($this->outputFormat === 'json') {
             return false;
@@ -90,7 +100,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      * @param CoverFishPHPUnitFile $coverFishUnitFile
      * @param CoverFishResult      $coverFishResult
      */
-    public function writeSingleTestResult(
+    private function writeSingleTestResult(
         CoverFishPHPUnitFile $coverFishUnitFile,
         CoverFishResult $coverFishResult
     ) {
@@ -123,7 +133,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      * @param CoverFishPHPUnitTest $coverFishTest
      * @param CoverFishResult      $coverFishResult
      */
-    public function writeSingleMappingResult(
+    private function writeSingleMappingResult(
         CoverFishPHPUnitTest $coverFishTest,
         CoverFishResult $coverFishResult
     ) {
@@ -188,7 +198,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      * @param CoverFishError       $mappingError
      * @param $coverLine
      */
-    public function writeJsonFailureStream(
+    private function writeJsonFailureStream(
         CoverFishResult $coverFishResult,
         CoverFishPHPUnitTest $unitTest,
         CoverFishError $mappingError,
@@ -206,7 +216,7 @@ class CoverFishOutput extends BaseCoverFishOutput
     /**
      * @param CoverFishPHPUnitFile $coverFishUnitFile
      */
-    public function writeJsonResult(CoverFishPHPUnitFile $coverFishUnitFile)
+    private function writeJsonResult(CoverFishPHPUnitFile $coverFishUnitFile)
     {
         $this->jsonResult['pass'] = false;
         $this->jsonResult['file'] = $this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile());
@@ -317,7 +327,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      *
      * @return null
      */
-    public function writeFailureStream(
+    private function writeFailureStream(
         CoverFishResult $coverFishResult,
         CoverFishPHPUnitTest $unitTest,
         CoverFishMapping $coverMapping
@@ -360,7 +370,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      *
      * @return null
      */
-    public function writeNoCoverFound()
+    private function writeNoCoverFound()
     {
         if (true === $this->outputFormatJson) {
             return null;
@@ -383,7 +393,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      *
      * @return null on json
      */
-    public function writePass()
+    private function writePass()
     {
         $this->jsonResult['pass'] = true;
 
@@ -408,7 +418,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      *
      * @return null on json
      */
-    public function writeFailure()
+    private function writeFailure()
     {
         $this->jsonResult['pass'] = false;
 
@@ -429,11 +439,11 @@ class CoverFishOutput extends BaseCoverFishOutput
     }
 
     /**
-     * write (colored) error/exception 'E'
+     * write (colored) error/exception 'E', not used yet
      *
      * @return null on json
      */
-    public function writeError()
+    private function writeError()
     {
         $this->jsonResult['pass'] = false;
 
@@ -647,7 +657,7 @@ class CoverFishOutput extends BaseCoverFishOutput
      *
      * @throws CoverFishFailExit
      */
-    public function outputResult(CoverFishResult $coverFishResult)
+    private function outputResult(CoverFishResult $coverFishResult)
     {
         if (false === $this->outputFormatJson) {
 
