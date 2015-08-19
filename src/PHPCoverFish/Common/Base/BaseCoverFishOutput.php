@@ -5,6 +5,7 @@ namespace DF\PHPCoverFish\Common\Base;
 use DF\PHPCoverFish\Common\CoverFishHelper;
 use DF\PHPCoverFish\Common\CoverFishResult;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class BaseCoverFishOutput
@@ -15,10 +16,15 @@ use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.2
- * @version    0.9.3
+ * @version    0.9.8
  */
 abstract class BaseCoverFishOutput
 {
+    /**
+     * @var OutputInterface
+     */
+    protected $output;
+
     /**
      * @var CoverFishHelper
      */
@@ -95,7 +101,7 @@ abstract class BaseCoverFishOutput
             return null;
         }
 
-        echo sprintf('%s%s', $content, PHP_EOL);
+        $this->output->writeln(sprintf('%s', $content));
     }
 
     /**
@@ -109,7 +115,7 @@ abstract class BaseCoverFishOutput
             return null;
         }
 
-        echo sprintf('%s', $content);
+        $this->output->write(sprintf('%s', $content));
     }
 
     /**

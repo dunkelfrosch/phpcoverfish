@@ -4,6 +4,7 @@ namespace DF\PHPCoverFish\Common;
 
 use DF\PHPCoverFish\Common\Base\BaseCoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
+use DF\PHPCoverFish\CoverFishScanner;
 use DF\PHPCoverFish\Exception\CoverFishFailExit;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
- * @version    0.9.5
+ * @version    0.9.8
  */
 class CoverFishOutput extends BaseCoverFishOutput
 {
@@ -26,15 +27,23 @@ class CoverFishOutput extends BaseCoverFishOutput
     const MACRO_DETAIL_LINE_INDENT = 3;
 
     /**
-     * @param array $outputOptions
+     * @var CoverFishScanner
+     */
+    protected $scanner;
+
+    /**
+     * @param array            $outputOptions
+     * @param OutputInterface  $output
+     * @param CoverFishScanner $scanner
      *
      * @codeCoverageIgnore
      */
-    public function __construct(array $outputOptions, OutputInterface $output)
+    public function __construct(array $outputOptions, OutputInterface $output, CoverFishScanner $scanner)
     {
-
         $this->coverFishHelper = new CoverFishHelper();
         $this->scanFailure = false;
+        $this->output = $output;
+        $this->scanner = $scanner;
 
         $this->verbose = $outputOptions['out_verbose'];
         $this->outputFormat = $outputOptions['out_format'];
@@ -47,6 +56,34 @@ class CoverFishOutput extends BaseCoverFishOutput
             $this->outputFormatJson = true;
             $this->preventAnsiColors = true;
         }
+
+        if ($this->outputLevel > 0) {
+            $this->writeResultHeadlines();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function writeResultHeadlines()
+    {
+        if ($this->outputFormat === 'json') {
+            return false;
+        }
+
+        if ($this->coverFishHelper->checkParamNotEmpty($this->scanner->getPhpUnitConfigFile())) {
+            $this->output->writeln(sprintf('using phpunit scan mode, phpunit-config file "%s"', $this->scanner->getPhpUnitConfigFile()));
+        } else {
+            $this->output->writeln('using raw scan mode, reading parameter ...');
+        }
+
+        $this->output->writeln('');
+        $this->output->writeln(sprintf('- autoload file: %s', $this->scanner->getTestAutoloadPath()));
+        $this->output->writeln(sprintf('- test source path for scan: %s', $this->scanner->getTestSourcePath()));
+        $this->output->writeln(sprintf('- exclude test source path: %s', $this->scanner->getTestExcludePath()));
+        $this->output->writeln('');
+
+        return true;
     }
 
     /**
@@ -338,7 +375,7 @@ class CoverFishOutput extends BaseCoverFishOutput
             $output = "\033[33;40m$output\033[0m";
         }
 
-        echo $output;
+        $this->output->write($output);
     }
 
     /**
@@ -363,7 +400,7 @@ class CoverFishOutput extends BaseCoverFishOutput
             $output = "\033[32;40m$output\033[0m";
         }
 
-        echo $output;
+        $this->output->write($output);
     }
 
     /**
@@ -388,7 +425,7 @@ class CoverFishOutput extends BaseCoverFishOutput
             $output = "\033[33;41m$output\033[0m";
         }
 
-        echo $output;
+        $this->output->write($output);
     }
 
     /**
@@ -413,7 +450,7 @@ class CoverFishOutput extends BaseCoverFishOutput
             $output = "\033[30;43m$output\033[0m";
         }
 
-        echo $output;
+        $this->output->write($output);
     }
 
     /**
@@ -541,7 +578,7 @@ class CoverFishOutput extends BaseCoverFishOutput
                 : $passStatistic
         );
 
-        echo $scanResult;
+        $this->output->write($scanResult);
     }
 
     /**
@@ -569,13 +606,15 @@ class CoverFishOutput extends BaseCoverFishOutput
             $this->getScanFailPassStatistic($coverFishResult)
         );
 
-        echo $scanResult;
+        $this->output->write($scanResult);
 
         throw new CoverFishFailExit();
     }
 
     /**
-     * write scan fail result
+     * @param CoverFishResult $coverFishResult
+     *
+     * @return string
      */
     private function getScanFailPassStatistic(CoverFishResult $coverFishResult)
     {
@@ -602,7 +641,11 @@ class CoverFishOutput extends BaseCoverFishOutput
     /**
      * handle scanner output by default/parametric output format settings
      *
+     * @param CoverFishResult $coverFishResult
+     *
      * @return null|string
+     *
+     * @throws CoverFishFailExit
      */
     public function outputResult(CoverFishResult $coverFishResult)
     {
@@ -621,7 +664,7 @@ class CoverFishOutput extends BaseCoverFishOutput
             return json_encode($this->jsonResults);
         }
 
-        echo json_encode($this->jsonResults);
+        $this->output->write(json_encode($this->jsonResults));
 
         return null;
     }
