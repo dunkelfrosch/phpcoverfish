@@ -17,33 +17,14 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.7
+ * @version   0.9.8
  */
 class CoverFishScannerTest extends BaseCoverFishScannerTestCase
 {
-    /**
-     * @var CoverFishScanner
-     */
-    protected $defaultScanner;
-
-    /**
-     * @var CoverFishScanner
-     */
-    protected $phpUnitScannerAlpha;
-
-    /**
-     * @var CoverFishScanner
-     */
-    protected $phpUnitScannerBeta;
-
     public function setUp()
     {
-        parent::setUp();
-
         $this->output = new ConsoleOutput();
-        $this->defaultScanner = $this->getDefaultCoverFishScanner();
-        $this->phpUnitScannerAlpha = $this->getPHPUnitCoverFishScannerAlpha();
-        $this->phpUnitScannerBeta = $this->getPHPUnitCoverFishScannerBeta();
+        parent::setUp();
     }
 
     /**
@@ -52,7 +33,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     public function testCheckValidateCodeCoverage()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = $this->defaultScanner;
+        $scanner = $this->getDefaultCoverFishScanner();
 
         $testFile = 'ValidatorGlobalMethodPassTest.php';
         $methodData = $this->getSampleClassMethodData(sprintf('%s/data/tests/%s', __DIR__, $testFile));
@@ -71,7 +52,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     public function testCheckXmlToArray()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = $this->phpUnitScannerAlpha;
+        $scanner = $this->getPHPUnitCoverFishScannerAlpha();
 
         /** @var string $file */
         $file = sprintf('%s/data/phpunit.xml', __DIR__);
@@ -99,7 +80,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     public function testCheckSetConfigFromUnitTestConfigFileUseFirstSuite()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = $this->phpUnitScannerAlpha;
+        $scanner = $this->getPHPUnitCoverFishScannerAlpha();
         $scanner->setConfigFromPHPUnitConfigFile();
 
         $this->assertEquals('../data/vendor/autoload.php', str_replace($scanner->getPhpUnitConfigPath(), null, $scanner->getTestAutoloadPath()));
@@ -113,7 +94,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     public function testCheckSetConfigFromUnitTestConfigFileUseSecondSuite()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = $this->phpUnitScannerBeta;
+        $scanner = $this->getPHPUnitCoverFishScannerBeta();
         $scanner->setConfigFromPHPUnitConfigFile();
 
         $this->assertEquals('tests/exclude2', str_replace($scanner->getPhpUnitConfigPath(), null, $scanner->getTestExcludePath()));
@@ -127,7 +108,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     public function testCheckAddValidator()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = $this->defaultScanner;
+        $scanner = $this->getDefaultCoverFishScanner();
 
         $scanner->addValidator(new ValidatorMethodName('::methodName'));
         $this->assertEquals(1, $scanner->getValidatorCollection()->count());
@@ -141,7 +122,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
         $testFile = 'ValidatorGlobalMethodPassTest.php';
         $methodData = $this->getSampleClassMethodData(sprintf('%s/data/tests/%s', __DIR__, $testFile));
 
-        $scanner = $this->defaultScanner;
+        $scanner = $this->getDefaultCoverFishScanner();
 
         /** @var CoverFishPHPUnitTest $unitTestFile */
         $unitTestFile = $scanner->setPHPUnitTestData($methodData);
@@ -171,7 +152,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     public function testCheckSourceAutoloadUsingUnitConfigFile()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = $this->phpUnitScannerBeta;
+        $scanner = $this->getPHPUnitCoverFishScannerBeta();
         $this->assertTrue($scanner->checkSourceAutoload(sprintf('%s/data/vendor/autoload.php', __DIR__)));
     }
 
@@ -181,7 +162,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     public function testCheckScanFilesInPath()
     {
         /** @var CoverFishScanner $scanner */
-        $scanner = $this->defaultScanner;
+        $scanner = $this->getDefaultCoverFishScanner();
 
         /** @var array $files */
         $files = $scanner->scanFilesInPath(sprintf('%s/data/src', __DIR__));

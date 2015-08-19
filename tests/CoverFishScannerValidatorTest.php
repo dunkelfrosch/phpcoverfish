@@ -15,7 +15,7 @@ use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.6
+ * @version   0.9.8
  */
 class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
 {
@@ -32,6 +32,7 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\CoverFishScanner::analysePHPUnitFiles
      * @covers DF\PHPCoverFish\CoverFishScanner::analyseClassesInFile
      * @covers DF\PHPCoverFish\CoverFishScanner::analyseClass
+     * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeJsonFailureStream
      */
     public function testCoverClassFullyQualifiedNameValidatorCheckForValidClassFail()
     {
