@@ -30,11 +30,11 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeResultHeadlines
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeSingleMappingResult
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFinalCheckResults
-     * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeNoCoverFound
-     * @covers DF\PHPCoverFish\Common\CoverFishOutput::writePass
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFileName
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFilePass
-     * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeScanPassStatistic
+     * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::writeScanPassStatistic
+     * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::writeProgress
+     * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::outputResult
      */
     public function testScanByPhpUnitCommandOutputLevelOne()
     {
