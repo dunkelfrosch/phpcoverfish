@@ -1,4 +1,4 @@
-# Changes in PHPCoverFish 0.9.7
+# Changes in PHPCoverFish 0.9.8
 
 All notable changes of the PHPCoverFish release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09).
