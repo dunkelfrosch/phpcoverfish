@@ -101,7 +101,7 @@ abstract class BaseCoverFishOutput
             return null;
         }
 
-        $this->output->writeln(sprintf('%s', $content));
+        $this->output->writeln($content);
     }
 
     /**
@@ -115,7 +115,7 @@ abstract class BaseCoverFishOutput
             return null;
         }
 
-        $this->output->write(sprintf('%s', $content));
+        $this->output->write($content);
     }
 
     /**
