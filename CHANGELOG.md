@@ -4,6 +4,26 @@ All notable changes of the PHPCoverFish release series are documented in this fi
 This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09).
 
 
+## [0.9.8] - 2015-08-19
+
+### Fixed
+
+- Fixed problem with error return code on scan failures
+- Fixed non-property bug in "phpunit scan mode" during phpunit.xml check
+
+### Added
+
+- Added missing unit tests for collection/arrayCollection and other functional classes
+- Added new console commandLine tests for "phpunit scan mode"
+- Added new console commandLine tests for "raw scan mode"
+
+### Changes
+
+- minor readme/documentation issues
+- improve code quality / fix internal review related issues
+- refactoring of current test-base (validator/scanner tests)
+- initial refactoring of our ugly output module
+
 ## [0.9.7] - 2015-08-15
 
 ### Fixed
