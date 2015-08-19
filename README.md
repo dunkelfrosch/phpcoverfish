@@ -112,20 +112,17 @@ To call the PHPCoverFish help page use:
     --output-prevent-echo    if you fetch results in json format, you can hide direct output and analyse results as as a json object directly,
                              this parameter is mainly used for testing purposes (deprecated, will be replaced by --quiet/-q in beta version)
     --no-ansi                prevent colorful output of rendering results
+    -- verbose               will be handled by option '--output-level <n>'
+    -- no-interaction        not necessary, no virtual interaction planned yet
+    -- quiet                 will be handled by option '--output-prevent-echo'
     
-### Parameters (in development, not yet available in alpha)    
+### Parameters (not yet available in alpha)    
     
     --debug                  generate a more detailed debug output of coverfish process
     --stop-on-error          stop on first application error
     --stop-on-failure        stop on first detected coverFish failure 
     --warning-threshold-stop set a warning threshold value, application will break on reaching this number
 
-### Parameters (deprecated, will be removed or renamed in future beta/stable)
-
-    -- verbose               will be handled by option '--output-level <n>'
-    -- no-interaction        not necessary, no virtual interaction planned yet
-    -- quiet                 will be handled by option '--output-prevent-echo'
-                             maybe i'll just rename the current used argument to 'quiet'
 
 ## Missing features, annoying bugs and project thoughts
 
