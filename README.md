@@ -73,7 +73,7 @@ the result should be:
 
 ![phpunit mode result](https://dl.dropbox.com/s/371ea9arp1yvdb9/ss-sample-normal-mode-result-1.png)
 
-**RAW-Mode** scan (alternative scan mode), using additional parameters for required scan-path, autoload-file (exclude path will be used optinal here)
+**RAW-Mode** scan (alternative scan mode), using additional parameters for required scan-path, autoload-file (exclude path will be used optional here)
 
     php <path/to/your/coverfish/vendor/>bin/coverfish.php *scan* \
             --raw-scan-path "<path/to/your/phpunit/tests>" \
@@ -120,7 +120,7 @@ To call the PHPCoverFish help page use:
     --stop-on-failure        stop on first detected coverFish failure 
     --warning-threshold-stop set a warning threshold value, application will break on reaching this number
 
-### Parameters (deprecated, will be removed in future version(s))
+### Parameters (deprecated, will be removed or renamed in future beta/stable)
 
     -- verbose               will be handled by option '--output-level <n>'
     -- no-interaction        not necessary, no virtual interaction planned yet
@@ -135,9 +135,9 @@ around this project :)
 *We are currently working on*: 
 
 - validator for global code coverage using @cover in class head annotation of testFile
-- raw scan mode, currently php reflection ability is used to identify code coverage errors - in future versions a raw scan mode to scan files outside the autoload context will be provided 
+- File/IO scan mode, currently php reflection ability is used to identify code coverage errors - in future versions a raw scan mode to scan files outside the autoload context will be provided 
 - coverage warnings implementation; identify coverage problems or misconfiguration issues in use of phpunit code coverage
-- refactoring of coverFish's output module; this module is just "meh!"
+- optimization of coverFish's output module; this module is just "meh!"
 - mastering coverfish documentation and build up a useful wiki
 - include @use statement check
 - improve scanner/analyzer speed
