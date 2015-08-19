@@ -120,6 +120,8 @@ class CoverFishScanCommand extends Command
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getHelpOutput()
@@ -133,6 +135,8 @@ class CoverFishScanCommand extends Command
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getVersion()
@@ -145,6 +149,8 @@ class CoverFishScanCommand extends Command
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getLongVersion()
