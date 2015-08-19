@@ -245,29 +245,17 @@ class BaseCoverFishScanner
     }
 
     /**
-     * @param array           $cliOptions
+     * @param array $cliOptions
      *
      * @codeCoverageIgnore
      */
     public function __construct(array $cliOptions)
     {
-        $this->debug = $cliOptions['sys_debug'];
-
-        $this->phpUnitConfigFile = $cliOptions['sys_phpunit_config'];
-        $this->phpUnitConfigTestSuite = $cliOptions['sys_phpunit_config_test_suite'];
-
-        // fetch all necessary coverfish parameter by optional given raw-data first
-        $this->testAutoloadPath = $cliOptions['raw_scan_autoload_file'];
-        $this->testSourcePath = $cliOptions['raw_scan_source'];
-        $this->testExcludePath = $cliOptions['raw_scan_exclude_path'];
-
-        $this->stopOnError = $cliOptions['sys_stop_on_error'];
-        $this->stopOnFailure = $cliOptions['sys_stop_on_failure'];
-        $this->warningThreshold = $cliOptions['sys_warning_threshold'];
-
         $this->validatorCollection = new ArrayCollection();
         $this->coverFishHelper = new CoverFishHelper();
         $this->coverFishResult = new CoverFishResult();
+
+        $this->initCoverFishScanner($cliOptions);
 
         if (true === $this->coverFishHelper->checkFileExist($this->phpUnitConfigFile)) {
             $this->setConfigFromPHPUnitConfigFile();
@@ -276,6 +264,27 @@ class BaseCoverFishScanner
         if (true === $this->checkSourceAutoload($this->testAutoloadPath)) {
             include(sprintf('%s', $this->testAutoloadPath));
         }
+    }
+
+    /**
+     * @param array $cliOptions
+     *
+     * @codeCoverageIgnore
+     */
+    private function initCoverFishScanner(array $cliOptions)
+    {
+        // fetch all necessary coverfish parameter by optional given raw-data first
+        $this->testAutoloadPath = $cliOptions['raw_scan_autoload_file'];
+        $this->testSourcePath = $cliOptions['raw_scan_source'];
+        $this->testExcludePath = $cliOptions['raw_scan_exclude_path'];
+
+        // fetch additional system/app parameter
+        $this->debug = $cliOptions['sys_debug'];
+        $this->stopOnError = $cliOptions['sys_stop_on_error'];
+        $this->stopOnFailure = $cliOptions['sys_stop_on_failure'];
+        $this->warningThreshold = $cliOptions['sys_warning_threshold'];
+        $this->phpUnitConfigFile = $cliOptions['sys_phpunit_config'];
+        $this->phpUnitConfigTestSuite = $cliOptions['sys_phpunit_config_test_suite'];
     }
 
     /**
