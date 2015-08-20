@@ -70,7 +70,7 @@ or (using phpunit test suite name "PHPCoverFish Suite" ):
 
     php ./bin/coverfish scan tests/phpunit.xml --phpunit-config-suite "PHPCoverFish Suite" --output-level 1 --no-ansi   
 
-the result should be:
+the result for empty test suite usage should be:
 
 ![phpunit mode result](https://dl.dropbox.com/s/371ea9arp1yvdb9/ss-sample-normal-mode-result-1.png)
 
