@@ -101,34 +101,37 @@ abstract class BaseCoverFishOutput
     protected $scanFailure;
 
     /**
-     * @param string $content
-     *
-     * @return null on json
+     * initializer for json result set in write progress method
      */
+    private function resetJsonResult()
+    {
+        $this->jsonResult['skipped'] = false;
+        $this->jsonResult['pass'] = false;
+        $this->jsonResult['failure'] = false;
+        $this->jsonResult['error'] = false;
+        $this->jsonResult['unknown'] = false;
+    }
+
     protected function writeLine($content)
     {
-        if (true === $this->outputFormatJson) {
-            return null;
+        if (false === $this->outputFormatJson) {
+            $this->output->writeln($content);
         }
-
-        $this->output->writeln($content);
     }
 
     /**
      * @param string $content
-     *
-     * @return null on json
      */
     protected function write($content)
     {
-        if (true === $this->outputFormatJson) {
-            return null;
+        if (false === $this->outputFormatJson) {
+            $this->output->write($content);
         }
-
-        $this->output->write($content);
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @param int    $count
      * @param string $char
      *
@@ -145,6 +148,8 @@ abstract class BaseCoverFishOutput
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @param CoverFishResult $coverFishResult
      *
      * @return string
@@ -172,105 +177,79 @@ abstract class BaseCoverFishOutput
     }
 
     /**
+     * @param string $colorCode
+     * @param string $charMinimal
+     * @param string $charDetailed
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private function getProgressTemplate($colorCode, $charMinimal, $charDetailed)
+    {
+        $output = ($this->outputLevel > 1)
+            ? $charDetailed // detailed output required?
+            : $charMinimal  // otherwise "normal" progress output will be provided
+        ;
+
+        return (false === $this->preventAnsiColors)
+            ? $output = Color::setColor($colorCode, $output)
+            : $output;
+    }
+
+    /**
      * main progress output rendering function
      *
      * @param int $status
      *
-     * @return null|string
+     * @return null
      */
     protected function writeProgress($status)
     {
-        $this->jsonResult['skipped'] = false;
-        $this->jsonResult['pass'] = false;
-        $this->jsonResult['failure'] = false;
-        $this->jsonResult['error'] = false;
-        $this->jsonResult['unknown'] = false;
+        $this->resetJsonResult();
 
         switch ($status) {
             case self::MACRO_SKIPPED:
-
                 $this->jsonResult['skipped'] = true;
-                $this->jsonResult['pass'] = true;
-                $output = ($this->outputLevel > 1)
-                    ? 'N' // detailed output required?
-                    : 'n' // otherwise "normal" progress output will be provided
-                ;
-
-                // @todo: implementation of ansi code clearance script required ;)
-                $output = (false === $this->preventAnsiColors)
-                    ? $output = "\033[1;30m$output\033[0m"
-                    : $output
-                ;
+                $output = $this->getProgressTemplate('green', '_', 'S');
 
                 break;
 
             case self::MACRO_PASS:
-
                 $this->jsonResult['pass'] = true;
-                $output = ($this->outputLevel > 1)
-                    ? '+'
-                    : '.'
-                ;
-
-                $output = (false === $this->preventAnsiColors)
-                    ? $output = "\033[0;32m$output\033[0m"
-                    : $output
-                ;
+                $output = $this->getProgressTemplate('green', '.', '+');
 
                 break;
 
             case self::MACRO_FAILURE:
 
                 $this->jsonResult['failure'] = true;
-                $output = ($this->outputLevel > 1)
-                    ? 'fail'
-                    : 'F'
-                ;
-
-                $output = (false === $this->preventAnsiColors)
-                    ? $output = "\033[33;41m$output\033[0m"
-                    : $output
-                ;
+                $output = $this->getProgressTemplate('bg_red_fg_yellow', 'f', 'F');
 
                 break;
 
             case self::MACRO_ERROR:
 
+                $output = $this->getProgressTemplate('bg_red_fg_white', 'e', 'E');
                 $this->jsonResult['error'] = true;
-                $output = ($this->outputLevel > 1)
-                    ? 'error'
-                    : 'E'
-                ;
 
-                $output = (false === $this->preventAnsiColors)
-                    ? $output = "\033[30;43m$output\033[0m"
-                    : $output
-                ;
                 break;
 
             default:
 
                 $this->jsonResult['unknown'] = true;
-                $output = ($this->outputLevel > 1)
-                    ? 'unknown'
-                    : '?'
-                ;
+                $output = $output = $this->getProgressTemplate('bg_yellow_fg_black', '?', '?');
 
                 break;
         }
 
-        // prevent any output on json output format
-        if (true === $this->outputFormatJson) {
-            return null;
-        }
-
-        $this->output->write($output);
+        $this->write($output);
     }
 
     /**
-     * @todo: print out more detailed information about the final scan failure result
-     *
      * write scan pass results
+     *
+     * @param CoverFishResult $coverFishResult
      */
     protected function writeScanPassStatistic(CoverFishResult $coverFishResult)
     {
@@ -292,11 +271,15 @@ abstract class BaseCoverFishOutput
                 : $passStatistic
         );
 
-        $this->output->write($scanResult);
+        $this->write($scanResult);
     }
 
     /**
      * write scan fail result
+     *
+     * @param CoverFishResult $coverFishResult
+     *
+     * @throws CoverFishFailExit
      */
     protected function writeScanFailStatistic(CoverFishResult $coverFishResult)
     {
@@ -320,7 +303,7 @@ abstract class BaseCoverFishOutput
             $this->getScanFailPassStatistic($coverFishResult)
         );
 
-        $this->output->write($scanResult);
+        $this->write($scanResult);
 
         throw new CoverFishFailExit();
     }
@@ -330,7 +313,7 @@ abstract class BaseCoverFishOutput
      *
      * @param CoverFishResult $coverFishResult
      *
-     * @return null|string
+     * @return null
      *
      * @throws CoverFishFailExit
      */
