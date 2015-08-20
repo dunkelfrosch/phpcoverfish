@@ -21,8 +21,9 @@ This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09)
 
 - minor readme/documentation issues
 - improve code quality / fix internal review related issues
+- improve output template usage, minor output format extend 
 - refactoring of current test-base (validator/scanner tests)
-- initial refactoring of our ugly output module
+- initial refactoring of our ugly output module (base class)
 
 ## [0.9.7] - 2015-08-15
 
