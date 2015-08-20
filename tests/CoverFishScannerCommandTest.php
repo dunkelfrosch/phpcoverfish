@@ -33,6 +33,7 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFileName
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFilePass
      * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::writeScanPassStatistic
+     * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::getProgressTemplate
      * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::writeProgress
      * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::outputResult
      */
@@ -166,7 +167,7 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
 
     public function validateCoverFishSelfTestLevelZero($output)
     {
-        $this->assertRegExp('/[n]+[.]+/', $output);
+        $this->assertRegExp('/[_]+[.]+/', $output);
     }
 
     public function validateCoverFishSelfTestLevelOne($output)
@@ -186,7 +187,7 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
     public function validateCoverFishSelfTestLevelTwo($output)
     {
         $this->assertRegExp('/(scan file)([ ]{1})(BaseCoverFishScannerTestCase.php)/', $output);
-        $this->assertRegExp('/(->[ ]{1}public[ ]{1})(setUp[(]{1}[)]{1})([ ]{1}[:]{1}[ ]{1})([N]{1})/', $output);
+        $this->assertRegExp('/(->[ ]{1}public[ ]{1})(setUp[(]{1}[)]{1})([ ]{1}[:]{1}[ ]{1})([S]{1})/', $output);
         $this->assertRegExp('/(=>[ ]{1}cover test[(]s[)]{1} succeeded)/', $output);
     }
 
