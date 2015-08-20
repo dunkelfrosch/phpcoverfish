@@ -46,6 +46,9 @@ final class CoverFishColor
         'bg_blue' => '44',
         'bg_cyan' => '46',
         'bg_light_gray' => '47',
+        'bg_red_fg_yellow' => '33;41',
+        'bg_red_fg_white' => '37;41',
+        'bg_yellow_fg_black' => '30;43',
     );
 
     /**
