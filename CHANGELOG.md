@@ -10,6 +10,7 @@ This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09)
 
 - Fixed problem with error return code on scan failures
 - Fixed non-property bug in "phpunit scan mode" during phpunit.xml check
+- Fixed error in output template usage for output-level 1+
 
 ### Added
 
