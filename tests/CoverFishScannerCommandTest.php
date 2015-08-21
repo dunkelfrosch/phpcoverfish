@@ -31,7 +31,8 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeSingleMappingResult
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFinalCheckResults
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFileName
-     * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFilePass
+     * @covers DF\PHPCoverFish\Common\CoverFishOutput::getFileResultTemplate
+     * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFileResult
      * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::writeScanPassStatistic
      * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::getProgressTemplate
      * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::writeProgress
