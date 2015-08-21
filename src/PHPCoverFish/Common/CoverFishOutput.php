@@ -21,11 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CoverFishOutput extends BaseCoverFishOutput
 {
     /**
-     * @const MACRO_DETAIL_LINE_INDENT set line indent for detailed error message block
-     */
-    const MACRO_CONFIG_DETAIL_LINE_INDENT = 3;
-
-    /**
      * @var CoverFishScanner
      */
     protected $scanner;
@@ -54,7 +49,6 @@ class CoverFishOutput extends BaseCoverFishOutput
     private function initOutputConfig(array $outputOptions)
     {
         $this->scanFailure = false;
-        $this->verbose = $outputOptions['out_verbose'];
         $this->outputFormat = $outputOptions['out_format'];
         $this->outputLevel = $outputOptions['out_level'];
         $this->preventAnsiColors = $outputOptions['out_no_ansi'];
@@ -181,9 +175,11 @@ class CoverFishOutput extends BaseCoverFishOutput
     private function writeFinalCheckResults(CoverFishResult $coverFishResult)
     {
         if (false === $this->scanFailure) {
-            $this->writeFilePass();
+            //$this->writeFilePass();
+            $this->writeFileResult(self::FILE_PASS, null);
         } else {
-            $this->writeFileFail($coverFishResult);
+            //$this->writeFileFail($coverFishResult);
+            $this->writeFileResult(self::FILE_FAILURE, $coverFishResult->getFailureStream());
         }
 
         $this->jsonResults[] = $this->jsonResult;
@@ -362,105 +358,5 @@ class CoverFishOutput extends BaseCoverFishOutput
             $coverFishResult->addFailureToStream($lineMessage);
             $coverFishResult->addFailureToStream(PHP_EOL);
         }
-    }
-
-    /**
-     * @param CoverFishPHPUnitFile $coverFishUnitFile
-     *
-     * @return null
-     */
-    private function writeFileName(CoverFishPHPUnitFile $coverFishUnitFile)
-    {
-        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
-            return null;
-        }
-
-        $file = $this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile());
-        $fileNameLine = sprintf('%s%s%s',
-            (false === $this->preventAnsiColors)
-                ? Color::tplNormalColor(($this->outputLevel > 1) ? 'scan file ' : null)
-                : 'scan file '
-            ,
-            (false === $this->preventAnsiColors)
-                ? Color::tplYellowColor($file)
-                : $file
-            ,
-            ($this->outputLevel > 1) ? PHP_EOL : ' '
-        );
-
-        $this->write($fileNameLine);
-    }
-
-    /**
-     * @param CoverFishResult $coverFishResult
-     *
-     * @return null
-     */
-    private function writeFileFail(CoverFishResult $coverFishResult)
-    {
-        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
-            return null;
-        }
-
-        $output = 'FAIL';
-        if ($this->outputLevel > 1) {
-            $output = 'file/test failure';
-        }
-
-        $fileResultMacro = '%s%s %s%s%s';
-        $fileResult = sprintf($fileResultMacro,
-            ($this->outputLevel > 1)
-                ? PHP_EOL
-                : null
-            ,
-            ($this->outputLevel > 1)
-                ? '=>'
-                : null
-            ,
-            (false === $this->preventAnsiColors)
-                ? Color::tplRedColor($output)
-                : $output
-            ,
-            PHP_EOL,
-            $coverFishResult->getFailureStream()
-        );
-
-        $this->writeLine($fileResult);
-    }
-
-    /**
-     * @return null
-     */
-    private function writeFilePass()
-    {
-        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
-            return null;
-        }
-
-        $output = 'OK';
-        if ($this->outputLevel > 1) {
-            $output = 'cover test(s) succeeded';
-        }
-
-        $fileResultMacro = '%s%s %s%s';
-        $fileResult = sprintf($fileResultMacro,
-            ($this->outputLevel > 1)
-                ? PHP_EOL
-                : null
-            ,
-            ($this->outputLevel > 1)
-                ? '=>'
-                : null
-            ,
-            (false === $this->preventAnsiColors)
-                ? Color::tplGreenColor($output)
-                : $output
-            ,
-            ($this->outputLevel > 1)
-                ? PHP_EOL
-                : null
-        );
-
-        $this->writeLine($fileResult);
     }
 }
