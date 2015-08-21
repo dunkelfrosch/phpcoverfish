@@ -22,13 +22,40 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class BaseCoverFishOutput
 {
+    /**
+     * @const MACRO_DETAIL_LINE_INDENT set line indent for detailed error message block
+     */
+    const MACRO_CONFIG_DETAIL_LINE_INDENT = 3;
+
+    /**
+     * @const MACRO_SKIPPED code for skipped/coverage missing testFunctions
+     */
     const MACRO_SKIPPED = 0;
 
+    /**
+     * @const MACRO_PASS code for passed testFunctions
+     */
     const MACRO_PASS = 1;
 
+    /**
+     * @const MACRO_FAILURE code for failing testFunctions
+     */
     const MACRO_FAILURE = 2;
 
+    /**
+     * @const MACRO_FAILURE code for error/exception thrown testFunctions
+     */
     const MACRO_ERROR = 3;
+
+    /**
+     * @const FILE_PASS code for finally successfully closed single test file scan
+     */
+    const FILE_PASS = 10;
+
+    /**
+     * @const FILE_PASS code for tragically failed single test file scan exit
+     */
+    const FILE_FAILURE = 20;
 
     /**
      * @var OutputInterface
@@ -49,11 +76,6 @@ abstract class BaseCoverFishOutput
      * @var CoverFishPHPUnitFile
      */
     protected $coverFishUnitFile;
-
-    /**
-     * @var bool
-     */
-    protected $verbose = false;
 
     /**
      * @var string
@@ -103,7 +125,7 @@ abstract class BaseCoverFishOutput
     /**
      * initializer for json result set in write progress method
      */
-    private function resetJsonResult()
+    protected function resetJsonResult()
     {
         $this->jsonResult['skipped'] = false;
         $this->jsonResult['pass'] = false;
@@ -177,6 +199,71 @@ abstract class BaseCoverFishOutput
     }
 
     /**
+     * @param string      $colorCode
+     * @param string      $statusMinimal
+     * @param string      $statusDetailed
+     * @param null|string $streamMessage
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private function getFileResultTemplate($colorCode, $statusMinimal, $statusDetailed, $streamMessage = null)
+    {
+        $output = ($this->outputLevel > 1)
+            ? $statusDetailed
+            : $statusMinimal;
+
+        return sprintf('%s%s %s%s%s',
+            ($this->outputLevel > 1)
+                ? PHP_EOL
+                : null
+            ,
+            ($this->outputLevel > 1)
+                ? '=>'
+                : null
+            ,
+            (false === $this->preventAnsiColors)
+                ? Color::setColor($colorCode, $output)
+                : $output
+            ,
+            ($this->outputLevel > 1)
+                ? PHP_EOL
+                : null
+            ,
+            $streamMessage
+        );
+    }
+
+    /**
+     * main progress output rendering function
+     *
+     * @param int    $status
+     * @param string $message
+     *
+     * @return null
+     */
+    protected function writeFileResult($status, $message)
+    {
+        $output = null;
+
+        switch ($status) {
+
+            case self::FILE_FAILURE:
+                $output = $this->getFileResultTemplate('bg_red_fg_white', 'FAIL', 'file/test FAILURE', $message);
+                break;
+
+            case self::FILE_PASS:
+                $output = $this->getFileResultTemplate('green', 'OK', 'file/test OK', $message);
+                break;
+
+            default: break;
+        }
+
+        $this->writeLine($output);
+    }
+
+    /**
      * @param string $colorCode
      * @param string $charMinimal
      * @param string $charDetailed
@@ -222,21 +309,18 @@ abstract class BaseCoverFishOutput
                 break;
 
             case self::MACRO_FAILURE:
-
                 $this->jsonResult['failure'] = true;
                 $output = $this->getProgressTemplate('bg_red_fg_yellow', 'f', 'F');
 
                 break;
 
             case self::MACRO_ERROR:
-
-                $output = $this->getProgressTemplate('bg_red_fg_white', 'e', 'E');
                 $this->jsonResult['error'] = true;
+                $output = $this->getProgressTemplate('bg_red_fg_white', 'e', 'E');
 
                 break;
 
             default:
-
                 $this->jsonResult['unknown'] = true;
                 $output = $output = $this->getProgressTemplate('bg_yellow_fg_black', '?', '?');
 
@@ -306,6 +390,33 @@ abstract class BaseCoverFishOutput
         $this->write($scanResult);
 
         throw new CoverFishFailExit();
+    }
+
+    /**
+     * @param CoverFishPHPUnitFile $coverFishUnitFile
+     *
+     * @return null
+     */
+    protected function writeFileName(CoverFishPHPUnitFile $coverFishUnitFile)
+    {
+        if (true === $this->outputFormatJson || 0 === $this->outputLevel) {
+            return null;
+        }
+
+        $file = $this->coverFishHelper->getFileNameFromPath($coverFishUnitFile->getFile());
+        $fileNameLine = sprintf('%s%s%s',
+            (false === $this->preventAnsiColors)
+                ? Color::tplNormalColor(($this->outputLevel > 1) ? 'scan file ' : null)
+                : 'scan file '
+            ,
+            (false === $this->preventAnsiColors)
+                ? Color::tplYellowColor($file)
+                : $file
+            ,
+            ($this->outputLevel > 1) ? PHP_EOL : ' '
+        );
+
+        $this->write($fileNameLine);
     }
 
     /**
