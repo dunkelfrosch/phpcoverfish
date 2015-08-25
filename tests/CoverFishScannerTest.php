@@ -38,7 +38,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
         $testFile = 'ValidatorGlobalMethodPassTest.php';
         $methodData = $this->getSampleClassMethodData(sprintf('%s/data/tests/%s', __DIR__, $testFile));
         /** @var CoverFishPHPUnitTest $unitTest */
-        $unitTest = $scanner->setPHPUnitTestData($methodData);
+        $unitTest = $scanner->setPHPUnitTestByMethodData($methodData);
         $scanner->setPhpUnitTest($unitTest);
 
         $coverToken = '::myTestMethod';
@@ -115,7 +115,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     }
 
     /**
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setPHPUnitTestData
+     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setPHPUnitTestByMethodData
      */
     public function testCheckSetPHPUnitTestData()
     {
@@ -125,7 +125,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
         $scanner = $this->getDefaultCoverFishScanner();
 
         /** @var CoverFishPHPUnitTest $unitTestFile */
-        $unitTestFile = $scanner->setPHPUnitTestData($methodData);
+        $unitTestFile = $scanner->setPHPUnitTestByMethodData($methodData);
 
         $this->assertTrue($unitTestFile instanceof CoverFishPHPUnitTest);
         $this->assertEquals($testFile, $unitTestFile->getFile());
