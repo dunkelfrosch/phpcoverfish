@@ -202,7 +202,7 @@ class CoverFishHelper
     public function getAnnotationByKey($docBlock, $key)
     {
         /** @var array $classAnnotations */
-        $classAnnotations = $this->parseMethodDocBlock($docBlock);
+        $classAnnotations = $this->parseCoverAnnotationDocBlock($docBlock);
         if (false === array_key_exists($key, $classAnnotations)) {
             return array();
         }
@@ -242,7 +242,7 @@ class CoverFishHelper
      *
      * @return array
      */
-    public function parseMethodDocBlock($docBlock)
+    public function parseCoverAnnotationDocBlock($docBlock)
     {
         $annotations = array('covers' => array(), 'uses' => array());
         $docBlock = substr($docBlock, 3, -2);
