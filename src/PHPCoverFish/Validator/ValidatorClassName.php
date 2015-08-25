@@ -14,7 +14,7 @@ use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.4
+ * @version   0.9.8
  */
 class ValidatorClassName extends BaseCoverFishValidator
 {
