@@ -36,10 +36,10 @@ class CoverFishHelperTest extends BaseCoverFishScannerTestCase
     }
 
     /**
-     * @covers DF\PHPCoverFish\Common\CoverFishHelper::parseMethodDocBlock
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::parseCoverAnnotationDocBlock
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::getAnnotationByKey
      */
-    public function testCheckParseMethodDocBlock()
+    public function testCheckParseCoverAnnotationDocBlock()
     {
         $classData = $this->getSampleClassData(sprintf('%s/data/tests/ValidatorDefaultCoverClassPassTest.php', __DIR__));
 
