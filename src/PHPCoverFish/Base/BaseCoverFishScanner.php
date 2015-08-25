@@ -485,11 +485,13 @@ class BaseCoverFishScanner
     }
 
     /**
+     * fetch all relevant unit test data from incoming methodDataBlock array
+     *
      * @param array $methodData
      *
      * @return CoverFishPHPUnitTest
      */
-    public function setPHPUnitTestData(array $methodData)
+    public function setPHPUnitTestByMethodData(array $methodData)
     {
         /** @var string $classFileAndPath */
         $classFileAndPath = $methodData['classFile'];
@@ -501,6 +503,22 @@ class BaseCoverFishScanner
         $this->phpUnitTest->setFileAndPath($classFileAndPath);
         $this->phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($classFileAndPath));
         $this->phpUnitTest->setLoc($this->coverFishHelper->getLocOfTestMethod($methodData));
+
+        return $this->phpUnitTest;
+    }
+
+    /**
+     * @param array $classData
+     *
+     * @return CoverFishPHPUnitTest
+     */
+    public function setPHPUnitTestByClassData($classData)
+    {
+        $this->setPHPUnitTestMetaData($classData['className'], $classData);
+        $classFileAndPath = $classData['classFile'];
+        $this->phpUnitTest = new CoverFishPHPUnitTest();
+        $this->phpUnitTest->setFileAndPath($classFileAndPath);
+        $this->phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($classFileAndPath));
 
         return $this->phpUnitTest;
     }
