@@ -95,6 +95,51 @@ class CoverFishScanner extends BaseCoverFishScanner
     }
 
     /**
+     * @param array $coverAnnotations
+     */
+    public function analyseCoverAnnotations($coverAnnotations)
+    {
+        /** @var string $cover */
+        foreach ($coverAnnotations['covers'] as $cover) {
+            if (true === empty($cover)) {
+                continue;
+            }
+
+            $this->validateCodeCoverage($cover);
+        }
+
+        $this->phpUnitFile->addTest($this->validateAndReturnMapping($this->phpUnitTest));
+    }
+
+    /**
+     * scan class doc annotation block
+     *
+     * @param array $classData
+     */
+    public function analyseClassPHPDocAnnotation(array $classData)
+    {
+        $this->phpUnitTest = $this->setPHPUnitTestByClassData($classData);
+        // scan class cover annotation
+        $this->analyseCoverAnnotations($this->coverFishHelper
+            ->parseCoverAnnotationDocBlock($classData['docblock'])
+        );
+    }
+
+    /**
+     * scan method doc annotation block
+     *
+     * @param array $methodData
+     */
+    public function analyseMethodPHPDocAnnotation(array $methodData)
+    {
+        $this->phpUnitTest = $this->setPHPUnitTestByMethodData($methodData);
+        // scan method cover annotation
+        $this->analyseCoverAnnotations($this->coverFishHelper
+            ->parseCoverAnnotationDocBlock($methodData['docblock'])
+        );
+    }
+
+    /**
      * scan (test) class and add result to our coverFishResultCollection
      *
      * @param array  $classData
@@ -103,35 +148,17 @@ class CoverFishScanner extends BaseCoverFishScanner
      */
     public function analyseClass(array $classData)
     {
-        // add class meta information firstly
-        $this->setPHPUnitTestMetaData($classData['className'], $classData);
-
-        // iterate through all available methods in testClass
+        $this->analyseClassPHPDocAnnotation($classData);
+        // iterate through all available methods in give test class
         foreach ($classData['methods'] as $methodName => $methodData) {
+            $this->validatorCollection->clear();
             if (false === array_key_exists('docblock', $methodData)) {
                 continue;
             }
 
-            $this->validatorCollection->clear();
-
-            // transfer classFile information to methodData
             $methodData['classFile'] = (string) $classData['classFile'];
-            // generate our phpUnitTest data structure
-            $this->phpUnitTest = $this->setPHPUnitTestData($methodData);
-            /** @var array $annotations */
-            $annotations = $this->coverFishHelper->parseMethodDocBlock($methodData['docblock']);
 
-            /** @var string $cover */
-            foreach ($annotations['covers'] as $cover) {
-                if (true === empty($cover)) {
-                    continue;
-                }
-
-               $this->validateCodeCoverage($cover);
-            }
-
-            // add final test structure and result to phpUnitFile
-            $this->phpUnitFile->addTest($this->validateAndReturnMapping($this->phpUnitTest));
+            $this->analyseMethodPHPDocAnnotation($methodData);
         }
 
         // add final phpUnitFile structure including mapping result to our coverFishResult
