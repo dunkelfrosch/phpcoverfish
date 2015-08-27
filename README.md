@@ -2,7 +2,7 @@
 
 phpCoverFish is an open source php(cli) code coverage pre-processor, used to validate all of your @covers annotations inside your test files before the big code coverage train will run through all of your tests and may collide with bad coverage annotations scattered along the rails.
 
-*This alpha version of phpCoverFish won't be as functional as the coming beta version. Specific commands like coverage warning features, including corresponding threshold breaks and stop-on-error/stop-on-failure parameters are not fully functional yet. As coverfish is still actively  under development, it is a slight possibility that some  options and parameter are not fully working as expected or may have undergone changes in recent versions.*
+*This beta-1 version of phpCoverFish won't be as functional as the upcoming beta versions. Specific commands like coverage warning features, including corresponding threshold breaks and stop-on-error/stop-on-failure parameters are not fully functional yet. As coverfish is still actively  under development, it is a slight possibility that some  options and parameter are not fully working as expected or may have undergone changes in recent versions.*
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![Build Status](https://travis-ci.org/dunkelfrosch/phpcoverfish.svg?branch=master)](https://travis-ci.org/dunkelfrosch/phpcoverfish)
@@ -27,10 +27,10 @@ You can also execute this composer command in your console:
 
     composer require df/php-coverfish
 
-In order to use the current PHPCoverFish release you will need to take down the minimum-stability key in your composer.json file (set "alpha"). Simply place this line above your "extra" property key:
+In order to use the current PHPCoverFish release you will need to take down the minimum-stability key in your composer.json file (set "beta"). Simply place this line above your "extra" property key:
 
     ...
-    "minimum-stability": "alpha",
+    "minimum-stability": "beta",
     "extra": {
     ...
 
@@ -117,7 +117,7 @@ To call the PHPCoverFish help page use:
     -- no-interaction        not necessary, no virtual interaction planned yet
     -- quiet                 will be handled by option '--output-prevent-echo'
     
-### Parameters (not yet available in alpha)    
+### Parameters (not available in alpha/beta-1)    
     
     --debug                  generate a more detailed debug output of coverfish process
     --stop-on-error          stop on first application error
@@ -132,7 +132,6 @@ around this project :)
 
 *We are currently working on*: 
 
-- validator for global code coverage using @cover in class head annotation of testFile
 - File/IO scan mode, currently php reflection ability is used to identify code coverage errors - in future versions a raw scan mode to scan files outside the autoload context will be provided 
 - coverage warnings implementation; identify coverage problems or misconfiguration issues in use of phpunit code coverage
 - optimization of coverFish's output module; this module is just "meh!"
