@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
- * @version    0.9.8
+ * @version    0.9.9
  */
 class CoverFishOutput extends BaseCoverFishOutput
 {
@@ -199,7 +199,7 @@ class CoverFishOutput extends BaseCoverFishOutput
         CoverFishError $mappingError,
         $coverLine
     ) {
-        $this->jsonResult['error'] = $coverFishResult->getFailureCount();
+        $this->jsonResult['errorCount'] = $coverFishResult->getFailureCount();
         $this->jsonResult['errorMessage'] = $mappingError->getTitle();
         $this->jsonResult['errorCode'] = $mappingError->getErrorCode();
         $this->jsonResult['cover'] = $coverLine;
