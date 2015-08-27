@@ -15,10 +15,54 @@ use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.8
+ * @version   0.9.9
  */
 class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
 {
+    /**
+     * test new class phpdoc cover annotation placement validator (fail)
+     *
+     * @covers DF\PHPCoverFish\CoverFishScanner::analyseClassPHPDocAnnotation
+     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setPHPUnitTestByClassData
+     */
+    public function testCoverCompleteClassFullyQualifiedNameValidatorCheckForValidClassFail()
+    {
+        /** @var CoverFishScanner $scanner */
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorCompleteClassFQNameFailTest.php', __DIR__));
+
+        /** @var array $jsonResult */
+        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
+
+        /** @var \stdClass $jsonResult */
+        foreach ($jsonResult as $result) {
+            $pass = (bool) $result->pass;
+            $errorCode = (int) $result->errorCode;
+            $this->assertFalse($pass);
+            $this->assertEquals(CoverFishError::PHPUNIT_REFLECTION_CLASS_NOT_FOUND, $errorCode);
+        }
+    }
+
+    /**
+     * test new class phpdoc cover annotation placement validator (pass)
+     */
+    public function testCoverCompleteClassFullyQualifiedNameValidatorCheckForValidClassPass()
+    {
+        /** @var CoverFishScanner $scanner */
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorCompleteClassFQNamePassTest.php', __DIR__));
+
+        /** @var array $jsonResult */
+        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
+
+        /** @var \stdClass $jsonResult */
+        foreach ($jsonResult as $result) {
+            $pass = (bool) $result->pass;
+            $failure = (bool) $result->failure;
+            $this->assertTrue($pass);
+            $this->assertFalse($failure);
+
+        }
+    }
+
     /**
      * check for covered className (FQN) annotation "class missing"
      *
@@ -28,10 +72,12 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateMapping
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateReflectionClass
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::checkClassHasFQN
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::validateAndReturnMapping
+     * @covers DF\PHPCoverFish\CoverFishScanner::analyseClass
      * @covers DF\PHPCoverFish\CoverFishScanner::analysePHPUnitFiles
      * @covers DF\PHPCoverFish\CoverFishScanner::analyseClassesInFile
-     * @covers DF\PHPCoverFish\CoverFishScanner::analyseClass
+     * @covers DF\PHPCoverFish\CoverFishScanner::analyseMethodPHPDocAnnotation
+     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::validateAndReturnMapping
+     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setPHPUnitTestByMethodData
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeJsonFailureStream
      */
     public function testCoverClassFullyQualifiedNameValidatorCheckForValidClassFail()
