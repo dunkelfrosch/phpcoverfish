@@ -1,8 +1,25 @@
-# Changes in PHPCoverFish 0.9.8
+# Changes in PHPCoverFish 0.9.9
 
 All notable changes of the PHPCoverFish release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09).
 
+## [0.9.9] - 2015-08-27
+
+### Fixed
+
+- Fixed issue in json result output
+- Fixed constant usage problem and finish base refactoring of output class
+
+### Added
+
+- Added validator for global code coverage using @cover in class head annotation
+- new unit tests for global code coverage validator
+
+### Changes
+
+- minor changes in method naming
+- minor refactoring of coverFishHelper class
+- additional refactoring improvements, object property changes
 
 ## [0.9.8] - 2015-08-19
 
