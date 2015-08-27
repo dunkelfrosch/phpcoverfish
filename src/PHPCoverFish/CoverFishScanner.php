@@ -21,16 +21,16 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.8
+ * @version   0.9.9
  */
 class CoverFishScanner extends BaseCoverFishScanner
 {
     const APP_RELEASE_NAME = 'PHPCoverFish';
-    const APP_RELEASE_STATE = 'alpha';
+    const APP_RELEASE_STATE = 'beta';
 
     const APP_VERSION_MAJOR = 0;
     const APP_VERSION_MINOR = 9;
-    const APP_VERSION_BUILD = 8;
+    const APP_VERSION_BUILD = 9;
 
     /**
      * @param array           $cliOptions
@@ -157,7 +157,6 @@ class CoverFishScanner extends BaseCoverFishScanner
             }
 
             $methodData['classFile'] = (string) $classData['classFile'];
-
             $this->analyseMethodPHPDocAnnotation($methodData);
         }
 
