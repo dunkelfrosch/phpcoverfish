@@ -17,7 +17,7 @@ use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.8
- * @version   0.9.8
+ * @version   0.9.9
  */
 class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
 {
@@ -74,7 +74,6 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
             )
         );
 
-        
         $this->validateCoverFishAppTitle($commandTester->getDisplay());
         $this->validateCoverFishSelfTestLevelTwo($commandTester->getDisplay());
         $this->validateConfigInfoScanModePHPUnit($commandTester->getDisplay());
@@ -189,7 +188,7 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
     {
         $this->assertRegExp('/(scan file)([ ]{1})(BaseCoverFishScannerTestCase.php)/', $output);
         $this->assertRegExp('/(->[ ]{1}public[ ]{1})(setUp[(]{1}[)]{1})([ ]{1}[:]{1}[ ]{1})([S]{1})/', $output);
-        $this->assertRegExp('/(=>[ ]{1}cover test[(]s[)]{1} succeeded)/', $output);
+        $this->assertRegExp('/(=>[ ]{1})(file\/test[ ]{1}OK)/', $output);
     }
 
     public function validateConfigInfoScanModeRaw($output)
