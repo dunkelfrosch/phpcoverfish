@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
- * @version    0.9.6
+ * @version    0.9.9
  *
  * @codeCoverageIgnore
  */
@@ -53,7 +53,7 @@ class CoverFishMapping
     private $validatorClass;
 
     /**
-     * @var CoverFishMappingResult
+     * @var CoverFishResult
      */
     private $validatorResult;
 
@@ -154,7 +154,7 @@ class CoverFishMapping
     }
 
     /**
-     * @return CoverFishMappingResult
+     * @return CoverFishResult
      */
     public function getValidatorResult()
     {
@@ -162,7 +162,7 @@ class CoverFishMapping
     }
 
     /**
-     * @param CoverFishMappingResult $validatorResult
+     * @param CoverFishResult $validatorResult
      */
     public function setValidatorResult($validatorResult)
     {

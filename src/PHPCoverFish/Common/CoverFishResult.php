@@ -18,6 +18,11 @@ namespace DF\PHPCoverFish\Common;
 class CoverFishResult
 {
     /**
+     * @var bool
+     */
+    private $pass = false;
+
+    /**
      * @var int
      */
     private $passCount = 0;
@@ -114,6 +119,22 @@ class CoverFishResult
     public function addWarningCount()
     {
         return $this->warningCount++;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPass()
+    {
+        return $this->pass;
+    }
+
+    /**
+     * @param boolean $pass
+     */
+    public function setPass($pass)
+    {
+        $this->pass = $pass;
     }
 
     /**
