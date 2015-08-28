@@ -20,7 +20,7 @@ use SebastianBergmann\FinderFacade\FinderFacade;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.8
+ * @version   0.9.9
  */
 class BaseCoverFishScanner
 {
@@ -242,6 +242,14 @@ class BaseCoverFishScanner
     public function setPhpUnitTest($phpUnitTest)
     {
         $this->phpUnitTest = $phpUnitTest;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWarningThreshold()
+    {
+        return $this->warningThreshold;
     }
 
     /**

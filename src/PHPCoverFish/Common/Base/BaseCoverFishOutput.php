@@ -2,6 +2,7 @@
 
 namespace DF\PHPCoverFish\Common\Base;
 
+use DF\PHPCoverFish\CoverFishScanner;
 use DF\PHPCoverFish\Common\CoverFishHelper;
 use DF\PHPCoverFish\Common\CoverFishResult;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
@@ -18,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.2
- * @version    0.9.8
+ * @version    0.9.9
  */
 abstract class BaseCoverFishOutput
 {
@@ -61,6 +62,11 @@ abstract class BaseCoverFishOutput
      * @var OutputInterface
      */
     protected $output;
+
+    /**
+     * @var CoverFishScanner
+     */
+    protected $scanner;
 
     /**
      * @var CoverFishHelper
@@ -359,6 +365,27 @@ abstract class BaseCoverFishOutput
     }
 
     /**
+     * @param CoverFishResult $coverFishResult
+     */
+    protected function writeScanWarningStatistic(CoverFishResult $coverFishResult)
+    {
+        $thresholdPercent = 0;
+        if ($coverFishResult->getWarningCount() > 0 && $this->scanner->getWarningThreshold() > 0) {
+            $thresholdPercent = round($coverFishResult->getWarningCount() * 100 / $this->scanner->getWarningThreshold(), 2);
+        }
+
+        $warningStatistic = '%s warning(s) found, %s%% of warning threshold (>=%s) reached.';
+        $warningStatistic = sprintf(
+            $warningStatistic,
+            $coverFishResult->getWarningCount(),
+            $thresholdPercent,
+            $this->scanner->getWarningThreshold()
+        );
+
+        $this->writeLine($warningStatistic);
+    }
+
+    /**
      * write scan fail result
      *
      * @param CoverFishResult $coverFishResult
@@ -437,6 +464,8 @@ abstract class BaseCoverFishOutput
             } else {
                 $this->writeScanPassStatistic($coverFishResult);
             }
+
+            $this->writeScanWarningStatistic($coverFishResult);
 
             return null;
         }

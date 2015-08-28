@@ -4,13 +4,14 @@ namespace DF\PHPCoverFish;
 
 use DF\PHPCoverFish\Base\BaseCoverFishScanner;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
+use DF\PHPCoverFish\Common\CoverFishWarning;
 use DF\PHPCoverFish\Validator\ValidatorClassName;
 use DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess;
 use DF\PHPCoverFish\Validator\ValidatorClassNameMethodName;
 use DF\PHPCoverFish\Validator\ValidatorMethodName;
 use DF\PHPCoverFish\Common\CoverFishOutput;
-use \PHP_Token_Stream;
 use Symfony\Component\Console\Output\OutputInterface;
+use \PHP_Token_Stream;
 
 /**
  * Class BaseCoverFishScanner
@@ -95,13 +96,41 @@ class CoverFishScanner extends BaseCoverFishScanner
     }
 
     /**
+     * @todo move this to our coverFishHelper class
+     *
+     * @param string $methodSignature
+     *
+     * @return bool
+     */
+    public function isValidTestMethod($methodSignature)
+    {
+        $result = array();
+
+        if (preg_match_all('/(?P<prefix>^test)/', $methodSignature, $result)
+        && (array_key_exists('prefix', $result) && false === empty($result['prefix']))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param array $coverAnnotations
      */
     public function analyseCoverAnnotations($coverAnnotations)
     {
+        // add warning for empty
+        if (!array_key_exists('covers', $coverAnnotations) || empty($coverAnnotations['covers']) ) {
+            if ($this->isValidTestMethod($this->phpUnitTest->getSignature())) {
+                $this->coverFishResult->addWarningCount();
+                $this->coverFishResult->addWarning(new CoverFishWarning(CoverFishWarning::PHPUNIT_NO_COVERAGE_FOR_METHOD));
+            }
+        }
+
         /** @var string $cover */
         foreach ($coverAnnotations['covers'] as $cover) {
             if (true === empty($cover)) {
+                // @todo: add new empty cover error instead of step over!
                 continue;
             }
 
