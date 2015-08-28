@@ -33,6 +33,7 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFileName
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::getFileResultTemplate
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeFileResult
+     * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::writeScanWarningStatistic
      * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::writeScanPassStatistic
      * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::getProgressTemplate
      * @covers DF\PHPCoverFish\Common\Base\BaseCoverFishOutput::writeProgress
@@ -219,5 +220,6 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
     public function validateCoverFishAppFooterInfo($output)
     {
         $this->assertRegExp('/([0-9]+[ ]{1})(file[(]s[)] and )([0-9]+)( method[(]s[)] scanned, scan succeeded, no problems found.)/', $output);
+        $this->assertRegExp('/([0-9]+[ ]{1})(warning[(]s[)] found,[ ]{1}[0-9]+.[0-9]+[%])[ ]{1}of forced scan failure warning threshold/', $output);
     }
 }
