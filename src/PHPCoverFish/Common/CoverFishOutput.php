@@ -2,8 +2,8 @@
 
 namespace DF\PHPCoverFish\Common;
 
-use DF\PHPCoverFish\Common\Base\BaseCoverFishOutput;
 use DF\PHPCoverFish\CoverFishScanner;
+use DF\PHPCoverFish\Common\Base\BaseCoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -20,11 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CoverFishOutput extends BaseCoverFishOutput
 {
-    /**
-     * @var CoverFishScanner
-     */
-    protected $scanner;
-
     /**
      * @param array            $outputOptions
      * @param OutputInterface  $output
@@ -77,14 +72,14 @@ class CoverFishOutput extends BaseCoverFishOutput
         if ($this->coverFishHelper->checkParamNotEmpty($this->scanner->getPhpUnitConfigFile())) {
             $this->output->writeln(sprintf('using phpunit scan mode, phpunit-config file "%s"', $this->scanner->getPhpUnitConfigFile()));
         } else {
-            $this->output->writeln('using raw scan mode, reading parameter ...');
+            $this->output->writeln('using raw scan mode, reading necessary parameters ...');
         }
 
-        $this->output->writeln('');
+        $this->output->write(PHP_EOL);
         $this->output->writeln(sprintf('- autoload file: %s', $this->scanner->getTestAutoloadPath()));
         $this->output->writeln(sprintf('- test source path for scan: %s', $this->scanner->getTestSourcePath()));
         $this->output->writeln(sprintf('- exclude test source path: %s', $this->scanner->getTestExcludePath()));
-        $this->output->writeln('');
+        $this->output->write(PHP_EOL);
 
         return true;
     }
@@ -175,10 +170,8 @@ class CoverFishOutput extends BaseCoverFishOutput
     private function writeFinalCheckResults(CoverFishResult $coverFishResult)
     {
         if (false === $this->scanFailure) {
-            //$this->writeFilePass();
             $this->writeFileResult(self::FILE_PASS, null);
         } else {
-            //$this->writeFileFail($coverFishResult);
             $this->writeFileResult(self::FILE_FAILURE, $coverFishResult->getFailureStream());
         }
 
