@@ -194,7 +194,7 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
 
     public function validateConfigInfoScanModeRaw($output)
     {
-        $this->assertRegExp('/(using raw scan mode, reading parameter ...)/', $output);
+        $this->assertRegExp('/(using raw scan mode)/', $output);
         $this->assertRegExp('/(test source path for scan:)([ ]{1})(.+)(.{1})/', $output);
         $this->assertRegExp('/(exclude test source path:)([ ]{1})(.+)(.{1})/', $output);
         $this->assertRegExp('/(autoload file:)([ ]{1})(.+)(autoload.php)/', $output);
