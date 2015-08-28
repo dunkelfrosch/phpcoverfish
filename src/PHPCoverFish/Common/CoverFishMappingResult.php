@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
- * @version    0.9.6
+ * @version    0.9.9
  *
  * @codeCoverageIgnore
  */
@@ -26,11 +26,6 @@ class CoverFishMappingResult
      * @var ArrayCollection
      */
     private $errors;
-
-    /**
-     * @var ArrayCollection
-     */
-    private $warnings;
 
     /**
      * @return boolean
@@ -81,27 +76,11 @@ class CoverFishMappingResult
     }
 
     /**
-     * @return ArrayCollection
-     */
-    public function getWarnings()
-    {
-        return $this->warnings;
-    }
-
-    /**
-     * clear all warnings
-     */
-    public function clearWarnings()
-    {
-        $this->warnings->clear();
-    }
-
-    /**
      * our class constructor
      */
     public function __construct()
     {
         $this->errors = new ArrayCollection();
-        $this->warnings = new ArrayCollection();
+
     }
 }

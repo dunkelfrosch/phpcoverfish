@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.6
+ * @version   0.9.9
  *
  * @codeCoverageIgnore
  */
@@ -35,12 +35,22 @@ class CoverFishResult
     /**
      * @var int
      */
+    private $warningCount = 0;
+
+    /**
+     * @var int
+     */
     private $testCount = 0;
 
     /**
      * @var int
      */
     private $fileCount = 0;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $warnings;
 
     /**
      * @var ArrayCollection
@@ -76,6 +86,30 @@ class CoverFishResult
      * @var string
      */
     private $warningStream = null;
+
+    /**
+     * @return int
+     */
+    public function getWarningCount()
+    {
+        return $this->warningCount;
+    }
+
+    /**
+     * @param int $warningCount
+     */
+    public function setWarningCount($warningCount)
+    {
+        $this->warningCount = $warningCount;
+    }
+
+    /**
+     * @return int
+     */
+    public function addWarningCount()
+    {
+        return $this->warningCount++;
+    }
 
     /**
      * @return int
@@ -338,11 +372,44 @@ class CoverFishResult
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getWarnings()
+    {
+        return $this->warnings;
+    }
+
+    /**
+     * @param CoverFishWarning $warning
+     */
+    public function addWarning(CoverFishWarning $warning)
+    {
+        $this->warnings->add($warning);
+    }
+
+    /**
+     * @param CoverFishWarning $warning
+     */
+    public function removeWarning(CoverFishWarning $warning)
+    {
+        $this->warnings->removeElement($warning);
+    }
+
+    /**
+     * clear all warnings
+     */
+    public function clearWarnings()
+    {
+        $this->warnings->clear();
+    }
+
+    /**
      * class constructor
      */
     public function __construct()
     {
         $this->taskStartAt = new \DateTime();
+        $this->warnings = new ArrayCollection();
         $this->units = new ArrayCollection();
     }
 }
