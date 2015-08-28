@@ -374,7 +374,7 @@ abstract class BaseCoverFishOutput
             $thresholdPercent = round($coverFishResult->getWarningCount() * 100 / $this->scanner->getWarningThreshold(), 2);
         }
 
-        $warningStatistic = '%s warning(s) found, %s%% of warning threshold (>=%s) reached.';
+        $warningStatistic = '%s warning(s) found, %s%% of forced scan failure warning threshold (>=%s warnings) reached.';
         $warningStatistic = sprintf(
             $warningStatistic,
             $coverFishResult->getWarningCount(),
