@@ -55,6 +55,11 @@ class CoverFishResult
     /**
      * @var ArrayCollection
      */
+    private $errors;
+
+    /**
+     * @var ArrayCollection
+     */
     private $units;
 
     /**
@@ -404,12 +409,45 @@ class CoverFishResult
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    /**
+     * @param CoverFishError $error
+     */
+    public function addError(CoverFishError $error)
+    {
+        $this->errors->add($error);
+    }
+
+    /**
+     * @param CoverFishError $error
+     */
+    public function removeError(CoverFishError $error)
+    {
+        $this->errors->removeElement($error);
+    }
+
+    /**
+     * clear all errors
+     */
+    public function clearErrors()
+    {
+        $this->errors->clear();
+    }
+
+    /**
      * class constructor
      */
     public function __construct()
     {
         $this->taskStartAt = new \DateTime();
         $this->warnings = new ArrayCollection();
+        $this->errors = new ArrayCollection();
         $this->units = new ArrayCollection();
     }
 }
