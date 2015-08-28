@@ -18,7 +18,7 @@ use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.7
+ * @version   0.9.9
  */
 class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 {
@@ -201,7 +201,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
         $mappingResult = new CoverFishMappingResult();
         // cleanUp validation mapping result for current scan
         $mappingResult = $this->clearValidationErrors($mappingResult);
-
         // 01: check for classFQN/DefaultCoverClass existence/mapping validation-error
         $mappingResult = $this->validateDefaultCoverClassMapping($coverMapping, $mappingResult);
         // 02: check for invalid classFQN validation-error
