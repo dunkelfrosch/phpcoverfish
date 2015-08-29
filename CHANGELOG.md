@@ -9,11 +9,13 @@ This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09)
 
 - Fixed issue in json result output
 - Fixed constant usage problem and finish base refactoring of output class
+- Fixed an unitTest commandline check issue
 
 ### Added
 
 - Added validator for global code coverage using @cover in class head annotation
-- new unit tests for global code coverage validator
+- Added new unit tests for global code coverage validator
+- Added new unit tests for coverage warnings
 
 ### Changes
 
