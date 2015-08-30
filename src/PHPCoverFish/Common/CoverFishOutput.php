@@ -181,20 +181,20 @@ class CoverFishOutput extends BaseCoverFishOutput
     /**
      * write single json error line
      *
-     * @param CoverFishResult      $coverFishResult
-     * @param CoverFishPHPUnitTest $unitTest
-     * @param CoverFishError       $mappingError
+     * @param CoverFishResult       $coverFishResult
+     * @param CoverFishPHPUnitTest  $unitTest
+     * @param CoverFishMessageError $mappingError
      * @param $coverLine
      */
     private function writeJsonFailureStream(
         CoverFishResult $coverFishResult,
         CoverFishPHPUnitTest $unitTest,
-        CoverFishError $mappingError,
+        CoverFishMessageError $mappingError,
         $coverLine
     ) {
         $this->jsonResult['errorCount'] = $coverFishResult->getFailureCount();
-        $this->jsonResult['errorMessage'] = $mappingError->getTitle();
-        $this->jsonResult['errorCode'] = $mappingError->getErrorCode();
+        $this->jsonResult['errorMessage'] = $mappingError->getMessageTitle();
+        $this->jsonResult['errorCode'] = $mappingError->getMessageCode();
         $this->jsonResult['cover'] = $coverLine;
         $this->jsonResult['method'] = $unitTest->getSignature();
         $this->jsonResult['line'] = $unitTest->getLine();
@@ -286,11 +286,11 @@ class CoverFishOutput extends BaseCoverFishOutput
     /**
      * message block macro, line 04, error message
      *
-     * @param CoverFishError $mappingError
+     * @param CoverFishMessageError $mappingError
      *
      * @return string
      */
-    protected function getMacroCoverErrorMessage(CoverFishError $mappingError)
+    protected function getMacroCoverErrorMessage(CoverFishMessageError $mappingError)
     {
         $lineMessageMacro = '%s%s %s ';
         if ($this->outputLevel > 1) {
@@ -303,8 +303,8 @@ class CoverFishOutput extends BaseCoverFishOutput
                 ? Color::tplDarkGrayColor('Message')
                 : 'Message',
 
-            $mappingError->getTitle(),
-            $mappingError->getErrorCode()
+            $mappingError->getMessageTitle(),
+            $mappingError->getMessageCode()
         );
     }
 
@@ -321,7 +321,7 @@ class CoverFishOutput extends BaseCoverFishOutput
         CoverFishMapping $coverMapping
     )
     {
-        /** @var CoverFishError $mappingError */
+        /** @var CoverFishMessageError $mappingError */
         foreach ($coverMapping->getValidatorResult()->getErrors() as $mappingError) {
 
             $coverFishResult->addFailureCount();

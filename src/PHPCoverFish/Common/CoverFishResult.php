@@ -406,17 +406,17 @@ class CoverFishResult
     }
 
     /**
-     * @param CoverFishWarning $warning
+     * @param CoverFishMessageWarning $warning
      */
-    public function addWarning(CoverFishWarning $warning)
+    public function addWarning(CoverFishMessageWarning $warning)
     {
         $this->warnings->add($warning);
     }
 
     /**
-     * @param CoverFishWarning $warning
+     * @param CoverFishMessageWarning $warning
      */
-    public function removeWarning(CoverFishWarning $warning)
+    public function removeWarning(CoverFishMessageWarning $warning)
     {
         $this->warnings->removeElement($warning);
     }
@@ -438,17 +438,17 @@ class CoverFishResult
     }
 
     /**
-     * @param CoverFishError $error
+     * @param CoverFishMessageError $error
      */
-    public function addError(CoverFishError $error)
+    public function addError(CoverFishMessageError $error)
     {
         $this->errors->add($error);
     }
 
     /**
-     * @param CoverFishError $error
+     * @param CoverFishMessageError $error
      */
-    public function removeError(CoverFishError $error)
+    public function removeError(CoverFishMessageError $error)
     {
         $this->errors->removeElement($error);
     }

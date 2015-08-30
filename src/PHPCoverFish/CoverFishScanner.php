@@ -4,7 +4,7 @@ namespace DF\PHPCoverFish;
 
 use DF\PHPCoverFish\Base\BaseCoverFishScanner;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
-use DF\PHPCoverFish\Common\CoverFishWarning;
+use DF\PHPCoverFish\Common\CoverFishMessageWarning;
 use DF\PHPCoverFish\Validator\ValidatorClassName;
 use DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess;
 use DF\PHPCoverFish\Validator\ValidatorClassNameMethodName;
@@ -123,7 +123,7 @@ class CoverFishScanner extends BaseCoverFishScanner
         if (!array_key_exists('covers', $coverAnnotations) || empty($coverAnnotations['covers']) ) {
             if ($this->isValidTestMethod($this->phpUnitTest->getSignature())) {
                 $this->coverFishResult->addWarningCount();
-                $this->coverFishResult->addWarning(new CoverFishWarning(CoverFishWarning::PHPUNIT_NO_COVERAGE_FOR_METHOD));
+                $this->coverFishResult->addWarning(new CoverFishMessageWarning(CoverFishMessageWarning::PHPUNIT_NO_COVERAGE_FOR_METHOD));
             }
         }
 
