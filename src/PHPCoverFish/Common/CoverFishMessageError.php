@@ -5,7 +5,7 @@ namespace DF\PHPCoverFish\Common;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
 
 /**
- * Class CoverFishErrors, code coverage error definition
+ * Class CoverFishMessageError, code coverage error definition
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
@@ -13,9 +13,9 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.7
+ * @version   0.9.9
  */
-final class CoverFishError
+class CoverFishMessageError extends CoverFishMessage
 {
     // reflection problem, cover class is not available during reflection using annotation defined namespace
     const PHPUNIT_REFLECTION_CLASS_NOT_FOUND = 1000;
@@ -40,8 +40,10 @@ final class CoverFishError
     // annotation problem, defaultCoverClass not found during global method validation
     const PHPUNIT_VALIDATOR_MISSING_DEFAULT_COVER_CLASS_PROBLEM = 9001;
 
-    /** @var array */
-    private static $errorMessageTokens = array(
+    /**
+     * @var array
+     */
+    public $messageTokens = array(
         self::PHPUNIT_REFLECTION_CLASS_NOT_FOUND => 'Class not found!', // annotation defined coverClass is not available during reflection, may be the class is not available system wide!
         self::PHPUNIT_REFLECTION_METHOD_NOT_FOUND => 'Method not found!', // annotation defined method is not available during reflection of corresponding coverClass!
         self::PHPUNIT_REFLECTION_NO_PUBLIC_METHODS_FOUND => 'no public methods in class!', // method-access/-visibility problem!
@@ -56,60 +58,6 @@ final class CoverFishError
     );
 
     /**
-     * @var int
-     */
-    private $errorCode = null;
-
-    /**
-     * @var string
-     */
-    private $title = null;
-
-    /**
-     * @var string
-     */
-    private $errorMessageToken = null;
-
-    /**
-     * @var string
-     */
-    private $exceptionMessage = null;
-
-    /**
-     * @return array
-     */
-    public static function getErrorMessageTokens()
-    {
-        return self::$errorMessageTokens;
-    }
-
-    /**
-     * @param null        $errorCode
-     * @param null|string $exceptionMessage
-     *
-     * @throws \Exception
-     */
-    public function __construct($errorCode = null, $exceptionMessage = null)
-    {
-        $this->errorCode = $errorCode;
-        $this->exceptionMessage = $exceptionMessage;
-
-        if ($errorCode === null) {
-            $this->errorMessageToken = 'Unknown Error-Code!';
-        } else {
-            if (!isset(self::$errorMessageTokens[$errorCode])) {
-                throw new \Exception(sprintf(
-                    'ErrorCode found but no title for type "%s". Did you define this specific error code in your message token?',
-                    $errorCode
-                ));
-            }
-
-            $this->title = self::$errorMessageTokens[$errorCode];
-            $this->errorMessageToken = $this->title;
-        }
-    }
-
-    /**
      * @param CoverFishMapping $coverMapping
      * @param bool|false       $noAnsiColors
      *
@@ -118,7 +66,7 @@ final class CoverFishError
     public function getErrorStreamTemplate(CoverFishMapping $coverMapping, $noAnsiColors = false)
     {
         $coverLine = null;
-        switch ($this->errorCode) {
+        switch ($this->getMessageCode()) {
             case self::PHPUNIT_REFLECTION_CLASS_NOT_FOUND:
                 $coverLine = sprintf('@covers %s::%s', $coverMapping->getClassFQN(), $coverMapping->getMethod());
                 if (!$noAnsiColors) {
@@ -185,55 +133,5 @@ final class CoverFishError
         }
 
         return $coverLine;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return string
-     */
-    public function getErrorMessageToken()
-    {
-        return $this->errorMessageToken;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return int
-     */
-    public function getErrorCode()
-    {
-        return $this->errorCode;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return mixed
-     */
-    public function getExceptionMessage()
-    {
-        return $this->exceptionMessage;
-    }
-
-    /**
-     * @param mixed $exceptionMessage
-     *
-     * @codeCoverageIgnore
-     */
-    public function setExceptionMessage($exceptionMessage)
-    {
-        $this->exceptionMessage = $exceptionMessage;
     }
 }
