@@ -5,7 +5,7 @@ namespace DF\PHPCoverFish\Tests;
 use DF\PHPCoverFish\Common\ArrayCollection;
 
 /**
- * Class ArrayCollectionTest, Tests for {@see \DF\PHPCoverFish\Common\ArrayCollection}
+ * Class CoverFishArrayCollectionTest, Tests for {@see \DF\PHPCoverFish\Common\ArrayCollection}
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
@@ -13,11 +13,11 @@ use DF\PHPCoverFish\Common\ArrayCollection;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.7
- * @version   0.9.7
+ * @version   0.9.9
  *
  * @covers \DF\PHPCoverFish\Common\ArrayCollection
  */
-class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
+class CoverFishArrayCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideDifferentElements

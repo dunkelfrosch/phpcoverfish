@@ -6,7 +6,7 @@ use DF\PHPCoverFish\Common\ArrayCollection;
 use DF\PHPCoverFish\Common\Collection;
 
 /**
- * Class CollectionTest, Tests for {@see \DF\PHPCoverFish\Common\Collection}
+ * Class CoverFishCollectionTest, Tests for {@see \DF\PHPCoverFish\Common\Collection}
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
@@ -16,7 +16,7 @@ use DF\PHPCoverFish\Common\Collection;
  * @since     class available since Release 0.9.7
  * @version   0.9.7
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CoverFishCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Collection
