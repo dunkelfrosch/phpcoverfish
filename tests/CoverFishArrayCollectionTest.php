@@ -20,6 +20,11 @@ use DF\PHPCoverFish\Common\ArrayCollection;
 class CoverFishArrayCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var array
+     */
+    public $testElements = array(1, 'A' => 'a', 2, 'null' => null, 3, 'A2' => 'a', 'zero' => 0);
+
+    /**
      * @dataProvider provideDifferentElements
      *
      * @covers \DF\PHPCoverFish\Common\ArrayCollection::toArray
@@ -240,8 +245,7 @@ class CoverFishArrayCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckContains()
     {
-        $elements = array(1, 'A' => 'a', 2, 'null' => null, 3, 'A2' => 'a', 'zero' => 0);
-        $collection = new ArrayCollection($elements);
+        $collection = new ArrayCollection($this->testElements);
 
         $this->assertTrue($collection->contains(0),               "Contains Zero");
         $this->assertTrue($collection->contains('a'),             "Contains \"a\"");
@@ -254,8 +258,7 @@ class CoverFishArrayCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckExists()
     {
-        $elements = array(1, 'A' => 'a', 2, 'null' => null, 3, 'A2' => 'a', 'zero' => 0);
-        $collection = new ArrayCollection($elements);
+        $collection = new ArrayCollection($this->testElements);
 
         $this->assertTrue($collection->exists(function($key, $element) {
             return $key == 'A' && $element == 'a';
@@ -271,7 +274,7 @@ class CoverFishArrayCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckIndexOf()
     {
-        $elements = array(1, 'A' => 'a', 2, 'null' => null, 3, 'A2' => 'a', 'zero' => 0);
+        $elements = $this->testElements;
         $collection = new ArrayCollection($elements);
 
         $this->assertSame(array_search(2,              $elements, true), $collection->indexOf(2),              'Index of 2');
@@ -284,8 +287,7 @@ class CoverFishArrayCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckGet()
     {
-        $elements = array(1, 'A' => 'a', 2, 'null' => null, 3, 'A2' => 'a', 'zero' => 0);
-        $collection = new ArrayCollection($elements);
+        $collection = new ArrayCollection($this->testElements);
 
         $this->assertSame(2,    $collection->get(1),              'Get element by index');
         $this->assertSame('a',  $collection->get('A'),            'Get element by name');
