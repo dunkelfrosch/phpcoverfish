@@ -13,10 +13,19 @@ use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.7
- * @version   0.9.7
+ * @version   0.9.9
  */
 class CoverFishHelperTest extends BaseCoverFishScannerTestCase
 {
+    /**
+     * @covers DF\PHPCoverFish\Common\CoverFishHelper::checkClassHasFQN
+     */
+    public function testCheckClassHasFQN()
+    {
+        $this->assertTrue($this->getCoverFishHelper()->checkClassHasFQN('DF\PHPCoverFish\Tests\Data\Src\SampleClass'));
+        $this->assertFalse($this->getCoverFishHelper()->checkClassHasFQN('SampleClass'));
+    }
+
     /**
      * @covers DF\PHPCoverFish\Common\CoverFishHelper::getRegexPath
      */

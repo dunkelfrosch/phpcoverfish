@@ -262,4 +262,18 @@ class CoverFishHelper
         );
         return $annotations;
     }
+
+    /**
+     * check if class got fully qualified name
+     *
+     * @param string $class
+     *
+     * @return bool
+     */
+    public function checkClassHasFQN($class)
+    {
+        preg_match_all('/(\\\\+)/', $class, $result, PREG_SET_ORDER);
+
+        return count($result) > 0;
+    }
 }
