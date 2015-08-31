@@ -14,7 +14,7 @@ use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.8
+ * @version   0.9.9
  */
 class ValidatorClassName extends BaseCoverFishValidator
 {
@@ -54,11 +54,10 @@ class ValidatorClassName extends BaseCoverFishValidator
         $class = $this->getResult()['class'];
         // fqn detected? fully qualified classNames will be used directly without any kind of counterCheck
         // against use statement(s) - otherwise classFQN will be taken from use statement directly.
-        if (true === $this->checkClassHasFQN($class)) {
+        $classFQN = $this->coverFishHelper->getClassFromUse($class, $phpUnitFile->getUsedClasses());
+        if (true === $this->coverFishHelper->checkClassHasFQN($class)) {
             $classFQN = $class;
             $class = $this->coverFishHelper->getClassNameFromClassFQN($classFQN);
-        } else {
-            $classFQN = $this->coverFishHelper->getClassFromUse($class, $phpUnitFile->getUsedClasses());
         }
 
         $mappingOptions = array(
