@@ -2,8 +2,10 @@
 
 namespace DF\PHPCoverFish\Common;
 
+use DF\PHPCoverFish\Common\Base\BaseCoverFishResult;
+
 /**
- * Class CoverFishPHPUnitFile, wrapper for all phpUnit testClass files
+ * Class CoverFishResult
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
@@ -15,43 +17,8 @@ namespace DF\PHPCoverFish\Common;
  *
  * @codeCoverageIgnore
  */
-class CoverFishResult
+class CoverFishResult extends BaseCoverFishResult
 {
-    /**
-     * @var bool
-     */
-    private $pass = false;
-
-    /**
-     * @var int
-     */
-    private $passCount = 0;
-
-    /**
-     * @var int
-     */
-    private $failureCount = 0;
-
-    /**
-     * @var int
-     */
-    private $errorCount = 0;
-
-    /**
-     * @var int
-     */
-    private $warningCount = 0;
-
-    /**
-     * @var int
-     */
-    private $testCount = 0;
-
-    /**
-     * @var int
-     */
-    private $fileCount = 0;
-
     /**
      * @var ArrayCollection
      */
@@ -66,16 +33,6 @@ class CoverFishResult
      * @var ArrayCollection
      */
     private $units;
-
-    /**
-     * @var \DateTime
-     */
-    private $taskStartAt;
-
-    /**
-     * @var \DateTime
-     */
-    private $taskFinishedAt;
 
     /**
      * @var string
@@ -96,242 +53,6 @@ class CoverFishResult
      * @var string
      */
     private $warningStream = null;
-
-    /**
-     * @return int
-     */
-    public function getWarningCount()
-    {
-        return $this->warningCount;
-    }
-
-    /**
-     * @param int $warningCount
-     */
-    public function setWarningCount($warningCount)
-    {
-        $this->warningCount = $warningCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function addWarningCount()
-    {
-        return $this->warningCount++;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isPass()
-    {
-        return $this->pass;
-    }
-
-    /**
-     * @param boolean $pass
-     */
-    public function setPass($pass)
-    {
-        $this->pass = $pass;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPassCount()
-    {
-        return $this->passCount;
-    }
-
-    /**
-     * @param int $passCount
-     */
-    public function setPassCount($passCount)
-    {
-        $this->passCount = $passCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function addPassCount()
-    {
-        return $this->passCount++;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFailureCount()
-    {
-        return $this->failureCount;
-    }
-
-    /**
-     * @param int $failureCount
-     */
-    public function setFailureCount($failureCount)
-    {
-        $this->failureCount = $failureCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function addFailureCount()
-    {
-        return $this->failureCount++;
-    }
-
-    /**
-     * @return int
-     */
-    public function getErrorCount()
-    {
-        return $this->errorCount;
-    }
-
-    /**
-     * @param int $errorCount
-     */
-    public function setErrorCount($errorCount)
-    {
-        $this->errorCount = $errorCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function addErrorCount()
-    {
-        return $this->errorCount++;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTestCount()
-    {
-        return $this->testCount;
-    }
-
-    /**
-     * @param int $testCount
-     */
-    public function setTestCount($testCount)
-    {
-        $this->testCount = $testCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function addTestCount()
-    {
-        return $this->testCount++;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFileCount()
-    {
-        return $this->fileCount;
-    }
-
-    /**
-     * @param int $fileCount
-     */
-    public function setFileCount($fileCount)
-    {
-        $this->fileCount = $fileCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function addFileCount()
-    {
-        return $this->fileCount++;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getUnits()
-    {
-        return $this->units;
-    }
-
-    /**
-     * @param CoverFishPHPUnitFile $file
-     */
-    public function addUnit(CoverFishPHPUnitFile $file)
-    {
-        $this->units->add($file);
-    }
-
-    /**
-     * @param CoverFishPHPUnitFile $file
-     */
-    public function removeUnit(CoverFishPHPUnitFile $file)
-    {
-        $this->units->removeElement($file);
-    }
-
-    /**
-     * remove all tests from testCollection
-     */
-    public function clearUnits()
-    {
-        $this->units->clear();
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getTaskStartAt()
-    {
-        return $this->taskStartAt;
-    }
-
-    /**
-     * @param \DateTime $taskStartAt
-     */
-    public function setTaskStartAt($taskStartAt)
-    {
-        $this->taskStartAt = $taskStartAt;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getTaskFinishedAt()
-    {
-        return $this->taskFinishedAt;
-    }
-
-    /**
-     * @param \DateTime $taskFinishedAt
-     */
-    public function setTaskFinishedAt($taskFinishedAt)
-    {
-        $this->taskFinishedAt = $taskFinishedAt;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTaskTime()
-    {
-        if ($this->taskFinishedAt !== null) {
-            return $this->taskFinishedAt - $this->taskStartAt;
-        }
-
-        return -1;
-    }
 
     /**
      * @return string
@@ -379,6 +100,14 @@ class CoverFishResult
     public function addInfoToStream($content)
     {
         $this->infoStream .= $content;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function addWarningToStream($content)
+    {
+        $this->warningStream .= $content;
     }
 
     /**
@@ -454,6 +183,38 @@ class CoverFishResult
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getUnits()
+    {
+        return $this->units;
+    }
+
+    /**
+     * @param CoverFishPHPUnitFile $file
+     */
+    public function addUnit(CoverFishPHPUnitFile $file)
+    {
+        $this->units->add($file);
+    }
+
+    /**
+     * @param CoverFishPHPUnitFile $file
+     */
+    public function removeUnit(CoverFishPHPUnitFile $file)
+    {
+        $this->units->removeElement($file);
+    }
+
+    /**
+     * remove all tests from testCollection
+     */
+    public function clearUnits()
+    {
+        $this->units->clear();
+    }
+
+    /**
      * clear all errors
      */
     public function clearErrors()
@@ -466,7 +227,8 @@ class CoverFishResult
      */
     public function __construct()
     {
-        $this->taskStartAt = new \DateTime();
+        parent::__construct();
+
         $this->warnings = new ArrayCollection();
         $this->errors = new ArrayCollection();
         $this->units = new ArrayCollection();

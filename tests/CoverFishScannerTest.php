@@ -3,6 +3,7 @@
 namespace DF\PHPCoverFish\Tests;
 
 use DF\PHPCoverFish\Common\CoverFishPHPUnitTest;
+use DF\PHPCoverFish\Common\CoverFishResult;
 use DF\PHPCoverFish\CoverFishScanner;
 use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
 use DF\PHPCoverFish\Validator\ValidatorMethodName;
@@ -17,7 +18,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.8
+ * @version   0.9.9
  */
 class CoverFishScannerTest extends BaseCoverFishScannerTestCase
 {
@@ -47,7 +48,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     }
 
     /**
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::xmlToArray
+     * @covers DF\PHPCoverFish\Base\BaseScanner::xmlToArray
      */
     public function testCheckXmlToArray()
     {
@@ -68,14 +69,16 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     }
 
     /**
+     * @covers DF\PHPCoverFish\Base\BaseScanner::getTestAutoloadPath
+     * @covers DF\PHPCoverFish\Base\BaseScanner::getTestExcludePath
+     * @covers DF\PHPCoverFish\Base\BaseScanner::getTestSourcePath
+     * @covers DF\PHPCoverFish\Base\BaseScanner::getAttributeFromXML
+     * @covers DF\PHPCoverFish\Base\BaseScanner::getTestSuiteNodeFromXML
+     * @covers DF\PHPCoverFish\Base\BaseScanner::getPhpUnitXMLPath
+     * @covers DF\PHPCoverFish\Base\BaseScanner::getPhpUnitXMLFile
+     * @covers DF\PHPCoverFish\Base\BaseScanner::getPhpUnitTestSuite
+     * @covers DF\PHPCoverFish\Base\BaseScanner::getTestSuitePropertyFromXML
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setConfigFromPHPUnitConfigFile
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestAutoloadPath
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestExcludePath
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestSourcePath
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getAttributeFromXML
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestSuiteNodeFromXML
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getPhpUnitConfigPath
-     * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::getTestSuitePropertyFromXML
      */
     public function testCheckSetConfigFromUnitTestConfigFileUseFirstSuite()
     {
@@ -83,9 +86,9 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
         $scanner = $this->getPHPUnitCoverFishScannerAlpha();
         $scanner->setConfigFromPHPUnitConfigFile();
 
-        $this->assertEquals('../data/vendor/autoload.php', str_replace($scanner->getPhpUnitConfigPath(), null, $scanner->getTestAutoloadPath()));
-        $this->assertEquals('tests/exclude', str_replace($scanner->getPhpUnitConfigPath(), null, $scanner->getTestExcludePath()));
-        $this->assertEquals('.', str_replace($scanner->getPhpUnitConfigPath(), null, $scanner->getTestSourcePath()));
+        $this->assertEquals('../data/vendor/autoload.php', str_replace($scanner->getPhpUnitXMLPath(), null, $scanner->getTestAutoloadPath()));
+        $this->assertEquals('tests/exclude', str_replace($scanner->getPhpUnitXMLPath(), null, $scanner->getTestExcludePath()));
+        $this->assertEquals('.', str_replace($scanner->getPhpUnitXMLPath(), null, $scanner->getTestSourcePath()));
     }
 
     /**
@@ -97,8 +100,8 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
         $scanner = $this->getPHPUnitCoverFishScannerBeta();
         $scanner->setConfigFromPHPUnitConfigFile();
 
-        $this->assertEquals('tests/exclude2', str_replace($scanner->getPhpUnitConfigPath(), null, $scanner->getTestExcludePath()));
-        $this->assertEquals('.', str_replace($scanner->getPhpUnitConfigPath(), null, $scanner->getTestSourcePath()));
+        $this->assertEquals('tests/exclude2', str_replace($scanner->getPhpUnitXMLPath(), null, $scanner->getTestExcludePath()));
+        $this->assertEquals('.', str_replace($scanner->getPhpUnitXMLPath(), null, $scanner->getTestSourcePath()));
     }
 
     /**
@@ -110,7 +113,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
         /** @var CoverFishScanner $scanner */
         $scanner = $this->getDefaultCoverFishScanner();
 
-        $scanner->addValidator(new ValidatorMethodName('::methodName'));
+        $scanner->addValidator(new ValidatorMethodName('::methodName', new CoverFishResult()));
         $this->assertEquals(1, $scanner->getValidatorCollection()->count());
     }
 

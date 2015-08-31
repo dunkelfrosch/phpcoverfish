@@ -8,6 +8,7 @@ use DF\PHPCoverFish\Common\CoverFishResult;
 use DF\PHPCoverFish\Common\CoverFishHelper;
 use DF\PHPCoverFish\Common\CoverFishMapping;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
+use DF\PHPCoverFish\Exception\CoverFishFailExit;
 
 /**
  * Class BaseCoverFishValidator
@@ -33,6 +34,11 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     protected $coversToken = null;
 
     /**
+     * @var CoverFishResult
+     */
+    protected $coverFishResult = null;
+
+    /**
      * @var array
      */
     protected $result = array();
@@ -55,6 +61,8 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getValidationInfo()
@@ -63,6 +71,8 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getValidationTag()
@@ -71,6 +81,8 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @param CoverFishPHPUnitFile $phpUnitFile
      *
      * @return CoverFishMapping
@@ -110,81 +122,73 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 
     /**
      * @param CoverFishMapping $coverMapping
-     * @param CoverFishResult  $coverFishResult
      *
      * @return CoverFishResult
      */
-    public function validateDefaultCoverClassMapping(CoverFishMapping $coverMapping, CoverFishResult $coverFishResult)
+    public function validateDefaultCoverClassMapping(CoverFishMapping $coverMapping)
     {
         if (empty($coverMapping->getClassFQN())) {
-            $coverFishResult = $this->setValidationError(
-                $coverFishResult,
+            $this->coverFishResult = $this->setValidationError(
                 empty($coverMapping->getClass())
                 ? CoverFishMessageError::PHPUNIT_VALIDATOR_MISSING_DEFAULT_COVER_CLASS_PROBLEM
                 : CoverFishMessageError::PHPUNIT_REFLECTION_CLASS_NOT_DEFINED
             );
         }
 
-        return $coverFishResult;
+        return $this->coverFishResult;
     }
 
     /**
      * @todo: mappingResult could be false, set special coverFishError here ...
      *
      * @param CoverFishMapping $coverMapping
-     * @param CoverFishResult  $coverFishResult
      *
      * @return CoverFishResult
      */
-    public function validateClassFQNMapping(CoverFishMapping $coverMapping, CoverFishResult $coverFishResult)
+    public function validateClassFQNMapping(CoverFishMapping $coverMapping)
     {
         $classReflectionResult = $this->validateReflectionClass($coverMapping->getClassFQN());
         if ($classReflectionResult instanceof CoverFishMessageError) {
-            $coverFishResult = $this->setValidationError(
-                $coverFishResult,
+            $this->coverFishResult = $this->setValidationError(
                 $classReflectionResult->getMessageCode()
             );
         }
 
-        return $coverFishResult;
+        return $this->coverFishResult;
     }
 
     /**
      * @param CoverFishMapping $coverMapping
-     * @param CoverFishResult  $coverFishResult
      *
      * @return CoverFishResult
      */
-    public function validateClassAccessorVisibility(CoverFishMapping $coverMapping, CoverFishResult $coverFishResult)
+    public function validateClassAccessorVisibility(CoverFishMapping $coverMapping)
     {
         $methodReflectionResult = $this->validateReflectionClassForAccessorVisibility($coverMapping->getClassFQN(), $coverMapping->getAccessor());
         if ($methodReflectionResult instanceof CoverFishMessageError) {
-            $coverFishResult = $this->setValidationError(
-                $coverFishResult,
+            $this->coverFishResult = $this->setValidationError(
                 $methodReflectionResult->getMessageCode()
             );
         }
 
-        return $coverFishResult;
+        return $this->coverFishResult;
     }
 
     /**
      * @param CoverFishMapping $coverMapping
-     * @param CoverFishResult  $coverFishResult
      *
      * @return CoverFishResult
      */
-    public function validateClassMethod(CoverFishMapping $coverMapping, CoverFishResult $coverFishResult)
+    public function validateClassMethod(CoverFishMapping $coverMapping)
     {
         $methodReflectionResult = $this->validateReflectionMethod($coverMapping->getClassFQN(), $coverMapping->getMethod());
         if ($methodReflectionResult instanceof CoverFishMessageError) {
-            $coverFishResult = $this->setValidationError(
-                $coverFishResult,
+            $this->coverFishResult = $this->setValidationError(
                 $methodReflectionResult->getMessageCode()
             );
         }
 
-        return $coverFishResult;
+        return $this->coverFishResult;
     }
 
     /**
@@ -197,18 +201,18 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
      */
     public function validateMapping(CoverFishMapping $coverMapping)
     {
-        /** @var CoverFishResult $coverFishResult */
-        $coverFishResult = new CoverFishResult();
         // cleanUp validation mapping result for current scan
-        $coverFishResult = $this->clearValidationErrors($coverFishResult);
+        $coverFishResult = $this->clearValidationErrors();
         // 01: check for classFQN/DefaultCoverClass existence/mapping validation-error
-        $coverFishResult = $this->validateDefaultCoverClassMapping($coverMapping, $coverFishResult);
+        $coverFishResult = $this->validateDefaultCoverClassMapping($coverMapping);
         // 02: check for invalid classFQN validation-error
-        $coverFishResult = $this->validateClassFQNMapping($coverMapping, $coverFishResult);
+        $coverFishResult = $this->validateClassFQNMapping($coverMapping);
         // 03: check for invalid accessor validation-error
-        $coverFishResult = $this->validateClassAccessorVisibility($coverMapping, $coverFishResult);
+        $coverFishResult = $this->validateClassAccessorVisibility($coverMapping);
         // 04: check for invalid method validation-error
-        $coverFishResult = $this->validateClassMethod($coverMapping, $coverFishResult);
+        $coverFishResult = $this->validateClassMethod($coverMapping);
+
+       // var_dump($coverFishResult->isStopOnFailure());die;
 
         return $coverFishResult;
     }
@@ -245,6 +249,117 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return bool|CoverFishMessageError
+     */
+    public function validateReflectionClassForAccessorPublic(\ReflectionClass $reflectionClass)
+    {
+        if (empty($methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC))) {
+            return new CoverFishMessageError(
+                CoverFishMessageError::PHPUNIT_REFLECTION_NO_PUBLIC_METHODS_FOUND, null
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return bool|CoverFishMessageError
+     */
+    public function validateReflectionClassForAccessorNotPublic(\ReflectionClass $reflectionClass)
+    {
+        $methods = array_merge(
+            $reflectionClass->getMethods(\ReflectionMethod::IS_PRIVATE),
+            $reflectionClass->getMethods(\ReflectionMethod::IS_PROTECTED)
+        );
+
+        if (empty($methods)) {
+            return new CoverFishMessageError(
+                CoverFishMessageError::PHPUNIT_REFLECTION_NO_NOT_PUBLIC_METHODS_FOUND, null
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return bool|CoverFishMessageError
+     */
+    public function validateReflectionClassForAccessorProtected(\ReflectionClass $reflectionClass)
+    {
+        if (empty($methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PROTECTED))) {
+            return new CoverFishMessageError(
+                CoverFishMessageError::PHPUNIT_REFLECTION_NO_PROTECTED_METHODS_FOUND, null
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return bool|CoverFishMessageError
+     */
+    public function validateReflectionClassForAccessorNotProtected(\ReflectionClass $reflectionClass)
+    {
+        $methods = array_merge(
+            $reflectionClass->getMethods(\ReflectionMethod::IS_PRIVATE),
+            $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC)
+        );
+
+        if (empty($methods)) {
+            return new CoverFishMessageError(
+                CoverFishMessageError::PHPUNIT_REFLECTION_NO_NOT_PROTECTED_METHODS_FOUND, null
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return bool|CoverFishMessageError
+     */
+    public function validateReflectionClassForAccessorPrivate(\ReflectionClass $reflectionClass)
+    {
+        if (empty($methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PRIVATE))) {
+            return new CoverFishMessageError(
+                CoverFishMessageError::PHPUNIT_REFLECTION_NO_PRIVATE_METHODS_FOUND, null
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return bool|CoverFishMessageError
+     */
+    public function validateReflectionClassForAccessorNotPrivate(\ReflectionClass $reflectionClass)
+    {
+        $methods = array_merge(
+            $reflectionClass->getMethods(\ReflectionMethod::IS_PROTECTED),
+            $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC)
+        );
+
+        if (empty($methods)) {
+            return new CoverFishMessageError(
+                CoverFishMessageError::PHPUNIT_REFLECTION_NO_NOT_PRIVATE_METHODS_FOUND, null
+            );
+        }
+
+        return true;
+    }
+
+    /**
      * @param string $classFQN
      * @param string $accessor
      *
@@ -252,90 +367,51 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
      */
     public function validateReflectionClassForAccessorVisibility($classFQN, $accessor)
     {
-        if (null === $classFQN || null === $accessor) {
-            return false;
-        }
-
         $reflectionClass = $this->getReflectionClass($classFQN);
         if ($reflectionClass instanceof CoverFishMessageError) {
             return $reflectionClass;
         }
 
+        $accessorResult = null;
+
         switch ($accessor) {
+
             case 'public':
-                $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
-                if (empty($methods)) {
-                    return new CoverFishMessageError(
-                        CoverFishMessageError::PHPUNIT_REFLECTION_NO_PUBLIC_METHODS_FOUND, null
-                    );
-                }
+                $accessorResult = $this->validateReflectionClassForAccessorPublic($reflectionClass);
 
                 break;
 
             case 'protected':
-                $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PROTECTED);
-                if (empty($methods)) {
-                    return new CoverFishMessageError(
-                        CoverFishMessageError::PHPUNIT_REFLECTION_NO_PROTECTED_METHODS_FOUND, null
-                    );
-                }
+                $accessorResult = $this->validateReflectionClassForAccessorProtected($reflectionClass);
 
                 break;
 
             case 'private':
-                $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PRIVATE);
-                if (empty($methods)) {
-                    return new CoverFishMessageError(
-                        CoverFishMessageError::PHPUNIT_REFLECTION_NO_PRIVATE_METHODS_FOUND, null
-                    );
-                }
+                $accessorResult = $this->validateReflectionClassForAccessorPrivate($reflectionClass);
 
                 break;
 
             case '!public':
-                $methods = array_merge(
-                    $reflectionClass->getMethods(\ReflectionMethod::IS_PRIVATE),
-                    $reflectionClass->getMethods(\ReflectionMethod::IS_PROTECTED)
-                );
-
-                if (empty($methods)) {
-                    return new CoverFishMessageError(
-                        CoverFishMessageError::PHPUNIT_REFLECTION_NO_NOT_PUBLIC_METHODS_FOUND, null
-                    );
-                }
+                $accessorResult = $this->validateReflectionClassForAccessorNotPublic($reflectionClass);
 
                 break;
 
             case '!protected':
-                $methods = array_merge(
-                    $reflectionClass->getMethods(\ReflectionMethod::IS_PRIVATE),
-                    $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC)
-                );
-
-                if (empty($methods)) {
-                    return new CoverFishMessageError(
-                        CoverFishMessageError::PHPUNIT_REFLECTION_NO_NOT_PROTECTED_METHODS_FOUND, null
-                    );
-                }
+                $accessorResult = $this->validateReflectionClassForAccessorNotProtected($reflectionClass);
 
                 break;
 
             case '!private':
-                $methods = array_merge(
-                    $reflectionClass->getMethods(\ReflectionMethod::IS_PROTECTED),
-                    $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC)
-                );
-
-                if (empty($methods)) {
-                    return new CoverFishMessageError(
-                        CoverFishMessageError::PHPUNIT_REFLECTION_NO_NOT_PRIVATE_METHODS_FOUND, null
-                    );
-                }
+                $accessorResult = $this->validateReflectionClassForAccessorNotPrivate($reflectionClass);
 
                 break;
 
             default:
                 return false;
+        }
+
+        if ($accessorResult instanceof CoverFishMessageError) {
+            return $accessorResult;
         }
 
         return true;
@@ -360,59 +436,45 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
-     * check if class got fully qualified name
-     *
-     * @param string $class
-     *
-     * @return bool
-     */
-    public function checkClassHasFQN($class)
-    {
-        preg_match_all('/(\\\\+)/', $class, $result, PREG_SET_ORDER);
-
-        return count($result) > 0;
-    }
-
-    /**
-     * @param CoverFishResult $coverFishResult
-     *
      * @return CoverFishResult
      */
-    public function clearValidationErrors(CoverFishResult $coverFishResult)
+    public function clearValidationErrors()
     {
-        $coverFishResult->setPass(true);
-        $coverFishResult->clearErrors();
+        $this->coverFishResult->setPass(true);
+        $this->coverFishResult->clearErrors();
 
-        return $coverFishResult;
+        return $this->coverFishResult;
     }
 
     /**
-     * @param CoverFishResult $coverFishResult
      * @param int             $errorCode
      * @param string|null     $errorMessage
      *
      * @return CoverFishResult
+     *
+     * @throws CoverFishFailExit
      */
-    public function setValidationError(CoverFishResult $coverFishResult, $errorCode, $errorMessage = null)
+    public function setValidationError($errorCode, $errorMessage = null)
     {
-        // skip validation if incoming mapping result is already invalid!
-        if (false === $coverFishResult->isPass()) {
-            return $coverFishResult;
+        // skip validation if incoming mapping result is already invalid ...
+        if (false === $this->coverFishResult->isPass()) {
+            return $this->coverFishResult;
         }
 
-        $coverFishResult->setPass(false);
-        $coverFishResult->addError(new CoverFishMessageError($errorCode, $errorMessage));
+        $this->coverFishResult->setPass(false);
+        $this->coverFishResult->addError(new CoverFishMessageError($errorCode, $errorMessage));
 
-        return $coverFishResult;
+        return $this->coverFishResult;
     }
 
     /**
      * @param string $coversToken
      */
-    public function __construct($coversToken)
+    public function __construct($coversToken, CoverFishResult $coverFishResult)
     {
         $this->coversToken = $coversToken;
-        $this->validatorCollection = new ArrayCollection();
         $this->coverFishHelper = new CoverFishHelper();
+        $this->coverFishResult = $coverFishResult;
+        $this->validatorCollection = new ArrayCollection();
     }
 }
