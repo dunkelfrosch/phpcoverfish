@@ -69,8 +69,8 @@ class CoverFishOutput extends BaseCoverFishOutput
             return false;
         }
 
-        if ($this->coverFishHelper->checkParamNotEmpty($this->scanner->getPhpUnitConfigFile())) {
-            $this->output->writeln(sprintf('using phpunit scan mode, phpunit-config file "%s"', $this->scanner->getPhpUnitConfigFile()));
+        if ($this->coverFishHelper->checkParamNotEmpty($this->scanner->getPhpUnitXMLFile())) {
+            $this->output->writeln(sprintf('using phpunit scan mode, phpunit-config file "%s"', $this->scanner->getPhpUnitXMLFile()));
         } else {
             $this->output->writeln('using raw scan mode, reading necessary parameters ...');
         }
