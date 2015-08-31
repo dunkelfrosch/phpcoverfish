@@ -182,7 +182,8 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
 
         $this->assertRegExp('/(scan file CoverFishScannerCommandTest.php)([ ]{1})(.+)([ ]{1})(OK)/', $output);
         $this->assertRegExp('/(scan file CoverFishScannerTest.php)([ ]{1})(.+)([ ]{1})(OK)/', $output);
-        $this->assertRegExp('/(scan file CoverFishScannerValidatorTest.php)([ ]{1})(.+)([ ]{1})(OK)/', $output);
+        $this->assertRegExp('/(scan file CoverFishScannerValidatorBaseTest.php)([ ]{1})(.+)([ ]{1})(OK)/', $output);
+        $this->assertRegExp('/(scan file CoverFishScannerValidatorExtendedTest.php)([ ]{1})(.+)([ ]{1})(OK)/', $output);
     }
 
     public function validateCoverFishSelfTestLevelTwo($output)

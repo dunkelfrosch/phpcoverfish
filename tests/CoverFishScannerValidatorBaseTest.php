@@ -7,17 +7,17 @@ use DF\PHPCoverFish\Common\CoverFishMessageError;
 use DF\PHPCoverFish\Tests\Base\BaseCoverFishScannerTestCase;
 
 /**
- * Class CoverFishScannerValidatorTest
+ * Class CoverFishScannerValidatorBaseTest
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @copyright 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
- * @since     class available since Release 0.9.0
+ * @since     class available since Release 0.9.9
  * @version   0.9.9
  */
-class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
+class CoverFishScannerValidatorBaseTest extends BaseCoverFishScannerTestCase
 {
     /**
      * check for covered className (FQN) annotation "class missing"
@@ -25,9 +25,9 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute
      * @covers DF\PHPCoverFish\Validator\ValidatorClassName::<public>
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::__construct
-     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::getResult
-     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::setMapping
-     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateMapping
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::getResult2
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::setMapping2
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateMapping2
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateReflectionClass
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::clearValidationErrors
      * @covers DF\PHPCoverFish\CoverFishScanner::analyseClass
@@ -57,6 +57,27 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
 
             $this->assertTrue($error);
             $this->assertEquals(CoverFishMessageError::PHPUNIT_REFLECTION_CLASS_NOT_FOUND, $errorCode);
+        }
+    }
+
+    /**
+     * check for covered className (FQN) annotation "class found", cover is valid!
+     *
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute
+     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::<public>
+     */
+    public function testCoverClassFullyQualifiedNameValidatorCheckForValidClassPass()
+    {
+        /** @var CoverFishScanner $scanner */
+        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassFQNamePassTest.php', __DIR__));
+
+        /** @var array $jsonResult */
+        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
+
+        /** @var \stdClass $jsonResult */
+        foreach ($jsonResult as $result) {
+            $pass = (bool) $result->pass;
+            $this->assertTrue($pass);
         }
     }
 
@@ -101,27 +122,6 @@ class CoverFishScannerValidatorTest extends BaseCoverFishScannerTestCase
             $this->assertTrue($pass);
             $this->assertFalse($failure);
 
-        }
-    }
-
-    /**
-     * check for covered className (FQN) annotation "class found", cover is valid!
-     *
-     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute
-     * @covers DF\PHPCoverFish\Validator\ValidatorClassName::<public>
-     */
-    public function testCoverClassFullyQualifiedNameValidatorCheckForValidClassPass()
-    {
-        /** @var CoverFishScanner $scanner */
-        $scanner = $this->getDefaultCoverFishScanner(sprintf('%s/data/tests/ValidatorClassFQNamePassTest.php', __DIR__));
-
-        /** @var array $jsonResult */
-        $jsonResult = json_decode($scanner->analysePHPUnitFiles());
-
-        /** @var \stdClass $jsonResult */
-        foreach ($jsonResult as $result) {
-            $pass = (bool) $result->pass;
-            $this->assertTrue($pass);
         }
     }
 
