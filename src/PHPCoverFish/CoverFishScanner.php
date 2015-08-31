@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use \PHP_Token_Stream;
 
 /**
- * Class BaseCoverFishScanner
+ * Class CoverFishScanner
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
@@ -55,13 +55,13 @@ class CoverFishScanner extends BaseCoverFishScanner
     public function validateCodeCoverage($coverToken)
     {
         // covers ClassName::methodName
-        $this->addValidator(new ValidatorClassNameMethodName($coverToken));
+        $this->addValidator(new ValidatorClassNameMethodName($coverToken, $this->coverFishResult));
         // covers ::methodName
-        $this->addValidator(new ValidatorMethodName($coverToken));
+        $this->addValidator(new ValidatorMethodName($coverToken, $this->coverFishResult));
         // covers ClassName
-        $this->addValidator(new ValidatorClassName($coverToken));
+        $this->addValidator(new ValidatorClassName($coverToken, $this->coverFishResult));
         // covers ClassName::accessor (for public, protected, private, !public, !protected, !private)
-        $this->addValidator(new ValidatorClassNameMethodAccess($coverToken));
+        $this->addValidator(new ValidatorClassNameMethodAccess($coverToken, $this->coverFishResult));
         // save used coverToken inside cover annotation collection for each phpUnitTest
         $this->phpUnitTest->addCoverAnnotation($coverToken);
     }

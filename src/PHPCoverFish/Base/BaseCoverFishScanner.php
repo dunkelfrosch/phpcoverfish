@@ -2,127 +2,32 @@
 
 namespace DF\PHPCoverFish\Base;
 
-use DF\PHPCoverFish\Common\ArrayCollection;
-use DF\PHPCoverFish\Common\CoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitTest;
-use DF\PHPCoverFish\Common\CoverFishResult;
-use DF\PHPCoverFish\Common\CoverFishHelper;
-use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidatorInterface as CoverFishValidatorInterface;
-use SebastianBergmann\FinderFacade\FinderFacade;
+use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidatorInterface;
 
 /**
- * Class CoverFishScanner
+ * Class BaseCoverFishScanner
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @copyright 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
- * @since     class available since Release 0.9.0
+ * @since     class available since Release 0.9.9
  * @version   0.9.9
  */
-class BaseCoverFishScanner
+class BaseCoverFishScanner extends BaseScanner
 {
     /**
      * @var string
      */
-    protected $phpUnitConfigPath;
-
-    /**
-     * @var string
-     */
-    protected $phpUnitConfigFile;
-
-    /**
-     * @var string
-     */
-    protected $phpUnitConfigTestSuite;
-
-    /**
-     * @var string
-     */
-    protected $testSourcePath;
-
-    /**
-     * @var String
-     */
-    protected $testExcludePath;
-
-    /**
-     * @var String
-     */
-    protected $testAutoloadPath;
-
-    /**
-     * @var bool
-     */
-    protected $stopOnError = false;
-
-    /**
-     * @var bool
-     */
-    protected $stopOnFailure = false;
-
-    /**
-     * @var int
-     */
-    protected $warningThreshold = 99;
-
-    /**
-     * @var bool
-     */
-    protected $passes;
+    protected $filePattern = '*.php';
 
     /**
      * @var array
      */
-    protected $usedClasses;
-
-    /**
-     * @var CoverFishPHPUnitFile
-     */
-    protected $phpUnitFile;
-
-    /**
-     * @var CoverFishPHPUnitTest
-     */
-    protected $phpUnitTest;
-
-    /**
-     * @var CoverFishHelper
-     */
-    protected $coverFishHelper;
-
-    /**
-     * @var CoverFishResult
-     */
-    protected $coverFishResult;
-
-    /**
-     * @var CoverFishOutput
-     */
-    protected $coverFishOutput;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $validatorCollection;
-
-    /**
-     * @var bool
-     */
-    protected $debug = false;
-
-    /**
-     * @var string
-     */
-    protected $baseFilePattern = '*.php';
-
-    /**
-     * @var array
-     */
-    protected $baseFilePatternExclude = array(
+    protected $filePatternExclude = array(
         '*.log',
         '*.js',
         '*.html',
@@ -137,135 +42,16 @@ class BaseCoverFishScanner
     );
 
     /**
-     * @return ArrayCollection
-     */
-    public function getValidatorCollection()
-    {
-        return $this->validatorCollection;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPhpUnitConfigPath()
-    {
-        return $this->phpUnitConfigPath;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return string
-     */
-    public function getPhpUnitConfigFile()
-    {
-        return $this->phpUnitConfigFile;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return string
-     */
-    public function getPhpUnitConfigTestSuite()
-    {
-        return $this->phpUnitConfigTestSuite;
-    }
-
-    /**
-     * @todo rename this variable to (get)TestSourcePathOrFile
-     *
-     * @codeCoverageIgnore
-     *
-     * @return string
-     */
-    public function getTestSourcePath()
-    {
-        return $this->testSourcePath;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return String
-     */
-    public function getTestExcludePath()
-    {
-        return $this->testExcludePath;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return String
-     */
-    public function getTestAutoloadPath()
-    {
-        return $this->testAutoloadPath;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return CoverFishPHPUnitFile
-     */
-    public function getPhpUnitFile()
-    {
-        return $this->phpUnitFile;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return CoverFishPHPUnitTest
-     */
-    public function getPhpUnitTest()
-    {
-        return $this->phpUnitTest;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return CoverFishHelper
-     */
-    public function getCoverFishHelper()
-    {
-        return $this->coverFishHelper;
-    }
-
-    /**
-     * @param CoverFishPHPUnitTest $phpUnitTest
-     *
-     * @codeCoverageIgnore
-     */
-    public function setPhpUnitTest($phpUnitTest)
-    {
-        $this->phpUnitTest = $phpUnitTest;
-    }
-
-    /**
-     * @return int
-     */
-    public function getWarningThreshold()
-    {
-        return $this->warningThreshold;
-    }
-
-    /**
      * @param array $cliOptions
      *
      * @codeCoverageIgnore
      */
     public function __construct(array $cliOptions)
     {
-        $this->validatorCollection = new ArrayCollection();
-        $this->coverFishHelper = new CoverFishHelper();
-        $this->coverFishResult = new CoverFishResult();
-
+        parent::__construct();
         $this->initCoverFishScanner($cliOptions);
 
-        if (true === $this->coverFishHelper->checkFileExist($this->phpUnitConfigFile)) {
+        if (true === $this->coverFishHelper->checkFileExist($this->phpUnitXMLFile)) {
             $this->setConfigFromPHPUnitConfigFile();
         }
 
@@ -288,111 +74,12 @@ class BaseCoverFishScanner
 
         // fetch additional system/app parameter
         $this->debug = $cliOptions['sys_debug'];
-        $this->stopOnError = $cliOptions['sys_stop_on_error'];
-        $this->stopOnFailure = $cliOptions['sys_stop_on_failure'];
         $this->warningThreshold = $cliOptions['sys_warning_threshold'];
-        $this->phpUnitConfigFile = $cliOptions['sys_phpunit_config'];
-        $this->phpUnitConfigTestSuite = $cliOptions['sys_phpunit_config_test_suite'];
-    }
+        $this->phpUnitXMLFile = $cliOptions['sys_phpunit_config'];
+        $this->phpUnitTestSuite = $cliOptions['sys_phpunit_config_test_suite'];
 
-    /**
-     * check existence of given autoload file (raw/psr-0/psr-4)
-     *
-     * @param string $autoloadFile
-     *
-     * @return bool
-     *
-     * @throws \Exception
-     */
-    public function checkSourceAutoload($autoloadFile)
-    {
-        if (false === $this->coverFishHelper->checkFileExist($autoloadFile)) {
-            throw new \Exception(sprintf('autoload file "%s" not found! please define your autoload.php file to use (e.g. ../app/autoload.php in symfony)', $autoloadFile));
-        }
-
-        return true;
-    }
-
-    /**
-     * get a testSuite main attribute of given phpunit xml file (like name, bootstrap ...)
-     *
-     * @param string            $attribute
-     * @param \SimpleXMLElement $xmlDocument
-     *
-     * @return bool|string
-     */
-    public function getAttributeFromXML($attribute, \SimpleXMLElement $xmlDocument)
-    {
-        /** @var \SimpleXMLElement $value */
-        foreach ($xmlDocument->attributes() as $key => $value) {
-            /** @var \SimpleXMLElement $attribute */
-            if ($attribute === $key) {
-                return (string) ($this->xmlToArray($value)[0]);
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * function will return the first testSuite directory found in testSuites node-block.
-     * if no "$this->phpUnitConfigTestSuite" provided, first testSuite will be returned!
-     *
-     * @param \SimpleXMLElement $xmlDocumentNodes
-     *
-     * @return bool|\SimpleXMLElement
-     */
-    public function getTestSuiteNodeFromXML(\SimpleXMLElement $xmlDocumentNodes) {
-
-        /** @var \SimpleXMLElement $suite */
-        foreach ($xmlDocumentNodes->testsuites->testsuite as $suite) {
-
-            if (false === $suiteName = $this->getAttributeFromXML('name', $suite)) {
-                continue;
-            }
-
-            if ((true === empty($this->phpUnitConfigTestSuite)) || ($suiteName === $this->phpUnitConfigTestSuite)) {
-                return $suite;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * get a specific property from named testSuite node (like "exclude" or "directory")
-     *
-     * @param string            $property
-     * @param \SimpleXMLElement $xmlDocumentNodes
-     *
-     * @return bool|string
-     */
-    public function getTestSuitePropertyFromXML($property, \SimpleXMLElement $xmlDocumentNodes)
-    {
-        /** @var \SimpleXMLElement $suite */
-        $suite = $this->getTestSuiteNodeFromXML($xmlDocumentNodes);
-        if (false === empty($suite) && property_exists($suite, $property)) {
-            return (string) ($this->xmlToArray($suite->$property)[0]);
-        }
-
-        return false;
-    }
-
-    /**
-     * @param \SimpleXMLElement|array $xmlObject
-     * @param array                   $output
-     *
-     * @return array
-     */
-    public function xmlToArray($xmlObject, $output = array())
-    {
-        foreach ((array) $xmlObject as $index => $node) {
-            $output[$index] = ($node instanceof \SimpleXMLElement || is_array($node))
-                ? $this->xmlToArray($node)
-                : $node;
-        }
-
-        return $output;
+        $this->coverFishResult->setStopOnFailure((bool) $cliOptions['sys_stop_on_failure']);
+        $this->coverFishResult->setStopOnError((bool) $cliOptions['sys_stop_on_error']);
     }
 
     /**
@@ -403,29 +90,19 @@ class BaseCoverFishScanner
         try {
 
             /** @var \SimpleXMLElement $xmlDocument */
-            $xmlDocument = simplexml_load_file($this->phpUnitConfigFile);
+            $xmlDocument = simplexml_load_file($this->phpUnitXMLFile);
 
-            $this->phpUnitConfigPath = $this->coverFishHelper->getPathFromFileNameAndPath($this->phpUnitConfigFile);
-            $this->testAutoloadPath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getAttributeFromXML('bootstrap', $xmlDocument));
-            $this->testSourcePath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getTestSuitePropertyFromXML('directory', $xmlDocument));
-            $this->testExcludePath = sprintf('%s%s', $this->phpUnitConfigPath, $this->getTestSuitePropertyFromXML('exclude', $xmlDocument));
+            $this->phpUnitXMLPath = $this->coverFishHelper->getPathFromFileNameAndPath($this->phpUnitXMLFile);
+            $this->testAutoloadPath = sprintf('%s%s', $this->phpUnitXMLPath, $this->getAttributeFromXML('bootstrap', $xmlDocument));
+            $this->testSourcePath = sprintf('%s%s', $this->phpUnitXMLPath, $this->getTestSuitePropertyFromXML('directory', $xmlDocument));
+            $this->testExcludePath = sprintf('%s%s', $this->phpUnitXMLPath, $this->getTestSuitePropertyFromXML('exclude', $xmlDocument));
 
         } catch (\Exception $e) {
 
-            echo (sprintf('parse error loading phpunit config file "%s"!', $this->phpUnitConfigFile));
+            echo (sprintf('parse error loading phpunit config file "%s"!', $this->phpUnitXMLFile));
             echo (sprintf('-> message: %s', $e->getMessage()));
 
         }
-    }
-
-    /**
-     * @param CoverFishValidatorInterface $validator
-     *
-     * @return ArrayCollection
-     */
-    public function addValidator(CoverFishValidatorInterface $validator)
-    {
-        $this->validatorCollection->add($validator);
     }
 
     /**
@@ -435,7 +112,7 @@ class BaseCoverFishScanner
      */
     public function validateAndReturnMapping(CoverFishPHPUnitTest $phpUnitTest)
     {
-        /** @var CoverFishValidatorInterface $validator */
+        /** @var BaseCoverFishValidatorInterface $validator */
         foreach ($this->validatorCollection as $validator) {
 
             if (false === $validator->validate()) {
@@ -555,29 +232,5 @@ class BaseCoverFishScanner
         }
 
         return $finalPath;
-    }
-
-    /**
-     * scan all files by given path recursively, if one php file will be provided within given path,
-     * this file will be returned in finder format
-     *
-     * @param string $sourcePath
-     *
-     * @return array
-     */
-    public function scanFilesInPath($sourcePath)
-    {
-        $filePattern = $this->baseFilePattern;
-        if (strpos($sourcePath, str_replace('*', null, $filePattern))) {
-            $filePattern = $this->coverFishHelper->getFileNameFromPath($sourcePath);
-        }
-
-        $facade = new FinderFacade(
-            array($sourcePath),
-            $this->baseFilePatternExclude,
-            array($filePattern)
-        );
-
-        return $this->removeExcludedPath($facade->findFiles(), $this->testExcludePath);
     }
 }
