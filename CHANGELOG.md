@@ -14,12 +14,12 @@ _unreleased_
 
 ### Added
 
-- Added stop-on-failure option command
 - Added stop-on-error option command
 
 ### Changes
 
 - move xml related helper methods to additional (new) xml helper class
+- extend coverFishHelper class by refactoring coverFish scanner class
 - additional refactoring of baseCoverFishScanner and baseCoverFishResult classes
 - minor/major scrutinizer/codeClimate related changes in project code
 - minor documentation / output wording issues
@@ -35,6 +35,7 @@ _current_
 
 ### Added
 
+- Added stop-on-failure option command functionality
 - Added validator for global code coverage using @cover in class head annotation
 - Added new unit tests for global code coverage validator
 - Added new unit tests for coverage warnings
