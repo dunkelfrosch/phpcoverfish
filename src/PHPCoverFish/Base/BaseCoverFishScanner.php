@@ -73,13 +73,12 @@ class BaseCoverFishScanner extends BaseScanner
         $this->testExcludePath = $cliOptions['raw_scan_exclude_path'];
 
         // fetch additional system/app parameter
-        $this->debug = $cliOptions['sys_debug'];
-        $this->warningThreshold = $cliOptions['sys_warning_threshold'];
         $this->phpUnitXMLFile = $cliOptions['sys_phpunit_config'];
         $this->phpUnitTestSuite = $cliOptions['sys_phpunit_config_test_suite'];
 
-        $this->coverFishResult->setStopOnFailure((bool) $cliOptions['sys_stop_on_failure']);
-        $this->coverFishResult->setStopOnError((bool) $cliOptions['sys_stop_on_error']);
+        $this->warningThreshold = (int) $cliOptions['sys_warning_threshold'];
+        $this->stopOnFailure = (bool) $cliOptions['sys_stop_on_failure'];
+        $this->stopOnError = (bool) $cliOptions['sys_stop_on_error'];
     }
 
     /**
