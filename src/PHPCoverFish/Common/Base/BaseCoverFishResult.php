@@ -22,17 +22,6 @@ class BaseCoverFishResult
      */
     private $pass = false;
 
-
-    /**
-     * @var bool
-     */
-    private $stopOnError = false;
-
-    /**
-     * @var bool
-     */
-    private $stopOnFailure = false;
-
     /**
      * @var int
      */
@@ -72,38 +61,6 @@ class BaseCoverFishResult
      * @var \DateTime
      */
     private $taskFinishedAt;
-
-    /**
-     * @return boolean
-     */
-    public function isStopOnError()
-    {
-        return $this->stopOnError;
-    }
-
-    /**
-     * @param boolean $stopOnError
-     */
-    public function setStopOnError($stopOnError)
-    {
-        $this->stopOnError = $stopOnError;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isStopOnFailure()
-    {
-        return $this->stopOnFailure;
-    }
-
-    /**
-     * @param boolean $stopOnFailure
-     */
-    public function setStopOnFailure($stopOnFailure)
-    {
-        $this->stopOnFailure = $stopOnFailure;
-    }
 
     /**
      * @return int
