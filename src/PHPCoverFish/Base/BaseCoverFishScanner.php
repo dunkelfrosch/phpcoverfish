@@ -207,30 +207,4 @@ class BaseCoverFishScanner extends BaseScanner
 
         return $this->phpUnitTest;
     }
-
-    /**
-     * workaround for missing/buggy path exclude in symfony finder class
-     *
-     * @param array  $files
-     * @param string $excludePath
-     *
-     * @return array
-     */
-    public function removeExcludedPath(array $files, $excludePath)
-    {
-        $finalPath = array();
-
-        if (true === empty($excludePath)) {
-            return $files;
-        }
-
-        foreach ($files as $filePath) {
-            preg_match_all($this->coverFishHelper->getRegexPath($excludePath), $filePath, $result, PREG_SET_ORDER);
-            if (true === empty($result)) {
-                $finalPath[] = $filePath;
-            }
-        }
-
-        return $finalPath;
-    }
 }
