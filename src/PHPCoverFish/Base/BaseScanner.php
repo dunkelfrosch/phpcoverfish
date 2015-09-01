@@ -102,7 +102,12 @@ class BaseScanner
     /**
      * @var bool
      */
-    protected $debug = false;
+    protected $stopOnError = false;
+
+    /**
+     * @var bool
+     */
+    protected $stopOnFailure = false;
 
     /**
      * @var string
@@ -117,6 +122,22 @@ class BaseScanner
         '*.txt',
         '*.md'
     );
+
+    /**
+     * @return boolean
+     */
+    public function isStopOnError()
+    {
+        return $this->stopOnError;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isStopOnFailure()
+    {
+        return $this->stopOnFailure;
+    }
 
     /**
      * @return string
