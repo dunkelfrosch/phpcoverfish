@@ -25,9 +25,9 @@ class CoverFishScannerValidatorBaseTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\Validator\ValidatorClassName::execute
      * @covers DF\PHPCoverFish\Validator\ValidatorClassName::<public>
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::__construct
-     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::getResult2
-     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::setMapping2
-     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateMapping2
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::getResult
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::setMapping
+     * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateMapping
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::validateReflectionClass
      * @covers DF\PHPCoverFish\Validator\Base\BaseCoverFishValidator::clearValidationErrors
      * @covers DF\PHPCoverFish\CoverFishScanner::analyseClass
