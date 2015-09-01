@@ -27,7 +27,7 @@ use \PHP_Token_Stream;
 class CoverFishScanner extends BaseCoverFishScanner
 {
     const APP_RELEASE_NAME = 'PHPCoverFish';
-    const APP_RELEASE_STATE = 'beta2';
+    const APP_RELEASE_STATE = 'beta1';
 
     const APP_VERSION_MAJOR = 0;
     const APP_VERSION_MINOR = 9;
