@@ -8,7 +8,6 @@ use DF\PHPCoverFish\Common\CoverFishResult;
 use DF\PHPCoverFish\Common\CoverFishHelper;
 use DF\PHPCoverFish\Common\CoverFishMapping;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
-use DF\PHPCoverFish\Exception\CoverFishFailExit;
 
 /**
  * Class BaseCoverFishValidator
@@ -32,11 +31,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
      * @var string
      */
     protected $coversToken = null;
-
-    /**
-     * @var CoverFishResult
-     */
-    protected $coverFishResult = null;
 
     /**
      * @var array
@@ -122,73 +116,81 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 
     /**
      * @param CoverFishMapping $coverMapping
+     * @param CoverFishResult  $coverFishResult
      *
      * @return CoverFishResult
      */
-    public function validateDefaultCoverClassMapping(CoverFishMapping $coverMapping)
+    public function validateDefaultCoverClassMapping(CoverFishMapping $coverMapping, CoverFishResult $coverFishResult)
     {
         if (empty($coverMapping->getClassFQN())) {
-            $this->coverFishResult = $this->setValidationError(
+            $coverFishResult = $this->setValidationError(
+                $coverFishResult,
                 empty($coverMapping->getClass())
-                ? CoverFishMessageError::PHPUNIT_VALIDATOR_MISSING_DEFAULT_COVER_CLASS_PROBLEM
-                : CoverFishMessageError::PHPUNIT_REFLECTION_CLASS_NOT_DEFINED
+                    ? CoverFishMessageError::PHPUNIT_VALIDATOR_MISSING_DEFAULT_COVER_CLASS_PROBLEM
+                    : CoverFishMessageError::PHPUNIT_REFLECTION_CLASS_NOT_DEFINED
             );
         }
 
-        return $this->coverFishResult;
+        return $coverFishResult;
     }
 
     /**
      * @todo: mappingResult could be false, set special coverFishError here ...
      *
      * @param CoverFishMapping $coverMapping
+     * @param CoverFishResult  $coverFishResult
      *
      * @return CoverFishResult
      */
-    public function validateClassFQNMapping(CoverFishMapping $coverMapping)
+    public function validateClassFQNMapping(CoverFishMapping $coverMapping, CoverFishResult $coverFishResult)
     {
         $classReflectionResult = $this->validateReflectionClass($coverMapping->getClassFQN());
         if ($classReflectionResult instanceof CoverFishMessageError) {
-            $this->coverFishResult = $this->setValidationError(
+            $coverFishResult = $this->setValidationError(
+                $coverFishResult,
                 $classReflectionResult->getMessageCode()
             );
         }
 
-        return $this->coverFishResult;
+        return $coverFishResult;
     }
 
     /**
      * @param CoverFishMapping $coverMapping
+     * @param CoverFishResult  $coverFishResult
      *
      * @return CoverFishResult
      */
-    public function validateClassAccessorVisibility(CoverFishMapping $coverMapping)
+    public function validateClassAccessorVisibility(CoverFishMapping $coverMapping, CoverFishResult $coverFishResult)
     {
         $methodReflectionResult = $this->validateReflectionClassForAccessorVisibility($coverMapping->getClassFQN(), $coverMapping->getAccessor());
         if ($methodReflectionResult instanceof CoverFishMessageError) {
-            $this->coverFishResult = $this->setValidationError(
+            $coverFishResult = $this->setValidationError(
+                $coverFishResult,
                 $methodReflectionResult->getMessageCode()
             );
         }
 
-        return $this->coverFishResult;
+        return $coverFishResult;
     }
 
     /**
      * @param CoverFishMapping $coverMapping
+     * @param CoverFishResult  $coverFishResult
      *
      * @return CoverFishResult
      */
-    public function validateClassMethod(CoverFishMapping $coverMapping)
+    public function validateClassMethod(CoverFishMapping $coverMapping, CoverFishResult $coverFishResult)
     {
         $methodReflectionResult = $this->validateReflectionMethod($coverMapping->getClassFQN(), $coverMapping->getMethod());
         if ($methodReflectionResult instanceof CoverFishMessageError) {
-            $this->coverFishResult = $this->setValidationError(
+            $coverFishResult = $this->setValidationError(
+                $coverFishResult,
                 $methodReflectionResult->getMessageCode()
             );
         }
 
-        return $this->coverFishResult;
+        return $coverFishResult;
     }
 
     /**
@@ -201,18 +203,18 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
      */
     public function validateMapping(CoverFishMapping $coverMapping)
     {
+        /** @var CoverFishResult $coverFishResult */
+        $coverFishResult = new CoverFishResult();
         // cleanUp validation mapping result for current scan
-        $coverFishResult = $this->clearValidationErrors();
+        $coverFishResult = $this->clearValidationErrors($coverFishResult);
         // 01: check for classFQN/DefaultCoverClass existence/mapping validation-error
-        $coverFishResult = $this->validateDefaultCoverClassMapping($coverMapping);
+        $coverFishResult = $this->validateDefaultCoverClassMapping($coverMapping, $coverFishResult);
         // 02: check for invalid classFQN validation-error
-        $coverFishResult = $this->validateClassFQNMapping($coverMapping);
+        $coverFishResult = $this->validateClassFQNMapping($coverMapping, $coverFishResult);
         // 03: check for invalid accessor validation-error
-        $coverFishResult = $this->validateClassAccessorVisibility($coverMapping);
+        $coverFishResult = $this->validateClassAccessorVisibility($coverMapping, $coverFishResult);
         // 04: check for invalid method validation-error
-        $coverFishResult = $this->validateClassMethod($coverMapping);
-
-       // var_dump($coverFishResult->isStopOnFailure());die;
+        $coverFishResult = $this->validateClassMethod($coverMapping, $coverFishResult);
 
         return $coverFishResult;
     }
@@ -418,6 +420,39 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
+     * @param CoverFishResult $coverFishResult
+     *
+     * @return CoverFishResult
+     */
+    public function clearValidationErrors(CoverFishResult $coverFishResult)
+    {
+        $coverFishResult->setPass(true);
+        $coverFishResult->clearErrors();
+
+        return $coverFishResult;
+    }
+
+    /**
+     * @param CoverFishResult $coverFishResult
+     * @param int             $errorCode
+     * @param string|null     $errorMessage
+     *
+     * @return CoverFishResult
+     */
+    public function setValidationError(CoverFishResult $coverFishResult, $errorCode, $errorMessage = null)
+    {
+        // skip validation if incoming mapping result is already invalid!
+        if (false === $coverFishResult->isPass()) {
+            return $coverFishResult;
+        }
+
+        $coverFishResult->setPass(false);
+        $coverFishResult->addError(new CoverFishMessageError($errorCode, $errorMessage));
+
+        return $coverFishResult;
+    }
+
+    /**
      * @param string $classFQN
      *
      * @return CoverFishMessageError|\ReflectionClass
@@ -436,45 +471,12 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
-     * @return CoverFishResult
-     */
-    public function clearValidationErrors()
-    {
-        $this->coverFishResult->setPass(true);
-        $this->coverFishResult->clearErrors();
-
-        return $this->coverFishResult;
-    }
-
-    /**
-     * @param int             $errorCode
-     * @param string|null     $errorMessage
-     *
-     * @return CoverFishResult
-     *
-     * @throws CoverFishFailExit
-     */
-    public function setValidationError($errorCode, $errorMessage = null)
-    {
-        // skip validation if incoming mapping result is already invalid ...
-        if (false === $this->coverFishResult->isPass()) {
-            return $this->coverFishResult;
-        }
-
-        $this->coverFishResult->setPass(false);
-        $this->coverFishResult->addError(new CoverFishMessageError($errorCode, $errorMessage));
-
-        return $this->coverFishResult;
-    }
-
-    /**
      * @param string $coversToken
      */
-    public function __construct($coversToken, CoverFishResult $coverFishResult)
+    public function __construct($coversToken)
     {
         $this->coversToken = $coversToken;
-        $this->coverFishHelper = new CoverFishHelper();
-        $this->coverFishResult = $coverFishResult;
         $this->validatorCollection = new ArrayCollection();
+        $this->coverFishHelper = new CoverFishHelper();
     }
 }

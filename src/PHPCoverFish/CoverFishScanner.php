@@ -27,7 +27,7 @@ use \PHP_Token_Stream;
 class CoverFishScanner extends BaseCoverFishScanner
 {
     const APP_RELEASE_NAME = 'PHPCoverFish';
-    const APP_RELEASE_STATE = 'beta';
+    const APP_RELEASE_STATE = 'beta2';
 
     const APP_VERSION_MAJOR = 0;
     const APP_VERSION_MINOR = 9;
@@ -55,13 +55,13 @@ class CoverFishScanner extends BaseCoverFishScanner
     public function validateCodeCoverage($coverToken)
     {
         // covers ClassName::methodName
-        $this->addValidator(new ValidatorClassNameMethodName($coverToken, $this->coverFishResult));
+        $this->addValidator(new ValidatorClassNameMethodName($coverToken));
         // covers ::methodName
-        $this->addValidator(new ValidatorMethodName($coverToken, $this->coverFishResult));
+        $this->addValidator(new ValidatorMethodName($coverToken));
         // covers ClassName
-        $this->addValidator(new ValidatorClassName($coverToken, $this->coverFishResult));
+        $this->addValidator(new ValidatorClassName($coverToken));
         // covers ClassName::accessor (for public, protected, private, !public, !protected, !private)
-        $this->addValidator(new ValidatorClassNameMethodAccess($coverToken, $this->coverFishResult));
+        $this->addValidator(new ValidatorClassNameMethodAccess($coverToken));
         // save used coverToken inside cover annotation collection for each phpUnitTest
         $this->phpUnitTest->addCoverAnnotation($coverToken);
     }
