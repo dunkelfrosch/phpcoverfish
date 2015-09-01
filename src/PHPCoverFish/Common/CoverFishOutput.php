@@ -5,6 +5,7 @@ namespace DF\PHPCoverFish\Common;
 use DF\PHPCoverFish\CoverFishScanner;
 use DF\PHPCoverFish\Common\Base\BaseCoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
+use DF\PHPCoverFish\Exception\CoverFishFailExit;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -112,6 +113,11 @@ class CoverFishOutput extends BaseCoverFishOutput
             }
 
             $this->writeSingleMappingResult($coverFishTest, $coverFishResult);
+
+            // stop on failure defined? break ... do not check further unit tests!
+            if ($this->scanFailure && $this->scanner->isStopOnFailure()) {
+                break;
+            }
         }
     }
 
@@ -132,6 +138,11 @@ class CoverFishOutput extends BaseCoverFishOutput
                 $this->scanFailure = true;
                 $this->writeFailureStream($coverFishResult, $coverFishTest, $coverMappings);
                 $this->writeProgress(self::MACRO_FAILURE);
+                // stop on failure defined? break ... do not check further methods
+                if ($this->scanner->isStopOnFailure()) {
+                    break;
+                }
+
             } else {
                 $coverFishResult->addPassCount();
                 $this->writeProgress(self::MACRO_PASS);
