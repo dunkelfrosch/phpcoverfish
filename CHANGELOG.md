@@ -1,9 +1,27 @@
-# Changes in PHPCoverFish 0.9.9
+# Changes in PHPCoverFish 0.9.9-beta1
 
 All notable changes of the PHPCoverFish release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09).
 
-## [0.9.9] - 2015-08-27
+## [0.9.9-beta2] - 2015-09-09
+
+### Fixed
+
+- fixed refactoring related error in output (commandline) unitTest
+- fixed baseValidation class failure halt-bug
+
+### Added
+
+- Added stop-on-failure option command
+- Added stop-on-error option command
+
+### Changes
+
+- additional refactoring of baseCoverFishScanner and baseCoverFishResult classes
+- minor/major scrutinizer/codeClimate related changes in project code
+- minor documentation / output wording issues
+
+## [0.9.9-beta1] - 2015-08-27
 
 ### Fixed
 
