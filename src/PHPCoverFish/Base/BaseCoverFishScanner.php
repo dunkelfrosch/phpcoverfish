@@ -111,6 +111,8 @@ class BaseCoverFishScanner extends BaseScanner
      */
     public function validateAndReturnMapping(CoverFishPHPUnitTest $phpUnitTest)
     {
+        $phpUnitTest->clearCoverMappings();
+
         /** @var BaseCoverFishValidatorInterface $validator */
         foreach ($this->validatorCollection as $validator) {
 
@@ -148,7 +150,8 @@ class BaseCoverFishScanner extends BaseScanner
             );
 
         $usedClassesInFile = $this->coverFishHelper->getUsedClassesInClass($this->phpUnitFile->getFile());
-        if (is_array($usedClassesInFile)) {
+
+        if (is_array($usedClassesInFile) && false === empty($usedClassesInFile)) {
             $this->phpUnitFile->setUsedClasses($usedClassesInFile);
         }
 
@@ -180,15 +183,16 @@ class BaseCoverFishScanner extends BaseScanner
         /** @var string $classFileAndPath */
         $classFileAndPath = $methodData['classFile'];
 
-        $this->phpUnitTest = new CoverFishPHPUnitTest();
-        $this->phpUnitTest->setSignature($methodData['signature']);
-        $this->phpUnitTest->setVisibility($methodData['visibility']);
-        $this->phpUnitTest->setLine($methodData['startLine']);
-        $this->phpUnitTest->setFileAndPath($classFileAndPath);
-        $this->phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($classFileAndPath));
-        $this->phpUnitTest->setLoc($this->coverFishHelper->getLocOfTestMethod($methodData));
+        $phpUnitTest = new CoverFishPHPUnitTest();
+        $phpUnitTest->setFromMethod(true);
+        $phpUnitTest->setSignature($methodData['signature']);
+        $phpUnitTest->setVisibility($methodData['visibility']);
+        $phpUnitTest->setLine($methodData['startLine']);
+        $phpUnitTest->setFileAndPath($classFileAndPath);
+        $phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($classFileAndPath));
+        $phpUnitTest->setLoc($this->coverFishHelper->getLocOfTestMethod($methodData));
 
-        return $this->phpUnitTest;
+        return $phpUnitTest;
     }
 
     /**
@@ -199,11 +203,14 @@ class BaseCoverFishScanner extends BaseScanner
     public function setPHPUnitTestByClassData($classData)
     {
         $this->setPHPUnitTestMetaData($classData['className'], $classData);
-        $classFileAndPath = $classData['classFile'];
-        $this->phpUnitTest = new CoverFishPHPUnitTest();
-        $this->phpUnitTest->setFileAndPath($classFileAndPath);
-        $this->phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($classFileAndPath));
 
-        return $this->phpUnitTest;
+        $classFileAndPath = $classData['classFile'];
+
+        $phpUnitTest = new CoverFishPHPUnitTest();
+        $phpUnitTest->setFromClass(true);
+        $phpUnitTest->setFileAndPath($classFileAndPath);
+        $phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($classFileAndPath));
+
+        return $phpUnitTest;
     }
 }
