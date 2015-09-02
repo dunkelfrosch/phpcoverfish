@@ -45,13 +45,13 @@ class CoverFishHelper
     }
 
     /**
-     * @param string $namespace
+     * @param string $fileNameAndPath
      *
      * @return string
      */
-    public function getFileNameFromPath($namespace)
+    public function getFileNameFromPath($fileNameAndPath)
     {
-        return $this->getLastItemInFQNBlock($namespace, '/');
+        return $this->getLastItemInFQNBlock($fileNameAndPath, '/');
     }
 
     /**
@@ -82,15 +82,18 @@ class CoverFishHelper
     /**
      * check for className in use statements, return className on missing use statement
      *
-     * @param string $coverClassName
-     * @param array  $usedClasses
+     * @param string     $coverClassName
+     * @param array|null $usedClasses
      *
      * @return string
      */
     public function getClassFromUse($coverClassName, $usedClasses)
     {
-        $classUses = $usedClasses;
-        foreach ($classUses as $use) {
+        if (false === is_array($usedClasses)) {
+            return $coverClassName;
+        }
+
+        foreach ($usedClasses as $use) {
             $this->getClassNameFromClassFQN($use);
             if ($coverClassName === $this->getClassNameFromClassFQN($use)) {
                 return $use;
@@ -116,7 +119,7 @@ class CoverFishHelper
             return ($useResult[2]);
         }
 
-        return $useResult;
+        return null;
     }
 
     /**
@@ -261,6 +264,18 @@ class CoverFishHelper
             }
         );
         return $annotations;
+    }
+
+    public function isValidTestMethod($methodSignature)
+    {
+        $result = array();
+
+        if (preg_match_all('/(?P<prefix>^test)/', $methodSignature, $result)
+            && (array_key_exists('prefix', $result) && false === empty($result['prefix']))) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
