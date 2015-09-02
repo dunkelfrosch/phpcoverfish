@@ -18,6 +18,16 @@ namespace DF\PHPCoverFish\Common;
 class CoverFishPHPUnitTest
 {
     /**
+     * @var bool
+     */
+    private $fromClass = false;
+
+    /**
+     * @var bool
+     */
+    private $fromMethod = false;
+
+    /**
      * @var string
      */
     private $docBlock;
@@ -259,6 +269,38 @@ class CoverFishPHPUnitTest
     public function setFileAndPath($fileAndPath)
     {
         $this->fileAndPath = $fileAndPath;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFromClass()
+    {
+        return $this->fromClass;
+    }
+
+    /**
+     * @param boolean $fromClass
+     */
+    public function setFromClass($fromClass)
+    {
+        $this->fromClass = $fromClass;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFromMethod()
+    {
+        return $this->fromMethod;
+    }
+
+    /**
+     * @param boolean $fromMethod
+     */
+    public function setFromMethod($fromMethod)
+    {
+        $this->fromMethod = $fromMethod;
     }
 
     /**
