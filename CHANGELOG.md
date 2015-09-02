@@ -1,16 +1,19 @@
-# Changes in PHPCoverFish 0.9.9-beta1
+# Changes in PHPCoverFish 0.9.9-beta2
 
 All notable changes of the PHPCoverFish release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09).
 
-## [0.9.9-beta2] - 2015-09-09
-_unreleased_
+## [0.9.9-beta2] - 2015-09-02
+_current_
 
 ### Fixed
 
 - Fixed refactoring related error in output (commandline) unitTest
 - Fixed baseValidation class failure halt-bug
 - Fixed double function definition (removeExcludedPath)
+- Fixed false positive failure validator match
+- Fixed a php warning issue caused by missing use statements scan target classes
+- Fixed property mismatch in coverFishHelper class
 
 ### Added
 
@@ -19,13 +22,12 @@ _unreleased_
 ### Changes
 
 - move xml related helper methods to additional (new) xml helper class
-- extend coverFishHelper class by refactoring coverFish scanner class
+- extend coverFishHelper class, refactoring coverFish scanner class
 - additional refactoring of baseCoverFishScanner and baseCoverFishResult classes
 - minor/major scrutinizer/codeClimate related changes in project code
 - minor documentation / output wording issues
 
 ## [0.9.9-beta1] - 2015-08-27
-_current_
 
 ### Fixed
 
