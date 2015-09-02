@@ -19,7 +19,7 @@ Below you can find find a minimal example of a composer.json file that just defi
     ...
     {
         "require-dev": {
-            "df/phpcoverfish": "0.9.*"
+            "df/php-coverfish": "0.9.*"
     }
     ...
  
@@ -36,11 +36,11 @@ In order to use the current PHPCoverFish release you will need to take down the 
 
 Afterwards, just call *composer install "df/phpcoverfish=0.9.*"* or use *composer update* and create a symbolic link from *vendor/df/coverfish/bin/coverfish.php* to your web application tool directory (this step is optional).
 
-    composer install "df/phpcoverfish=0.9.*"
+    composer install "df/php-coverfish=0.9.*"
 
 To provide coverfish system-wide just type the following command:
 
-    composer global require "df/phpcoverfish=0.9.*"
+    composer global require "df/php-coverfish=0.9.*"
 
 Don't forget to make sure you've got your composers vendor binary path available in your global shell path:
 
