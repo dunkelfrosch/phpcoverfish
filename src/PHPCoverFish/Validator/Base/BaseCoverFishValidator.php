@@ -135,7 +135,7 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
-     * @todo: mappingResult could be false, set special coverFishError here ...
+     * @todo: mappingResult could be false, set a specific/real coverFishError here ...
      *
      * @param CoverFishMapping $coverMapping
      * @param CoverFishResult  $coverFishResult
