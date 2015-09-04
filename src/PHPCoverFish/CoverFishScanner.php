@@ -110,10 +110,6 @@ class CoverFishScanner extends BaseCoverFishScanner
             }
         }
 
-        if (($phpUnitTest->getFile() === 'ContingentRestControllerTest.php')) {
-
-        }
-
         /** @var string $cover */
         foreach ($phpDocBlock['covers'] as $cover) {
             if (true === empty($cover)) {
