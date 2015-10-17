@@ -1,10 +1,28 @@
-# Changes in PHPCoverFish 0.9.9-beta2
+# Changes in PHPCoverFish 0.9.9-beta3
 
 All notable changes of the PHPCoverFish release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09).
 
-## [0.9.9-beta2] - 2015-09-02
+
+## [0.9.9-beta3] - 2015-10-17
 _current_
+
+### Fixed
+
+- Fixed minor output template issues
+- Fixed method naming issue(s)
+
+### Added
+
+- Added new phpunit base class identifier
+
+### Changes
+
+- remove warning feature (will be re-introduced in future 1.0.1 stable version)
+- improvements in class/method identification process, we'll scan only real php unit test classes now
+- improvements in scanning speed
+
+## [0.9.9-beta2] - 2015-09-02
 
 ### Fixed
 
