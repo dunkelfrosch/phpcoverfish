@@ -33,7 +33,6 @@ class CoverFishScannerValidatorBaseTest extends BaseCoverFishScannerTestCase
      * @covers DF\PHPCoverFish\CoverFishScanner::analyseClass
      * @covers DF\PHPCoverFish\CoverFishScanner::analysePHPUnitFiles
      * @covers DF\PHPCoverFish\CoverFishScanner::analyseClassesInFile
-     * @covers DF\PHPCoverFish\CoverFishScanner::analyseMethodPHPDocAnnotation
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::validateAndReturnMapping
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setPHPUnitTestByMethodData
      * @covers DF\PHPCoverFish\Common\CoverFishOutput::writeJsonFailureStream
@@ -84,7 +83,6 @@ class CoverFishScannerValidatorBaseTest extends BaseCoverFishScannerTestCase
     /**
      * test new class phpdoc cover annotation placement validator (fail)
      *
-     * @covers DF\PHPCoverFish\CoverFishScanner::analyseClassPHPDocAnnotation
      * @covers DF\PHPCoverFish\Base\BaseCoverFishScanner::setPHPUnitTestByClassData
      */
     public function testCoverCompleteClassFullyQualifiedNameValidatorCheckForValidClassFail()
