@@ -5,7 +5,6 @@ namespace DF\PHPCoverFish\Common;
 use DF\PHPCoverFish\CoverFishScanner;
 use DF\PHPCoverFish\Common\Base\BaseCoverFishOutput;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
-use DF\PHPCoverFish\Exception\CoverFishFailExit;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -101,6 +100,9 @@ class CoverFishOutput extends BaseCoverFishOutput
 
         /** @var CoverFishPHPUnitTest $coverFishTest */
         foreach ($coverFishUnitFile->getTests() as $coverFishTest) {
+            if (null === $coverFishTest->getVisibility()) {
+                $coverFishTest->setVisibility('public');
+            }
 
             if ($this->outputLevel > 1) {
                 $this->write(sprintf('%s-> %s %s : ',
@@ -155,7 +157,7 @@ class CoverFishOutput extends BaseCoverFishOutput
     }
 
     /**
-     * alpha/basic implementation of minimal reporting output
+     * handle single file/unit test result (process/failureStream and final check result)
      *
      * @param CoverFishResult $coverFishResult
      *
@@ -176,6 +178,8 @@ class CoverFishOutput extends BaseCoverFishOutput
     }
 
     /**
+     * write single file check result
+     *
      * @param CoverFishResult $coverFishResult
      */
     private function writeFinalCheckResults(CoverFishResult $coverFishResult)
@@ -303,9 +307,9 @@ class CoverFishOutput extends BaseCoverFishOutput
      */
     protected function getMacroCoverErrorMessage(CoverFishMessageError $mappingError)
     {
-        $lineMessageMacro = '%s%s %s ';
+        $lineMessageMacro = '%s%s: %s ';
         if ($this->outputLevel > 1) {
-            $lineMessageMacro = '%s%s %s (ErrorCode: %s)';
+            $lineMessageMacro = '%s%s: %s (ErrorCode: %s)';
         }
 
         return sprintf($lineMessageMacro,
