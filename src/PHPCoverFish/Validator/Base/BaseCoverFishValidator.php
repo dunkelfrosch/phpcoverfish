@@ -4,6 +4,7 @@ namespace DF\PHPCoverFish\Validator\Base;
 
 use DF\PHPCoverFish\Common\ArrayCollection;
 use DF\PHPCoverFish\Common\CoverFishMessageError;
+use DF\PHPCoverFish\Common\CoverFishMessageWarning;
 use DF\PHPCoverFish\Common\CoverFishResult;
 use DF\PHPCoverFish\Common\CoverFishHelper;
 use DF\PHPCoverFish\Common\CoverFishMapping;
@@ -101,6 +102,7 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
         $coverMapping->setClassFQN($mappingOptions['coverClassFQN']);
         $coverMapping->setValidatorMatch($mappingOptions['validatorMatch']);
         $coverMapping->setValidatorClass($mappingOptions['validatorClass']);
+        // weazL
         $coverMapping->setValidatorResult($this->validateMapping($coverMapping));
 
         return $coverMapping;
@@ -194,6 +196,24 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     }
 
     /**
+     * @param CoverFishMapping $coverMapping
+     * @param CoverFishResult  $coverFishResult
+     *
+     * @return CoverFishResult
+     */
+    public function validateEmptyDocBlock(CoverFishMapping $coverMapping, CoverFishResult $coverFishResult)
+    {
+        if (null === ($coverMapping->getAnnotation())) {
+            $coverFishResult = $this->setValidationWarning(
+                $coverFishResult,
+                CoverFishMessageWarning::PHPUNIT_NO_DOCBLOCK_FOR_METHOD
+            );
+        }
+
+        return $coverFishResult;
+    }
+
+    /**
      * main validator mapping "engine", if any of our cover validator checks will fail,
      * return corresponding result immediately ...
      *
@@ -205,16 +225,28 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     {
         /** @var CoverFishResult $coverFishResult */
         $coverFishResult = new CoverFishResult();
-        // cleanUp validation mapping result for current scan
-        $coverFishResult = $this->clearValidationErrors($coverFishResult);
-        // 01: check for classFQN/DefaultCoverClass existence/mapping validation-error
+        $coverFishResult = $this->prepareCoverFishResult($coverFishResult);
+        // E-01: check for classFQN/DefaultCoverClass existence/mapping validation-error
         $coverFishResult = $this->validateDefaultCoverClassMapping($coverMapping, $coverFishResult);
-        // 02: check for invalid classFQN validation-error
+        // E-02: check for invalid classFQN validation-error
         $coverFishResult = $this->validateClassFQNMapping($coverMapping, $coverFishResult);
-        // 03: check for invalid accessor validation-error
+        // E-03: check for invalid accessor validation-error
         $coverFishResult = $this->validateClassAccessorVisibility($coverMapping, $coverFishResult);
-        // 04: check for invalid method validation-error
+        // E-04: check for invalid method validation-error
         $coverFishResult = $this->validateClassMethod($coverMapping, $coverFishResult);
+
+        return $coverFishResult;
+    }
+
+    /**
+     * @param CoverFishResult $coverFishResult
+     *
+     * @return CoverFishResult
+     */
+    public function prepareCoverFishResult(CoverFishResult $coverFishResult)
+    {
+        $this->clearValidationErrors($coverFishResult);
+        $this->clearValidationWarnings($coverFishResult);
 
         return $coverFishResult;
     }
@@ -432,6 +464,20 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
         return $coverFishResult;
     }
 
+
+    /**
+     * @param CoverFishResult $coverFishResult
+     *
+     * @return CoverFishResult
+     */
+    public function clearValidationWarnings(CoverFishResult $coverFishResult)
+    {
+        $coverFishResult->setPass(true);
+        $coverFishResult->clearWarnings();
+
+        return $coverFishResult;
+    }
+
     /**
      * @param CoverFishResult $coverFishResult
      * @param int             $errorCode
@@ -448,6 +494,20 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 
         $coverFishResult->setPass(false);
         $coverFishResult->addError(new CoverFishMessageError($errorCode, $errorMessage));
+
+        return $coverFishResult;
+    }
+
+    /**
+     * @param CoverFishResult $coverFishResult
+     * @param int             $warningCode
+     * @param string|null     $warningMessage
+     *
+     * @return CoverFishResult
+     */
+    public function setValidationWarning(CoverFishResult $coverFishResult, $warningCode, $warningMessage = null)
+    {
+        $coverFishResult->addWarning(new CoverFishMessageWarning($warningCode, $warningMessage));
 
         return $coverFishResult;
     }
