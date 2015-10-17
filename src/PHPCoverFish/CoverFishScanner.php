@@ -4,7 +4,6 @@ namespace DF\PHPCoverFish;
 
 use DF\PHPCoverFish\Base\BaseCoverFishScanner;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitFile;
-use DF\PHPCoverFish\Common\CoverFishMessageWarning;
 use DF\PHPCoverFish\Common\CoverFishPHPUnitTest;
 use DF\PHPCoverFish\Validator\ValidatorClassName;
 use DF\PHPCoverFish\Validator\ValidatorClassNameMethodAccess;
@@ -28,7 +27,7 @@ use \PHP_Token_Stream;
 class CoverFishScanner extends BaseCoverFishScanner
 {
     const APP_RELEASE_NAME = 'PHPCoverFish';
-    const APP_RELEASE_STATE = 'beta2';
+    const APP_RELEASE_STATE = 'beta3';
 
     const APP_VERSION_MAJOR = 0;
     const APP_VERSION_MINOR = 9;
@@ -53,7 +52,7 @@ class CoverFishScanner extends BaseCoverFishScanner
      *
      * @param $coverToken
      */
-    public function validateCodeCoverage($coverToken)
+    public function addCoverageValidatorPoolForCover($coverToken)
     {
         // covers ClassName::methodName
         $this->addValidator(new ValidatorClassNameMethodName($coverToken));
@@ -66,6 +65,8 @@ class CoverFishScanner extends BaseCoverFishScanner
     }
 
     /**
+     * scan all unit-test files inside specific path
+     *
      * @return string
      */
     public function analysePHPUnitFiles()
@@ -79,6 +80,30 @@ class CoverFishScanner extends BaseCoverFishScanner
     }
 
     /**
+     * scan all annotations inside one single unit test file
+     *
+     * @param array                $phpDocBlock
+     * @param CoverFishPHPUnitTest $phpUnitTest
+     */
+    public function analyseCoverAnnotations($phpDocBlock, CoverFishPHPUnitTest $phpUnitTest)
+    {
+        $this->validatorCollection->clear();
+        $phpUnitTest->clearCoverMappings();
+        $phpUnitTest->clearCoverAnnotation();
+
+        /** @var string $cover */
+        foreach ($phpDocBlock['covers'] as $cover) {
+            $phpUnitTest->addCoverAnnotation($cover);
+            $this->addCoverageValidatorPoolForCover($cover);
+        }
+
+        $phpUnitTest = $this->validateAndReturnMapping($phpUnitTest);
+        $this->phpUnitFile->addTest($phpUnitTest);
+    }
+
+    /**
+     * scan all classes inside one defined unit test file
+     *
      * @param string $file
      *
      * @return array
@@ -87,72 +112,21 @@ class CoverFishScanner extends BaseCoverFishScanner
     {
         $ts = new PHP_Token_Stream($file);
         $this->phpUnitFile = new CoverFishPHPUnitFile();
+
         foreach ($ts->getClasses() as $className => $classData) {
+            $fqnClass = sprintf('%s\\%s',
+                $this->coverFishHelper->getAttributeByKey('namespace', $classData['package']),
+                $className
+            );
+
+            if (false === $this->coverFishHelper->isValidTestClass($fqnClass)) {
+                continue;
+            }
+
             $classData['className'] = $className;
             $classData['classFile'] = $file;
             $this->analyseClass($classData);
         }
-    }
-
-    /**
-     * @param array                $phpDocBlock
-     * @param CoverFishPHPUnitTest $phpUnitTest
-     */
-    public function analyseCoverAnnotations($phpDocBlock, CoverFishPHPUnitTest $phpUnitTest)
-    {
-        $phpUnitTest->clearCoverMappings();
-        $phpUnitTest->clearCoverAnnotation();
-
-        if (!array_key_exists('covers', $phpDocBlock) || empty($phpDocBlock['covers']) ) {
-            if ($this->getCoverFishHelper()->isValidTestMethod($phpUnitTest->getSignature())) {
-                $this->coverFishResult->addWarningCount();
-                $this->coverFishResult->addWarning(new CoverFishMessageWarning(CoverFishMessageWarning::PHPUNIT_NO_COVERAGE_FOR_METHOD));
-            }
-        }
-
-        /** @var string $cover */
-        foreach ($phpDocBlock['covers'] as $cover) {
-            if (true === empty($cover)) {
-                continue;
-            }
-
-            $phpUnitTest->addCoverAnnotation($cover);
-            $this->validateCodeCoverage($cover);
-        }
-
-        $phpUnitTest = $this->validateAndReturnMapping($phpUnitTest);
-        $this->phpUnitFile->addTest($phpUnitTest);
-    }
-
-    /**
-     * scan class doc annotation block
-     *
-     * @param array $classData
-     */
-    public function analyseClassPHPDocAnnotation(array $classData)
-    {
-        $this->validatorCollection->clear();
-
-        $phpUnitTest = $this->setPHPUnitTestByClassData($classData);
-        $coverAnnotations = $this->coverFishHelper->parseCoverAnnotationDocBlock($classData['docblock']);
-
-        $this->analyseCoverAnnotations($coverAnnotations, $phpUnitTest);
-    }
-
-    /**
-     * scan method doc annotation block
-     *
-     * @param array $methodData
-     */
-    public function analyseMethodPHPDocAnnotation(array $methodData)
-    {
-        $this->validatorCollection->clear();
-
-        $phpUnitTest = $this->setPHPUnitTestByMethodData($methodData);
-        $coverAnnotations = $this->coverFishHelper->parseCoverAnnotationDocBlock($methodData['docblock']);
-
-        // scan method cover annotation
-        $this->analyseCoverAnnotations($coverAnnotations, $phpUnitTest);
     }
 
     /**
@@ -164,17 +138,27 @@ class CoverFishScanner extends BaseCoverFishScanner
      */
     public function analyseClass(array $classData)
     {
-        $this->analyseClassPHPDocAnnotation($classData);
+        // scan main test class annotation
+        $this->analyseCoverAnnotations(
+            $this->coverFishHelper->parseCoverAnnotationDocBlock($classData['docblock']),
+            $this->setPHPUnitTestByClassData($classData)
+        );
 
-        // iterate through all available methods in give test class
+        // iterate through all available methods in give test class ignore all "non-test" methods
         foreach ($classData['methods'] as $methodName => $methodData) {
-            $this->validatorCollection->clear();
-            if (false === array_key_exists('docblock', $methodData)) {
+
+            // ignore all non-test- and docblock free methods for deep scan process
+            if (false === $this->getCoverFishHelper()->isValidTestMethod($methodName)
+             || false === array_key_exists('docblock', $methodData)) {
                 continue;
             }
 
             $methodData['classFile'] = (string) $classData['classFile'];
-            $this->analyseMethodPHPDocAnnotation($methodData);
+            // scan unit test method annotation
+            $this->analyseCoverAnnotations(
+                $this->coverFishHelper->parseCoverAnnotationDocBlock($methodData['docblock']),
+                $this->setPHPUnitTestByMethodData($methodData)
+            );
         }
 
         // add final phpUnitFile structure including mapping result to our coverFishResult
