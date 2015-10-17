@@ -25,10 +25,12 @@ class CoverFishMessageWarning extends CoverFishMessage
 {
     // no coverage found
     const PHPUNIT_NO_COVERAGE_FOR_METHOD = 1000;
+    const PHPUNIT_NO_DOCBLOCK_FOR_METHOD = 1001;
     
     /** @var array */
     public $messageTokens = array(
         self::PHPUNIT_NO_COVERAGE_FOR_METHOD => 'no coverage for this method!',
+        self::PHPUNIT_NO_DOCBLOCK_FOR_METHOD => 'no phpdoc block for this method!',
     );
 
     /**
@@ -45,6 +47,20 @@ class CoverFishMessageWarning extends CoverFishMessage
                 $coverLine = sprintf('no @covers annotation for %s::%s', $coverMapping->getClassFQN(), $coverMapping->getMethod());
                 if (!$noAnsiColors) {
                     $coverLine  = Color::tplNormalColor('no @covers annotation for ');
+                    $coverLine .= Color::tplYellowColor($coverMapping->getClassFQN());
+                    $coverLine .= Color::tplYellowColor('::' . $coverMapping->getMethod());
+                }
+
+                if (null === $coverMapping->getMethod()) {
+                    $coverLine = str_replace('::', null, $coverLine);
+                }
+
+                break;
+
+            case self::PHPUNIT_NO_DOCBLOCK_FOR_METHOD:
+                $coverLine = sprintf('no phpdoc block for %s::%s', $coverMapping->getClassFQN(), $coverMapping->getMethod());
+                if (!$noAnsiColors) {
+                    $coverLine  = Color::tplNormalColor('no phpdoc block for ');
                     $coverLine .= Color::tplYellowColor($coverMapping->getClassFQN());
                     $coverLine .= Color::tplYellowColor('::' . $coverMapping->getMethod());
                 }
