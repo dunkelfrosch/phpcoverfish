@@ -15,6 +15,9 @@ namespace DF\PHPCoverFish\Common;
  */
 class CoverFishHelper
 {
+    const PHPUNIT_ID_INTERFACE = 'PHPUnit_Framework_Test';
+    const PHPUNIT_ID_CLASS = 'PHPUnit_Framework_TestCase';
+
     /**
      * @param string $file
      *
@@ -273,6 +276,41 @@ class CoverFishHelper
         if (preg_match_all('/(?P<prefix>^test)/', $methodSignature, $result)
             && (array_key_exists('prefix', $result) && false === empty($result['prefix']))) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a class extends or implements a specific class/interface
+     *
+     * @param string $classFQN The class name of the object to compare to
+     *
+     * @return bool
+     */
+    public function isValidTestClass($classFQN)
+    {
+        try {
+
+            $testClass = new \ReflectionClass($classFQN);
+
+            do {
+
+                if( self::PHPUNIT_ID_CLASS === $testClass->getName() ) {
+                    return true;
+                }
+
+                $interfaces = $testClass->getInterfaceNames();
+                if (is_array( $interfaces) && in_array(self::PHPUNIT_ID_INTERFACE, $interfaces)) {
+                    return true;
+                }
+
+                $testClass = $testClass->getParentClass();
+
+            } while (false !== $testClass);
+
+        } catch (\Exception $e) {
+            return false;
         }
 
         return false;
