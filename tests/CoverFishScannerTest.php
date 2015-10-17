@@ -29,9 +29,9 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
     }
 
     /**
-     * @covers DF\PHPCoverFish\CoverFishScanner::validateCodeCoverage
+     * @covers DF\PHPCoverFish\CoverFishScanner::addCoverageValidatorPoolForCover
      */
-    public function testCheckValidateCodeCoverage()
+    public function testCheckAddCoverageValidatorPoolForCover()
     {
         /** @var CoverFishScanner $scanner */
         $scanner = $this->getDefaultCoverFishScanner();
@@ -43,7 +43,7 @@ class CoverFishScannerTest extends BaseCoverFishScannerTestCase
         $scanner->setPhpUnitTest($unitTest);
 
         $coverToken = '::myTestMethod';
-        $scanner->validateCodeCoverage($coverToken);
+        $scanner->addCoverageValidatorPoolForCover($coverToken);
         $this->assertGreaterThanOrEqual(4, $scanner->getValidatorCollection()->count());
     }
 
