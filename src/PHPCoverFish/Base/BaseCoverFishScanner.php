@@ -115,11 +115,7 @@ class BaseCoverFishScanner extends BaseScanner
 
         /** @var BaseCoverFishValidatorInterface $validator */
         foreach ($this->validatorCollection as $validator) {
-
             if (false === $validator->validate()) {
-                /**
-                 * @todo: set 'special' validation error for covers annotation mismatch by exotic/unsupported covers
-                 */
                 continue;
             }
 
@@ -208,6 +204,7 @@ class BaseCoverFishScanner extends BaseScanner
 
         $phpUnitTest = new CoverFishPHPUnitTest();
         $phpUnitTest->setFromClass(true);
+        $phpUnitTest->setSignature($classData['className']);
         $phpUnitTest->setFileAndPath($classFileAndPath);
         $phpUnitTest->setFile($this->coverFishHelper->getFileNameFromPath($classFileAndPath));
 
