@@ -9,6 +9,7 @@ _current_
 
 ### Fixed
 
+- Fixed autoload issue under composer related environment usage
 - Fixed minor output template issues
 - Fixed method naming issue(s)
 
