@@ -189,7 +189,7 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
     public function validateCoverFishSelfTestLevelTwo($output)
     {
         $this->assertRegExp('/(scan file)([ ]{1})(BaseCoverFishScannerTestCase.php)/', $output);
-        $this->assertRegExp('/(->[ ]{1}public[ ]{1})(setUp[(]{1}[)]{1})([ ]{1}[:]{1}[ ]{1})([S]{1})/', $output);
+        $this->assertRegExp('/(->[ ]{1}public[ ]{1})(BaseCoverFishScannerTestCase)/', $output);
         $this->assertRegExp('/(=>[ ]{1})(file\/test[ ]{1}OK)/', $output);
     }
 
@@ -221,6 +221,5 @@ class CoverFishScannerCommandTest extends BaseCoverFishScannerTestCase
     public function validateCoverFishAppFooterInfo($output)
     {
         $this->assertRegExp('/([0-9]+[ ]{1})(file[(]s[)] and )([0-9]+)( method[(]s[)] scanned, scan succeeded, no problems found.)/', $output);
-        $this->assertRegExp('/([0-9]+[ ]{1})(warning[(]s[)] found,[ ]{1}[0-9]+.[0-9]+[%])[ ]{1}of forced scan failure warning threshold/', $output);
     }
 }
