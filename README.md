@@ -7,7 +7,7 @@ phpCoverFish is an open source php(cli) code coverage pre-processor, used to val
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![Build Status](https://travis-ci.org/dunkelfrosch/phpcoverfish.svg?branch=master)](https://travis-ci.org/dunkelfrosch/phpcoverfish)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/?branch=master)
-[![Code Climate](https://codeclimate.com/github/dunkelfrosch/phpcoverfish/badges/gpa.svg)](https://codeclimate.com/github/dunkelfrosch/phpcoverfish)[
+[![Code Climate](https://codeclimate.com/github/dunkelfrosch/phpcoverfish/badges/gpa.svg)](https://codeclimate.com/github/dunkelfrosch/phpcoverfish)
 [![Code Coverage](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/?branch=master)
 
 ## Installation
