@@ -49,6 +49,11 @@ abstract class BaseCoverFishOutput
     const MACRO_ERROR = 3;
 
     /**
+     * @const MACRO_WARNING code for warning in testFunctions
+     */
+    const MACRO_WARNING = 4;
+
+    /**
      * @const FILE_PASS code for finally successfully closed single test file scan
      */
     const FILE_PASS = 10;
@@ -326,6 +331,12 @@ abstract class BaseCoverFishOutput
 
                 break;
 
+            case self::MACRO_WARNING:
+                $this->jsonResult['warning'] = true;
+                $output = $this->getProgressTemplate('bg_yellow_fg_black', 'w', 'W');
+
+                break;
+
             default:
                 $this->jsonResult['unknown'] = true;
                 $output = $output = $this->getProgressTemplate('bg_yellow_fg_black', '?', '?');
@@ -366,6 +377,8 @@ abstract class BaseCoverFishOutput
 
     /**
      * @param CoverFishResult $coverFishResult
+     *
+     * @throws CoverFishFailExit
      */
     protected function writeScanWarningStatistic(CoverFishResult $coverFishResult)
     {
@@ -383,6 +396,11 @@ abstract class BaseCoverFishOutput
         );
 
         $this->writeLine($warningStatistic);
+
+        if (100 === $thresholdPercent) {
+            $this->writeLine('warning threshold exceeded maximum threshold - EXIT!');
+            throw new CoverFishFailExit();
+        }
     }
 
     /**
@@ -464,8 +482,6 @@ abstract class BaseCoverFishOutput
             } else {
                 $this->writeScanPassStatistic($coverFishResult);
             }
-
-            $this->writeScanWarningStatistic($coverFishResult);
 
             return null;
         }
