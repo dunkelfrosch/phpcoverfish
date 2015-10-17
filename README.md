@@ -9,7 +9,6 @@ phpCoverFish is an open source php(cli) code coverage pre-processor, used to val
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/?branch=master)
 [![Code Climate](https://codeclimate.com/github/dunkelfrosch/phpcoverfish/badges/gpa.svg)](https://codeclimate.com/github/dunkelfrosch/phpcoverfish)[
 [![Code Coverage](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/?branch=master)
-[![Dependency Status](https://gemnasium.com/dunkelfrosch/phpcoverfish.svg)](https://gemnasium.com/dunkelfrosch/phpcoverfish)
 
 ## Installation
 
