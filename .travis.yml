@@ -1,8 +1,9 @@
 language: php
 
-php:
+php:so
   - 5.5
   - 5.6
+  - 7
 
 cache:
   directories:
