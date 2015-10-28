@@ -164,7 +164,6 @@ class CoverFishScanCommand extends Command
     protected function showExecTitle(OutputInterface $output)
     {
         $output->writeln(sprintf('<info>%s</info> <comment>%s</comment>', CoverFishScanner::APP_RELEASE_NAME, $this->getLongVersion()));
-        $output->writeln(sprintf('%s%s', '*** community preview ***', PHP_EOL));
     }
 
     /**
