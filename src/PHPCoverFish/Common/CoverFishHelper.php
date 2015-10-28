@@ -11,12 +11,12 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.9
+ * @version   1.0.0
  */
 class CoverFishHelper
 {
-    const PHPUNIT_ID_INTERFACE = 'PHPUnit_Framework_Test';
-    const PHPUNIT_ID_CLASS = 'PHPUnit_Framework_TestCase';
+    const PHPUNIT_ID_INTERFACE = 'PHPUnit_Framework_Test',
+          PHPUNIT_ID_CLASS = 'PHPUnit_Framework_TestCase';
 
     /**
      * @param string $file
@@ -30,6 +30,7 @@ class CoverFishHelper
 
     /**
      * @param $param
+     *
      * @return bool
      */
     public function checkParamNotEmpty($param)
@@ -238,9 +239,7 @@ class CoverFishHelper
      */
     public function getRegexPath($inputPath)
     {
-        $path = str_replace('/', '\/', $inputPath);
-
-        return sprintf('/%s/', $path);
+        return sprintf('/%s/', str_replace('/', '\/', $inputPath));
     }
 
     /**
@@ -291,11 +290,8 @@ class CoverFishHelper
     public function isValidTestClass($classFQN)
     {
         try {
-
             $testClass = new \ReflectionClass($classFQN);
-
             do {
-
                 if( self::PHPUNIT_ID_CLASS === $testClass->getName() ) {
                     return true;
                 }
@@ -328,5 +324,15 @@ class CoverFishHelper
         preg_match_all('/(\\\\+)/', $class, $result, PREG_SET_ORDER);
 
         return count($result) > 0;
+    }
+
+    /**
+     * @param $string
+     *
+     * @return bool
+     */
+    public function stringToBool($string)
+    {
+        return filter_var($string, FILTER_VALIDATE_BOOLEAN);
     }
 }
