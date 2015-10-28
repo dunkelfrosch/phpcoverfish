@@ -102,7 +102,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
         $coverMapping->setClassFQN($mappingOptions['coverClassFQN']);
         $coverMapping->setValidatorMatch($mappingOptions['validatorMatch']);
         $coverMapping->setValidatorClass($mappingOptions['validatorClass']);
-        // weazL
         $coverMapping->setValidatorResult($this->validateMapping($coverMapping));
 
         return $coverMapping;
@@ -225,6 +224,7 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     {
         /** @var CoverFishResult $coverFishResult */
         $coverFishResult = new CoverFishResult();
+        // prepare base results, clear all validation errors and warnings
         $coverFishResult = $this->prepareCoverFishResult($coverFishResult);
         // E-01: check for classFQN/DefaultCoverClass existence/mapping validation-error
         $coverFishResult = $this->validateDefaultCoverClassMapping($coverMapping, $coverFishResult);
@@ -409,35 +409,28 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
         $accessorResult = null;
 
         switch ($accessor) {
-
             case 'public':
                 $accessorResult = $this->validateReflectionClassForAccessorPublic($reflectionClass);
-
                 break;
 
             case 'protected':
                 $accessorResult = $this->validateReflectionClassForAccessorProtected($reflectionClass);
-
                 break;
 
             case 'private':
                 $accessorResult = $this->validateReflectionClassForAccessorPrivate($reflectionClass);
-
                 break;
 
             case '!public':
                 $accessorResult = $this->validateReflectionClassForAccessorNotPublic($reflectionClass);
-
                 break;
 
             case '!protected':
                 $accessorResult = $this->validateReflectionClassForAccessorNotProtected($reflectionClass);
-
                 break;
 
             case '!private':
                 $accessorResult = $this->validateReflectionClassForAccessorNotPrivate($reflectionClass);
-
                 break;
 
             default:
@@ -463,7 +456,6 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
 
         return $coverFishResult;
     }
-
 
     /**
      * @param CoverFishResult $coverFishResult
@@ -520,9 +512,7 @@ class BaseCoverFishValidator implements BaseCoverFishValidatorInterface
     public function getReflectionClass($classFQN)
     {
         try {
-
             $reflectionClass = new \ReflectionClass($classFQN);
-
         } catch (\ReflectionException $re) {
             return new CoverFishMessageError(CoverFishMessageError::PHPUNIT_REFLECTION_CLASS_NOT_FOUND, $classFQN);
         }
