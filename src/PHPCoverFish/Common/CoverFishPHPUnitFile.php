@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.6
+ * @version   1.0.0
  *
  * @codeCoverageIgnore
  */
@@ -58,16 +58,6 @@ final class CoverFishPHPUnitFile
      * @var ArrayCollection
      */
     private $classCovers;
-
-    /**
-     * @var \DateTime
-     */
-    private $scanStartAt;
-
-    /**
-     * @var \DateTime
-     */
-    private $scanFinishedAt;
 
     /**
      * @return ArrayCollection
@@ -222,55 +212,10 @@ final class CoverFishPHPUnitFile
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getScanStartAt()
-    {
-        return $this->scanStartAt;
-    }
-
-    /**
-     * @param \DateTime $scanStartAt
-     */
-    public function setScanStartAt($scanStartAt)
-    {
-        $this->scanStartAt = $scanStartAt;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getScanFinishedAt()
-    {
-        return $this->scanFinishedAt;
-    }
-
-    /**
-     * @param \DateTime $scanFinishedAt
-     */
-    public function setScanFinishedAt($scanFinishedAt)
-    {
-        $this->scanFinishedAt = $scanFinishedAt;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTaskTime()
-    {
-        if ($this->scanFinishedAt !== null) {
-            return $this->scanFinishedAt - $this->scanStartAt;
-        }
-
-        return -1;
-    }
-
-    /**
      * class constructor
      */
     public function __construct()
     {
-        $this->scanStartAt = new \DateTime();
         $this->tests = new ArrayCollection();
     }
 }
