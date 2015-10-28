@@ -5,7 +5,7 @@ namespace DF\PHPCoverFish\Common;
 use DF\PHPCoverFish\Common\CoverFishColor as Color;
 
 /**
- * Class CoverFishMessageWarning, code coverage warning definition
+ * Class CoverFishMessageWarning, code coverage warning definition - used in feature version of coverFish
  *
  * @package   DF\PHPCoverFish
  * @author    Patrick Paechnatz <patrick.paechnatz@gmail.com>
@@ -13,7 +13,7 @@ use DF\PHPCoverFish\Common\CoverFishColor as Color;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.9
- * @version   0.9.9
+ * @version   1.0.0
  *
  * - no coverage found (implemented)
  * - double covers in methods

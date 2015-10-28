@@ -22,16 +22,16 @@ use \PHP_Token_Stream;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.9
+ * @version   1.0.0
  */
 class CoverFishScanner extends BaseCoverFishScanner
 {
     const APP_RELEASE_NAME = 'PHPCoverFish';
-    const APP_RELEASE_STATE = 'beta3';
+    const APP_RELEASE_STATE = null;
 
-    const APP_VERSION_MAJOR = 0;
-    const APP_VERSION_MINOR = 9;
-    const APP_VERSION_BUILD = 9;
+    const APP_VERSION_MAJOR = 1;
+    const APP_VERSION_MINOR = 0;
+    const APP_VERSION_BUILD = 0;
 
     /**
      * @param array           $cliOptions
@@ -43,7 +43,6 @@ class CoverFishScanner extends BaseCoverFishScanner
     public function __construct(array $cliOptions, array $outputOptions, OutputInterface $output)
     {
         parent::__construct($cliOptions);
-
         $this->coverFishOutput = new CoverFishOutput($outputOptions, $output, $this);
     }
 
@@ -148,8 +147,8 @@ class CoverFishScanner extends BaseCoverFishScanner
         foreach ($classData['methods'] as $methodName => $methodData) {
 
             // ignore all non-test- and docblock free methods for deep scan process
-            if (false === $this->getCoverFishHelper()->isValidTestMethod($methodName)
-             || false === array_key_exists('docblock', $methodData)) {
+            if (false === $this->getCoverFishHelper()->isValidTestMethod($methodName) ||
+                false === array_key_exists('docblock', $methodData)) {
                 continue;
             }
 

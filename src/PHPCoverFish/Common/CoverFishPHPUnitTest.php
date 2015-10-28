@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.6
+ * @version   1.0.0
  *
  * @codeCoverageIgnore
  */
@@ -95,6 +95,7 @@ class CoverFishPHPUnitTest
 
     /**
      * @deprecated in version 0.9.3, signature will be used instead
+     *
      * @return string
      */
     public function getName()
@@ -104,6 +105,7 @@ class CoverFishPHPUnitTest
 
     /**
      * @deprecated in version 0.9.3, signature will be used instead
+     *
      * @param string $name
      */
     public function setName($name)

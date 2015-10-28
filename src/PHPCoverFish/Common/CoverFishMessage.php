@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.9
- * @version   0.9.9
+ * @version   1.0.0
  */
 class CoverFishMessage
 {
@@ -50,7 +50,6 @@ class CoverFishMessage
     {
         $this->messageCode = $messageCode;
         $this->exceptionMessage = $exceptionMessage;
-
         $this->messageToken = 'Unknown Message-Code!';
 
         if ($messageCode !== 0) {
