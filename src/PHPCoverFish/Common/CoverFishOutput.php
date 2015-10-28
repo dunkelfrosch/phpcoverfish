@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.0
- * @version    0.9.9
+ * @version    1.0.0
  */
 class CoverFishOutput extends BaseCoverFishOutput
 {
@@ -69,12 +69,12 @@ class CoverFishOutput extends BaseCoverFishOutput
             return false;
         }
 
+        $initLine = 'using raw scan mode, reading necessary parameters ...';
         if ($this->coverFishHelper->checkParamNotEmpty($this->scanner->getPhpUnitXMLFile())) {
-            $this->output->writeln(sprintf('using phpunit scan mode, phpunit-config file "%s"', $this->scanner->getPhpUnitXMLFile()));
-        } else {
-            $this->output->writeln('using raw scan mode, reading necessary parameters ...');
+            $initLine = sprintf('using phpunit scan mode, phpunit-config file "%s"', $this->scanner->getPhpUnitXMLFile());
         }
 
+        $this->output->writeln($initLine);
         $this->output->write(PHP_EOL);
         $this->output->writeln(sprintf('- autoload file: %s', $this->scanner->getTestAutoloadPath()));
         $this->output->writeln(sprintf('- test source path for scan: %s', $this->scanner->getTestSourcePath()));
@@ -140,7 +140,7 @@ class CoverFishOutput extends BaseCoverFishOutput
                 $this->scanFailure = true;
                 $this->writeFailureStream($coverFishResult, $coverFishTest, $coverMappings);
                 $this->writeProgress(self::MACRO_FAILURE);
-                // stop on failure defined? break ... do not check further methods
+                // stop on failure defined? break ... do not check further methods, exit!
                 if ($this->scanner->isStopOnFailure()) {
                     break;
                 }
@@ -338,9 +338,7 @@ class CoverFishOutput extends BaseCoverFishOutput
     {
         /** @var CoverFishMessageError $mappingError */
         foreach ($coverMapping->getValidatorResult()->getErrors() as $mappingError) {
-
             $coverFishResult->addFailureCount();
-
             $coverLine = $mappingError->getErrorStreamTemplate($coverMapping, $this->preventAnsiColors);
             $this->writeJsonFailureStream($coverFishResult, $unitTest, $mappingError, $coverLine);
 
