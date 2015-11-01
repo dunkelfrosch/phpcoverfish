@@ -56,6 +56,7 @@ class BaseCoverFishScanner extends BaseScanner
         }
 
         if (true === $this->checkSourceAutoload($this->testAutoloadPath)) {
+            // still looking for a valid workaround %)
             include(sprintf('%s', $this->testAutoloadPath));
         }
     }
@@ -75,8 +76,6 @@ class BaseCoverFishScanner extends BaseScanner
         // fetch additional system/app parameter
         $this->phpUnitXMLFile = $cliOptions['sys_phpunit_config'];
         $this->phpUnitTestSuite = $cliOptions['sys_phpunit_config_test_suite'];
-
-        $this->warningThreshold = (int) $cliOptions['sys_warning_threshold'];
         $this->stopOnFailure = (bool) $cliOptions['sys_stop_on_failure'];
         $this->stopOnError = (bool) $cliOptions['sys_stop_on_error'];
     }
@@ -93,7 +92,7 @@ class BaseCoverFishScanner extends BaseScanner
             $this->phpUnitXMLPath = $this->coverFishHelper->getPathFromFileNameAndPath($this->phpUnitXMLFile);
             $this->testAutoloadPath = sprintf('%s%s', $this->phpUnitXMLPath, $this->getAttributeFromXML('bootstrap', $xmlDocument));
             $this->testSourcePath = sprintf('%s%s', $this->phpUnitXMLPath, $this->getTestSuitePropertyFromXML('directory', $xmlDocument));
-            $this->testExcludePath = sprintf('%s%s', $this->phpUnitXMLPath, $this->getTestSuitePropertyFromXML('exclude', $xmlDocument));
+            $this->testExcludePath = sprintf('%s', $this->getTestSuitePropertyFromXML('exclude', $xmlDocument));
 
         } catch (\Exception $e) {
 
