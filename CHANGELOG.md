@@ -1,21 +1,47 @@
-# Changes in PHPCoverFish 0.9.9-beta3
+# ChangeLog of PHPCoverFish 1.0.0 [stable]
 
 All notable changes of the PHPCoverFish release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
-This PHPCoverFish change-log documentation start with version 0.9.4 (2015-08-09).
+
+_This PHPCoverFish changeLog documentation start with version 0.9.4 (2015-08-09)_
+
+## [1.0.0], 2015-11-01:
+_current (first stable release)_
+
+### Fixed
+
+- Fixed memory leak issue in file scan processor
+- Fixed Documentation wording and meta issues
+- Fixed phpmd/phpcs issues in some base classes
+- Fixed output level 0 information problem
+- Fixed scan output for class as function
+- Fixed exclude path problem
+- Fixed functional tests
+
+### Changes
+
+- refactor option and argument base in cli
+- extend help meta in cli for <scan> command
+- extend execution title by used output level
+- remove additional warning fragments in code base
+- remove time measurement properties and methods
+- minor improvements in cli functional testing
+- travis ci build process improvements
 
 
-## [0.9.9-beta3] - 2015-10-17
-_current_
+## [0.9.9-beta3], 2015-10-17:
+_feature freeze_
 
 ### Fixed
 
 - Fixed autoload issue under composer related environment usage
+- Fixed minor php7 compatibility issue
 - Fixed minor output template issues
 - Fixed method naming issue(s)
 
 ### Added
 
 - Added new phpunit base class identifier
+- Added travis ci build processor for php7
 
 ### Changes
 
@@ -23,7 +49,8 @@ _current_
 - improvements in class/method identification process, we'll scan only real php unit test classes now
 - improvements in scanning speed
 
-## [0.9.9-beta2] - 2015-09-02
+
+## [0.9.9-beta2], 2015-09-02:
 
 ### Fixed
 
@@ -46,7 +73,8 @@ _current_
 - minor/major scrutinizer/codeClimate related changes in project code
 - minor documentation / output wording issues
 
-## [0.9.9-beta1] - 2015-08-27
+
+## [0.9.9-beta1], 2015-08-27:
 
 ### Fixed
 
@@ -67,7 +95,8 @@ _current_
 - minor refactoring of coverFishHelper class
 - additional refactoring improvements, object property changes
 
-## [0.9.8] - 2015-08-19
+
+## [0.9.8], 2015-08-19:
 
 ### Fixed
 
@@ -89,7 +118,8 @@ _current_
 - refactoring of current test-base (validator/scanner tests)
 - initial refactoring of our ugly output module (base class)
 
-## [0.9.7] - 2015-08-15
+
+## [0.9.7], 2015-08-15:
 
 ### Fixed
 
@@ -107,7 +137,8 @@ _current_
 - prefix current autoload, scan-path and exclude path argument/options in raw mode parameter
 - improve documentation
 
-## [0.9.6] - 2015-08-12
+
+## [0.9.6], 2015-08-12:
 
 ### Fixed
 
@@ -133,7 +164,9 @@ _current_
 - minor documentation issues
 - minor phpDoc issues
 
-## [0.9.5] - 2015-08-10, 2015-08-11
+
+## [0.9.5], 2015-08-10:
+_first community preview release_
 
 ### Fixed
 
@@ -148,7 +181,8 @@ _current_
 - Added build script features for travis and scrutinizer
 
 
-## [0.9.4] - 2015-08-09
+## [0.9.4], 2015-08-09:
+_first official release_
 
 ### Fixed
 
