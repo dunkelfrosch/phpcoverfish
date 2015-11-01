@@ -2,12 +2,12 @@
 
 namespace DF\PHPCoverFish;
 
-use DF\PHPCoverFish\Exception\CoverFishFailExit;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use DF\PHPCoverFish\Exception\CoverFishFailExit;
 use DF\PHPCoverFish\Common\CoverFishHelper;
 
 /**
@@ -19,7 +19,7 @@ use DF\PHPCoverFish\Common\CoverFishHelper;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.7
+ * @version   1.0.0
  */
 class CoverFishScanCommand extends Command
 {
@@ -35,7 +35,7 @@ class CoverFishScanCommand extends Command
     {
         $this
             ->setName('scan')
-            ->setDescription('open source php code coverage preprocessor')
+            ->setDescription('scan phpunit test files for static code analysis')
             ->setHelp($this->getHelpOutput())
             ->addArgument(
                 'phpunit-config',
@@ -52,13 +52,13 @@ class CoverFishScanCommand extends Command
                 'raw-scan-path',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'raw mode option: the source path of your corresponding phpunit test files or a specific testFile (e.g. tests/), this option will always override all arguments from phpunit.xml!'
+                'raw mode option: the source path of your corresponding phpunit test files or a specific testFile (e.g. tests/), this option will always override phpunit.xml settings!'
             )
             ->addOption(
                 'raw-autoload-file',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'raw-mode option: your application autoload file and path (e.g. ../app/autoload.php for running in symfony context), this option will always override all arguments from phpunit.xml!'
+                'raw-mode option: your application autoload file and path (e.g. ../app/autoload.php for running in symfony context), this option will always override phpunit.xml settings!'
             )
             ->addOption(
                 'raw-exclude-path',
@@ -82,39 +82,18 @@ class CoverFishScanCommand extends Command
                 1
             )
             ->addOption(
-                'output-prevent-echo',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'prevent direct echo on output, return json object directly',
-                false
-            )
-            ->addOption(
-                'debug',
-                'd',
-                InputOption::VALUE_OPTIONAL,
-                'output debug level information (not available in alpha)',
-                false
-            )
-            ->addOption(
                 'stop-on-error',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'stop on first application error (not available in alpha)',
+                'stop on first application error raises',
                 false
             )
             ->addOption(
                 'stop-on-failure',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'stop on first detected coverFish failure (not available in alpha)',
+                'stop on first detected coverFish failure raises',
                 false
-            )
-            ->addOption(
-                'warning-threshold-stop',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'numbers of allowed warnings before scan will be stopped (not available in alpha)',
-                99
             )
         ;
     }
@@ -126,10 +105,17 @@ class CoverFishScanCommand extends Command
      */
     public function getHelpOutput()
     {
-        $help  = PHP_EOL . 'The <comment>alpha</comment> version of <info>phpCoverFish</info> wont be as functional as the coming beta version.' . PHP_EOL;
-        $help .= 'Specific commands coverage warning features, including corresponding threshold break' . PHP_EOL;
-        $help .= 'and stop-on-error/stop-on-failure parameters not functional yet.' . PHP_EOL . PHP_EOL;
-        $help .= '';
+        // print out some "phpUnit-Mode" runtime samples
+        $help  = sprintf('%sscan by using your "phpunit.xml" config-file inside "Tests/" directory and using test suite "My Test Suite" directly with normal output-level and no ansi-colors:%s', PHP_EOL, PHP_EOL);
+        $help .= sprintf('<comment>php</comment> <info>./bin/coverfish</info> <info>scan</info> <comment>./Tests/phpunit.xml</comment> --phpunit-config-suite "<comment>My Test Suite</comment>" --output-level <comment>1</comment> --no-ansi%s', PHP_EOL);
+        $help .= sprintf('%sscan by using your "phpunit.xml" config-file inside "Tests/" directory without any given testSuite (so first suite will taken) with normal output-level and no ansi-colors:%s', PHP_EOL, PHP_EOL);
+        $help .= sprintf('<comment>php</comment> <info>./bin/coverfish</info> <info>scan</info> <comment>./Tests/phpunit.xml</comment> --output-level <comment>1</comment> --no-ansi%s', PHP_EOL);
+        $help .= sprintf('%ssame scan with maximum output-level and disabled ansi output:%s', PHP_EOL, PHP_EOL);
+        $help .= sprintf('<comment>php</comment> <info>./bin/coverfish</info> <info>scan</info> <comment>./Tests/phpunit.xml</comment> --output-level <comment>2</comment>%s', PHP_EOL);
+
+        // print out some "raw-Mode" runtime samples
+        $help .= sprintf('%sscan by using raw-mode, using "Tests/" directory as base scan path, autoload file "vendor/autoload.php" and exclude "Tests/data/" with normal output-level and no ansi-colors:%s', PHP_EOL, PHP_EOL);
+        $help .= sprintf('<comment>php</comment> <info>./bin/coverfish</info> <info>scan</info> --raw-scan-path <comment>./Tests/phpunit.xml</comment> --raw-autoload-file <comment>vendor/autoload.php</comment> --raw-exclude-path <comment>Tests/data</comment> --output-level <comment>1</comment> --no-ansi%s', PHP_EOL);
 
         return $help;
     }
@@ -159,11 +145,30 @@ class CoverFishScanCommand extends Command
     }
 
     /**
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
-    protected function showExecTitle(OutputInterface $output)
+    protected function showExecTitle(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln(sprintf('<info>%s</info> <comment>%s</comment>', CoverFishScanner::APP_RELEASE_NAME, $this->getLongVersion()));
+        /** @var string $outputLevelMsg */
+        $outputLevelMsg = 'minimal';
+        switch ((int) $input->getOption('output-level')) {
+            case 1:
+                $outputLevelMsg = 'moderate';
+                break;
+            case 2:
+                $outputLevelMsg = 'maximum';
+                break;
+        }
+
+        $output->writeln(
+            sprintf('<info>%s</info> <comment>%s</comment>%sstart scan process using %s output level',
+                CoverFishScanner::APP_RELEASE_NAME,
+                $this->getLongVersion(),
+                PHP_EOL,
+                $outputLevelMsg
+            )
+        );
     }
 
     /**
@@ -177,19 +182,17 @@ class CoverFishScanCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->showExecTitle($output);
+        $this->showExecTitle($input, $output);
         $this->prepareExecute($input);
 
         $cliOptions = array(
             'sys_phpunit_config' => $input->getArgument('phpunit-config'),
             'sys_phpunit_config_test_suite' => $input->getOption('phpunit-config-suite'),
+            'sys_stop_on_error' => $input->getOption('stop-on-error'),
+            'sys_stop_on_failure' => $input->getOption('stop-on-failure'),
             'raw_scan_source' => $input->getOption('raw-scan-path'),
             'raw_scan_autoload_file' => $input->getOption('raw-autoload-file'),
             'raw_scan_exclude_path' => $input->getOption('raw-exclude-path'),
-            'sys_debug' => $input->getOption('debug'),
-            'sys_stop_on_error' => $input->getOption('stop-on-error'),
-            'sys_stop_on_failure' => $input->getOption('stop-on-failure'),
-            'sys_warning_threshold' => (int) $input->getOption('warning-threshold-stop'),
         );
 
         $outOptions = array(
@@ -197,14 +200,12 @@ class CoverFishScanCommand extends Command
             'out_format' => $input->getOption('output-format'),
             'out_level' => (int) $input->getOption('output-level'),
             'out_no_ansi' => $input->getOption('no-ansi'),
-            'out_no_echo' => $input->getOption('output-prevent-echo'),
+            'out_no_echo' => $input->getOption('quiet'),
         );
 
         try {
-
             $scanner = new CoverFishScanner($cliOptions, $outOptions, $output);
             $scanner->analysePHPUnitFiles();
-
         } catch (CoverFishFailExit $e) {
             return CoverFishFailExit::RETURN_CODE_SCAN_FAIL;
         }
@@ -224,12 +225,14 @@ class CoverFishScanCommand extends Command
         $this->coverFishHelper = new CoverFishHelper();
 
         $phpUnitConfigFile = $input->getArgument('phpunit-config');
-        if (false === empty($phpUnitConfigFile) && false === $this->coverFishHelper->checkFileOrPath($phpUnitConfigFile)) {
+        if (false === empty($phpUnitConfigFile) &&
+            false === $this->coverFishHelper->checkFileOrPath($phpUnitConfigFile)) {
             throw new \Exception(sprintf('phpunit config file "%s" not found! please define your phpunit.xml config file to use (e.g. tests/phpunit.xml)', $phpUnitConfigFile));
         }
 
         $testPathOrFile = $input->getOption('raw-scan-path');
-        if (false === empty($testPathOrFile) && false === $this->coverFishHelper->checkFileOrPath($testPathOrFile)) {
+        if (false === empty($testPathOrFile) &&
+            false === $this->coverFishHelper->checkFileOrPath($testPathOrFile)) {
             throw new \Exception(sprintf('test path/file "%s" not found! please define test file path (e.g. tests/)', $testPathOrFile));
         }
     }
