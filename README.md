@@ -1,8 +1,9 @@
 # PHPCoverFish
 
-phpCoverFish is an open source php(cli) code coverage pre-processor, used to validate all of your @covers annotations inside your test files before the big code coverage train will run through all of your tests and may collide with bad coverage annotations scattered along the rails.
-
-*This beta-1 version of phpCoverFish won't be as functional as the upcoming beta versions. Specific commands like coverage warning features, including corresponding threshold breaks and stop-on-error/stop-on-failure parameters are not fully functional yet. As coverfish is still actively  under development, it is a slight possibility that some  options and parameter are not fully working as expected or may have undergone changes in recent versions.*
+phpCoverFish (coverfish) is an open source php cli static code validator used for code coverage pre-processing. coverFish 
+will analyze all of your @covers annotations inside your test files before the big code coverage train will run through all of
+your tests and may collide with bad coverage annotations scattered along the rails. Coverfish is using plugin base validators
+and is easy to extend / fulfill changes or extension in code coverage annotations.
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![Build Status](https://travis-ci.org/dunkelfrosch/phpcoverfish.svg?branch=master)](https://travis-ci.org/dunkelfrosch/phpcoverfish)
@@ -13,12 +14,12 @@ phpCoverFish is an open source php(cli) code coverage pre-processor, used to val
 ## Installation
 
 If you use Composer to manage the dependencies of your project, edit your projects composer.json file and add a dependency on df/phpcoverfish.
-Below you can find find a minimal example of a composer.json file that just defines a *dev-time* dependency on PHPCoverFish (beta strain):
+Below you can find find a minimal example of a composer.json file that just defines a *dev-time* dependency on PHPCoverFish (stable strain):
 
     ...
     {
         "require-dev": {
-            "df/php-coverfish": "^0.9.9@beta"
+            "df/php-coverfish": "1.0.*"
     }
     ...
  
@@ -26,20 +27,20 @@ You can also execute this composer command in your console:
 
     composer require df/php-coverfish
 
-In order to use the current PHPCoverFish release you will need to take down the minimum-stability key in your composer.json file (set "beta"). Simply place this line above your "extra" property key:
+In order to use upcoming PHPCoverFish beta releases you will need to take down the minimum-stability key in your composer.json file (set "beta"). Simply place this line above your "extra" property key:
 
     ...
     "minimum-stability": "beta",
     "extra": {
     ...
 
-Afterwards, just call *composer install "df/phpcoverfish=0.9.*"* or use *composer update* and create a symbolic link from *vendor/df/coverfish/bin/coverfish.php* to your web application tool directory (this step is optional).
+Afterwards, just call *composer install "df/phpcoverfish=1.0.*"* or use *composer update* and create a symbolic link from *vendor/df/coverfish/bin/coverfish.php* to your web application tool directory (this step is optional).
 
-    composer install "df/php-coverfish=^0.9.9@beta"
+    composer install "df/php-coverfish=1.0.*"
 
 To provide coverfish system-wide just type the following command:
 
-    composer global require "df/php-coverfish=^0.9.9@beta"
+    composer global require "df/php-coverfish=1.0.*"
 
 Don't forget to make sure you've got your composers vendor binary path available in your global shell path:
 
@@ -50,7 +51,7 @@ As soon as coverfish will reach it's stable state we will not only provide an ad
 
 ## Usage
 
-To call coverfish from your shell after installation use the following two mode's:
+To call coverfish from your shell after installation use the following two modes:
 *if you bound coverfish in your symfony application, composer will be create a symbolic link inside your bin/ directory 
 so you can call this tool like others (phpunit, ...) from this path directly.*
 
@@ -69,9 +70,9 @@ or (using phpunit test suite name "PHPCoverFish Suite" ):
 
     php ./bin/coverfish scan tests/phpunit.xml --phpunit-config-suite "PHPCoverFish Suite" --output-level 1 --no-ansi   
 
-the result for empty test suite usage should be:
+the screen result for code with and without called test suite should be the same:
 
-![phpunit mode result](https://dl.dropbox.com/s/371ea9arp1yvdb9/ss-sample-normal-mode-result-1.png)
+![phpunit mode result](https://dl.dropbox.com/s/nywdxycqqfoo8x8/cf_cli_rawmode_1280x325.png)
 
 **RAW-Mode** scan (alternative scan mode), using additional parameters for required scan-path, autoload-file (exclude path will be used optional here)
 
@@ -85,8 +86,7 @@ for example:
     php ./bin/coverfish scan --raw-scan-path tests/ --raw-autoload-file "vendor/autoload.php" --raw-exclude-path "tests/data" --output-level 1 --no-ansi
 
 the result should looking like:
-
-![raw mode result](https://dl.dropbox.com/s/cpr6tp341asxylu/ss-sample-raw-mode-result-1.png)
+![raw mode result](https://dl.dropbox.com/s/dutbzpnhxbgnrkc/cf_cli_phpunitmode_1280x325.png)
 
 
 ## PHPCoverfish arguments and parameter
@@ -99,7 +99,7 @@ To call the PHPCoverFish help page use:
 
     scan                     scan/analyze command (currently the only available mode of coverfish)
     phpunit-config           path to your project phpunit.xml config file (e.g. tests/phpunit.xml)
-                             this argument override all raw- parameter (raw-scan-path, raw-autoload-path ...)
+                             this argument override all raw-parameters (raw-scan-path, raw-autoload-path ...)
     
 ### Parameters (optional)
 
@@ -107,22 +107,16 @@ To call the PHPCoverFish help page use:
     raw-exclude-path         exclude a specific path from your planned scan 
     raw-autoload-file        your application used autoload file (psr-0/psr-4 standard)
                              will be replaced by phpunit.xml file in our upcoming beta version
-    -f / --output-format     json, text (default) - rendering of scan result output format (json or text)
-    -l / --output-level      detail of scan result output (0=minimal, 1=normal(default), 2=detailed)
-    --output-prevent-echo    if you fetch results in json format, you can hide direct output and analyse results as as a json object directly,
-                             this parameter is mainly used for testing purposes (deprecated, will be replaced by --quiet/-q in beta version)
-    --no-ansi                prevent colorful output of rendering results
-    --verbose                will be handled by option '--output-level <n>'
-    --no-interaction         not necessary, no virtual interaction planned yet
-    --quiet                  will be handled by option '--output-prevent-echo'
+    -f | --output-format     json, text (default) - rendering of scan result output format (json or text)
+    -l | --output-level      detail of scan result output (0=minimal, 1=normal(default), 2=detailed)
+    -n | --no-interaction    not necessary, no virtual interaction planned yet
+    -v | --verbose           will be handled by option '--output-level <n>'
+    -q | --quiet             if you fetch results in json format, you can hide direct output and analyse results as as a json object directly
+            
+    --no-ansi                prevent colorful output of rendering results (default: false | 0)
+    --stop-on-error          stop on first application error | exception (default: false | 0)
+    --stop-on-failure        stop on first detected coverFish scan failure (default: false | 0)
     
-### Parameters (not available in beta-1)    
-    
-    --debug                  generate a more detailed debug output of coverfish process
-    --stop-on-error          stop on first application error
-    --stop-on-failure        stop on first detected coverFish failure 
-    --warning-threshold-stop set a warning threshold value, application will break on reaching this number
-
 
 ## Missing features, annoying bugs and project thoughts
 
@@ -133,29 +127,47 @@ around this project :)
 
 - File/IO scan mode, currently php reflection ability is used to identify code coverage errors - in future versions a raw scan mode to scan files outside the autoload context will be provided 
 - coverage warnings implementation; identify coverage problems or misconfiguration issues in use of phpunit code coverage
-- optimization of coverFish's output module; this module is just "meh!"
+- optimization of coverFish's output module; this module is just "bad"
+- refactoring of color output module, using symfony outputFormatter
 - mastering coverfish documentation and build up a useful wiki
 - include @use statement check
 - improve scanner/analyzer speed
 
-## Screenshots, phpCoverFish at work
+
+## Some screenshots of result screens
 
 Depending on the chosen *--output-level* option coverfish will provide different output of test results
 
-Level 0 (—ouput-level **0**)
-![Level 0](https://dl.dropbox.com/s/7b6nptkbyiowrx4/ss-output-level-0.png)
+using minimal output level (—ouput-level **0**), no errors in code coverage found
+![Level 0, test validated](https://dl.dropbox.com/s/ss7nyvryekl4zhu/cf_cli_output_level_0_ansi_1280x130.png)
+same mode, errors in code coverage identified
+![Level 0, test failed](https://dl.dropbox.com/s/4yuafdw5r10xwv2/cf_cli_output_level_0_ansi_testfail_1280x160.png)
 
-Level 1 (—ouput-level **1**)
-![Level 1](https://dl.dropbox.com/s/xk43g0gu1ccqtlw/ss-output-level-1.png)
+using moderate (default) output level (—ouput-level **1**)
+![Level 1](https://dl.dropbox.com/s/gg7su00ef32y3lx/cf_cli_output_level_1_ansi_1280x681.png)
+same mode, errors in code coverage identified and shown detailed
+![Level 1, test failed](https://dl.dropbox.com/s/1m0ts3u2yaeaeku/cf_cli_output_level_1_ansi_testfail_1280x535.png)
 
-Level 2 (—ouput-level **2**)
-![Level 2](https://dl.dropbox.com/s/voyqmf5g9q42ana/ss-output-level-2.png)
+and using maximum output level, showing partial output of large screen result (—ouput-level **2**)
+![Level 2](https://dl.dropbox.com/s/9z5vkwqvotdmvc8/cf_cli_output_level_2_ansi_1280x557.png)
+same mode, errors in code coverage identified and shown more detailed
+![Level 2, test failed](https://dl.dropbox.com/s/fpfixam41rzy8rb/cf_cli_output_level_2_ansi_testfail_1280x699.png)
+
+
+## Version
+
+### phpCoverfish
+Please use our latest stable version **1.0.0** of phpCoverFish for your productive static code analyzing process.
+
+### Documentation
+This Documentation is based on version **1.0.0** of phpCoverFish. Last updated on **2015-11-01** (_internal version 1.0.0_) 
 
 
 ## Contribute
 
 PHPCoverFish is still under development and contributors are always welcome!
-Feel free to join our development team. Please refer to [CONTRIBUTING.md](https://github.com/dunkelfrosch/phpcoverfish/blob/master/CONTRIBUTING.md) to find out how to contribute to the PHPCoverFish Project.
+Feel free to join our coverFish distributor team. Please refer to [CONTRIBUTING.md](https://github.com/dunkelfrosch/phpcoverfish/blob/master/CONTRIBUTING.md)
+to find out how to contribute to the PHPCoverFish Project.
 
 
 ## License
