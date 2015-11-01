@@ -15,7 +15,7 @@
     <testsuites>
         <testsuite name="PHPCoverFish Suite">
             <directory>.</directory>
-            <exclude>data/</exclude>
+            <exclude>data</exclude>
         </testsuite>
     </testsuites>
 
