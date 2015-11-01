@@ -144,24 +144,21 @@ same mode, errors in code coverage identified
 ![Level 0, test failed](https://dl.dropbox.com/s/4yuafdw5r10xwv2/cf_cli_output_level_0_ansi_testfail_1280x160.png)
 
 using moderate (default) output level (—ouput-level **1**)
-![Level 1](https://dl.dropbox.com/s/gg7su00ef32y3lx/cf_cli_output_level_1_ansi_1280x681.png)
+![Level 1, test validated](https://dl.dropbox.com/s/gg7su00ef32y3lx/cf_cli_output_level_1_ansi_1280x681.png)
 same mode, errors in code coverage identified and shown detailed
 ![Level 1, test failed](https://dl.dropbox.com/s/1m0ts3u2yaeaeku/cf_cli_output_level_1_ansi_testfail_1280x535.png)
 
 and using maximum output level, showing partial output of large screen result (—ouput-level **2**)
-![Level 2](https://dl.dropbox.com/s/9z5vkwqvotdmvc8/cf_cli_output_level_2_ansi_1280x557.png)
+![Level 2, test validated](https://dl.dropbox.com/s/9z5vkwqvotdmvc8/cf_cli_output_level_2_ansi_1280x557.png)
 same mode, errors in code coverage identified and shown more detailed
 ![Level 2, test failed](https://dl.dropbox.com/s/fpfixam41rzy8rb/cf_cli_output_level_2_ansi_testfail_1280x699.png)
 
 
-## Version
+## Version and compatibility
 
-### phpCoverfish
 Please use our latest stable version **1.0.0** of phpCoverFish for your productive static code analyzing process.
-
-### Documentation
 This Documentation is based on version **1.0.0** of phpCoverFish. Last updated on **2015-11-01** (_internal version 1.0.0_) 
-
+phpCoverFish works fine with **php5.n**, **php6.n** and **php7**
 
 ## Contribute
 
