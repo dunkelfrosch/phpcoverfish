@@ -2,8 +2,6 @@
 
 namespace DF\PHPCoverFish\Tests\Data\Tests;
 
-use DF\PHPCoverFish\Tests\Data\Src\SampleClass;
-
 /**
  * Class ValidatorCompleteClassFQNamePassTest
  *
