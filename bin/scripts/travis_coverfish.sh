@@ -3,7 +3,7 @@
 # travis call for phpunit code coverage generation
 #
 
-php ../../bin/coverfish scan ../../tests/phpunit.xml --phpunit-config-suite "PHPCoverFish Suite" --output-level 2 --no-ansi
+php ../../bin/coverfish scan ../../tests/phpunit.xml --phpunit-config-suite "PHPCoverFish Suite" --output-level 1 --no-ansi
 
 if [ $? -eq 0 ]
 then
