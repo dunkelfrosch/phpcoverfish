@@ -20,7 +20,7 @@ use SebastianBergmann\FinderFacade\FinderFacade;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.9
- * @version   0.9.9
+ * @version   1.0.0
  */
 class BaseScanner
 {
@@ -53,11 +53,6 @@ class BaseScanner
      * @var String
      */
     protected $testAutoloadPath;
-
-    /**
-     * @var int
-     */
-    protected $warningThreshold = 99;
 
     /**
      * @var bool
@@ -184,13 +179,15 @@ class BaseScanner
     }
 
     /**
+     * return the excluded path, remove the last backslash before return
+     *
      * @codeCoverageIgnore
      *
      * @return String
      */
     public function getTestExcludePath()
     {
-        return $this->testExcludePath;
+        return rtrim($this->testExcludePath, '/');
     }
 
     /**
@@ -241,14 +238,6 @@ class BaseScanner
     public function setPhpUnitTest($phpUnitTest)
     {
         $this->phpUnitTest = $phpUnitTest;
-    }
-
-    /**
-     * @return int
-     */
-    public function getWarningThreshold()
-    {
-        return $this->warningThreshold;
     }
 
     /**
@@ -381,7 +370,7 @@ class BaseScanner
      */
     public function removeExcludedPath(array $files, $excludePath)
     {
-        $finalPath = array();
+        $result = $includedFiles = array();
 
         if (true === empty($excludePath)) {
             return $files;
@@ -390,11 +379,11 @@ class BaseScanner
         foreach ($files as $filePath) {
             preg_match_all($this->coverFishHelper->getRegexPath($excludePath), $filePath, $result, PREG_SET_ORDER);
             if (true === empty($result)) {
-                $finalPath[] = $filePath;
+                $includedFiles[] = $filePath;
             }
         }
 
-        return $finalPath;
+        return $includedFiles;
     }
 
     /**
