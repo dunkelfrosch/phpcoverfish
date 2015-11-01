@@ -11,7 +11,7 @@ namespace DF\PHPCoverFish\Common\Base;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.9
- * @version   0.9.9
+ * @version   1.0.0
  *
  * @codeCoverageIgnore
  */
@@ -40,11 +40,6 @@ class BaseCoverFishResult
     /**
      * @var int
      */
-    private $warningCount = 0;
-
-    /**
-     * @var int
-     */
     private $testCount = 0;
 
     /**
@@ -61,30 +56,6 @@ class BaseCoverFishResult
      * @var \DateTime
      */
     private $taskFinishedAt;
-
-    /**
-     * @return int
-     */
-    public function getWarningCount()
-    {
-        return $this->warningCount;
-    }
-
-    /**
-     * @param int $warningCount
-     */
-    public function setWarningCount($warningCount)
-    {
-        $this->warningCount = $warningCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function addWarningCount()
-    {
-        return $this->warningCount++;
-    }
 
     /**
      * @return boolean
