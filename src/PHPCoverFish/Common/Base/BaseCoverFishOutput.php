@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license    http://www.opensource.org/licenses/MIT
  * @link       http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since      class available since Release 0.9.2
- * @version    0.9.9
+ * @version    1.0.0
  */
 abstract class BaseCoverFishOutput
 {
@@ -258,8 +258,11 @@ abstract class BaseCoverFishOutput
     {
         $output = null;
 
-        switch ($status) {
+        if (0 === $this->outputLevel) {
+           return null;
+        }
 
+        switch ($status) {
             case self::FILE_FAILURE:
                 $output = $this->getFileResultTemplate('bg_red_fg_white', 'FAIL', 'file/test FAILURE', $message);
                 break;
@@ -373,34 +376,6 @@ abstract class BaseCoverFishOutput
         );
 
         $this->write($scanResult);
-    }
-
-    /**
-     * @param CoverFishResult $coverFishResult
-     *
-     * @throws CoverFishFailExit
-     */
-    protected function writeScanWarningStatistic(CoverFishResult $coverFishResult)
-    {
-        $thresholdPercent = 0;
-        if ($coverFishResult->getWarningCount() > 0 && $this->scanner->getWarningThreshold() > 0) {
-            $thresholdPercent = round($coverFishResult->getWarningCount() * 100 / $this->scanner->getWarningThreshold(), 2);
-        }
-
-        $warningStatistic = '%s warning(s) found, %s%% of forced scan failure warning threshold (>=%s warnings) reached.';
-        $warningStatistic = sprintf(
-            $warningStatistic,
-            $coverFishResult->getWarningCount(),
-            $thresholdPercent,
-            $this->scanner->getWarningThreshold()
-        );
-
-        $this->writeLine($warningStatistic);
-
-        if (100 === $thresholdPercent) {
-            $this->writeLine('warning threshold exceeded maximum threshold - EXIT!');
-            throw new CoverFishFailExit();
-        }
     }
 
     /**
