@@ -69,9 +69,9 @@ class CoverFishOutput extends BaseCoverFishOutput
             return false;
         }
 
-        $initLine = 'using raw scan mode, reading necessary parameters ...';
+        $initLine = 'switch in raw scan mode, using commandline parameters:';
         if ($this->coverFishHelper->checkParamNotEmpty($this->scanner->getPhpUnitXMLFile())) {
-            $initLine = sprintf('using phpunit scan mode, phpunit-config file "%s"', $this->scanner->getPhpUnitXMLFile());
+            $initLine = sprintf('switch in phpunit-config scan mode, using phpunit-config file "%s"', $this->scanner->getPhpUnitXMLFile());
         }
 
         $this->output->writeln($initLine);
@@ -100,10 +100,16 @@ class CoverFishOutput extends BaseCoverFishOutput
 
         /** @var CoverFishPHPUnitTest $coverFishTest */
         foreach ($coverFishUnitFile->getTests() as $coverFishTest) {
+            // ignore output for className test result as function
+            if ($coverFishUnitFile->getClassName() === $coverFishTest->getSignature()) {
+                continue;
+            }
+
             if (null === $coverFishTest->getVisibility()) {
                 $coverFishTest->setVisibility('public');
             }
 
+            // higher output level required? print out complete information!
             if ($this->outputLevel > 1) {
                 $this->write(sprintf('%s-> %s %s : ',
                     PHP_EOL,
@@ -170,11 +176,37 @@ class CoverFishOutput extends BaseCoverFishOutput
             $this->scanFailure = false;
             $coverFishResult->setFailureStream(null);
 
+            if (false === $this->checkForEmptyUnitTestClass($coverFishUnitFile)) {
+                continue;
+            }
+
             $this->writeSingleTestResult($coverFishUnitFile, $coverFishResult);
             $this->writeFinalCheckResults($coverFishResult);
         }
 
         return $this->outputResult($coverFishResult);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * 
+     * @param CoverFishPHPUnitFile $coverFishUnitFile
+     *
+     * @return bool
+     */
+    public function checkForEmptyUnitTestClass(CoverFishPHPUnitFile $coverFishUnitFile)
+    {
+        $testCount = 0;
+        foreach ($coverFishUnitFile->getTests() as $coverFishTest) {
+            // ignore output for className test result as function
+            if ($coverFishUnitFile->getClassName() === $coverFishTest->getSignature()) {
+                continue;
+            }
+
+            $testCount++;
+        }
+
+        return $testCount > 0;
     }
 
     /**
@@ -342,8 +374,7 @@ class CoverFishOutput extends BaseCoverFishOutput
             $coverLine = $mappingError->getErrorStreamTemplate($coverMapping, $this->preventAnsiColors);
             $this->writeJsonFailureStream($coverFishResult, $unitTest, $mappingError, $coverLine);
 
-            if (0 === $this->outputLevel)
-            {
+            if (0 === $this->outputLevel) {
                 continue;
             }
 
