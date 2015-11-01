@@ -145,7 +145,6 @@ class CoverFishScanner extends BaseCoverFishScanner
 
         // iterate through all available methods in give test class ignore all "non-test" methods
         foreach ($classData['methods'] as $methodName => $methodData) {
-
             // ignore all non-test- and docblock free methods for deep scan process
             if (false === $this->getCoverFishHelper()->isValidTestMethod($methodName) ||
                 false === array_key_exists('docblock', $methodData)) {
