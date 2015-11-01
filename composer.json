@@ -1,6 +1,6 @@
 {
     "name": "df/php-coverfish",
-    "description": "lightweight target class coverage check for PHPUnit's CodeCoverage",
+    "description": "lightweight static code analysis tool for class coverage check of PHPUnit's CodeCoverage",
     "keywords": ["symfony", "silex", "phpunit", "phpcc", "php", "coverage"],
     "time": "2015-08-08",
     "license": "MIT",
@@ -37,7 +37,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9.x-dev"
+            "dev-master": "1.0.x-dev"
         }
     }
 }
