@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   0.9.4
+ * @version   1.0.0
  */
 class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -61,6 +61,12 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
         return $this->coverFishHelper;
     }
 
+    /**
+     * @param null|string $testSource
+     * @param null|string $excludePath
+     *
+     * @return CoverFishScanner
+     */
     public function getDefaultCoverFishScanner($testSource = null, $excludePath = null)
     {
         return new CoverFishScanner(
@@ -70,6 +76,9 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return CoverFishScanner
+     */
     public function getPHPUnitCoverFishScannerAlpha()
     {
         return new CoverFishScanner(
@@ -79,6 +88,9 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return CoverFishScanner
+     */
     public function getPHPUnitCoverFishScannerBeta()
     {
         return new CoverFishScanner(
@@ -100,10 +112,8 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
             'raw_scan_source' => $testSource,
             'raw_scan_autoload_file' => 'vendor/autoload.php',
             'raw_scan_exclude_path' => $excludePath,
-            'sys_debug' => false,
             'sys_stop_on_error' => false,
             'sys_stop_on_failure' => false,
-            'sys_warning_threshold' => 99,
             'sys_phpunit_config' => null,
             'sys_phpunit_config_test_suite' => null,
         );
@@ -166,14 +176,15 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
             $fileNames[] = $this->getCoverFishHelper()->getFileNameFromPath($file);
         }
 
-        return in_array('SampleClass.php', $fileNames)
-        && in_array('SampleClassNoNotPublicMethods.php', $fileNames)
-        && in_array('SampleClassNoPrivateMethods.php', $fileNames)
-        && in_array('SampleClassNoProtectedMethods.php', $fileNames)
-        && in_array('SampleClassNoPublicMethods.php', $fileNames)
-        && in_array('SampleClassOnlyPrivateMethods.php', $fileNames)
-        && in_array('SampleClassOnlyProtectedMethods.php', $fileNames)
-        && in_array('SampleClassOnlyPublicMethods.php', $fileNames);
+        return
+            in_array('SampleClass.php', $fileNames) &&
+            in_array('SampleClassNoNotPublicMethods.php', $fileNames) &&
+            in_array('SampleClassNoPrivateMethods.php', $fileNames) &&
+            in_array('SampleClassNoProtectedMethods.php', $fileNames) &&
+            in_array('SampleClassNoPublicMethods.php', $fileNames) &&
+            in_array('SampleClassOnlyPrivateMethods.php', $fileNames) &&
+            in_array('SampleClassOnlyProtectedMethods.php', $fileNames) &&
+            in_array('SampleClassOnlyPublicMethods.php', $fileNames);
     }
 
     /**
@@ -193,11 +204,15 @@ class BaseCoverFishScannerTestCase extends \PHPUnit_Framework_TestCase
         return $classData;
     }
 
+    /**
+     * @param $file
+     * @return null
+     */
     public function getSampleClassMethodData($file)
     {
         $classData = $this->getSampleClassData($file);
         foreach ($classData['methods'] as $methodName => $methodData) {
-            // test class contained only one file, so leave iterator after first method found
+            // test if class contains only one file, leave iterator after first method found
             $methodData['classFile'] = (string) $classData['classFile'];
             return $methodData;
         }
