@@ -19,11 +19,11 @@ Below you can find find a minimal example of a composer.json file that just defi
     ...
     {
         "require-dev": {
-            "df/php-coverfish": "1.0.*"
+            "df/php-coverfish": "~1.0"
     }
     ...
  
-You can also execute this composer command in your console:
+You can also execute the following composer command in your console:
 
     composer require df/php-coverfish
 
@@ -34,13 +34,13 @@ In order to use upcoming PHPCoverFish beta releases you will need to take down t
     "extra": {
     ...
 
-Afterwards, just call *composer install "df/phpcoverfish=1.0.*"* or use *composer update* and create a symbolic link from *vendor/df/coverfish/bin/coverfish.php* to your web application tool directory (this step is optional).
+Afterwards, just call *composer install "df/phpcoverfish=~1.0"* or use *composer update* and create a symbolic link from *vendor/df/coverfish/bin/coverfish.php* to your web application tool directory (this step is optional).
 
-    composer install "df/php-coverfish=1.0.*"
+    composer install "df/php-coverfish=~1.0"
 
 To provide coverfish system-wide just type the following command:
 
-    composer global require "df/php-coverfish=1.0.*"
+    composer global require "df/php-coverfish=~1.0"
 
 Don't forget to make sure you've got your composers vendor binary path available in your global shell path:
 
@@ -55,7 +55,7 @@ To call coverfish from your shell after installation use the following two modes
 *if you bound coverfish in your symfony application, composer will be create a symbolic link inside your bin/ directory 
 so you can call this tool like others (phpunit, ...) from this path directly.*
 
-**PHPUnit-Mode** scan (recommended scan mode), using existing phpunit.xml instead of "raw" parameter for scan-path, exclude-path and autoload-file: 
+**PHPUnit-Mode** scan (the recommended scan mode), using existing phpunit.xml instead of "raw" parameter for scan-path, exclude-path and autoload-file: 
 
     php ./bin/coverfish scan tests/phpunit.xml \
             --phpunit-config-suite "PHPCoverFish Suite" \ 
@@ -126,7 +126,7 @@ around this project :)
 *We are currently working on*: 
 
 - File/IO scan mode, currently php reflection ability is used to identify code coverage errors - in future versions a raw scan mode to scan files outside the autoload context will be provided 
-- coverage warnings implementation; identify coverage problems or misconfiguration issues in use of phpunit code coverage
+- coverage warnings implementation, identify coverage problems or misconfiguration issues in use of phpunit code coverage
 - optimization of coverFish's output module; this module is just "bad"
 - refactoring of color output module, using symfony outputFormatter
 - mastering coverfish documentation and build up a useful wiki
@@ -156,9 +156,10 @@ same mode, errors in code coverage identified and shown more detailed
 
 ## Version and compatibility
 
-Please use our latest stable version **1.0.0** of phpCoverFish for your productive static code analyzing process.
-This Documentation is based on version **1.0.0** of phpCoverFish. Last updated on **2015-11-01** (_internal version 1.0.0_) 
-phpCoverFish works fine with **php5.n**, **php6.n** and **php7**
+Please use our latest stable version **1.0.1** of phpCoverFish for your productive static code analyzing process.
+This Documentation was last updated on **2015-11-98** (_internal version 1.0.1_)
+
+phpCoverFish works fine with **php5.n** and **php7.n**
 
 ## Contribute
 
