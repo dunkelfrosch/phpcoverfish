@@ -5,8 +5,9 @@
     "time": "2015-08-08",
     "license": "MIT",
     "support": {
+        "email": "dunkelfrosch.net@gmail.com",
+        "source": "https://github.com/dunkelfrosch/phpcoverfish",
         "issues": "https://github.com/dunkelfrosch/phpcoverfish/issues",
-        "email": "coverfish.support@gmail.com"
     },
     "authors": [
         {
@@ -17,7 +18,7 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "symfony/console": "2.3.*",
+        "symfony/console": ">=2.3",
         "phpunit/php-token-stream": "~1.2",
         "sebastian/finder-facade": "~1.1"
     },
@@ -27,9 +28,7 @@
     "autoload": {
         "psr-4": {
             "DF\\PHPCoverFish\\": "src/PHPCoverFish/",
-            "DF\\PHPCoverFish\\Tests\\": "tests/",
-            "DF\\PHPCoverFish\\Tests\\Data\\Src\\": "tests/data/src/",
-            "DF\\PHPCoverFish\\Tests\\Data\\Tests\\": "tests/data/tests/"
+            "DF\\PHPCoverFish\\Tests\\": "tests/"
         }
     },
     "bin": [
