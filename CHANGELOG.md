@@ -1,11 +1,25 @@
-# ChangeLog of PHPCoverFish 1.0.0 [stable]
+# ChangeLog of PHPCoverFish 1.0.1
 
 All notable changes of the PHPCoverFish release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 _This PHPCoverFish changeLog documentation start with version 0.9.4 (2015-08-09)_
 
+## [1.0.1], 2015-11-09:
+_current_
+
+### Fixed
+
+- wording issues in documentation
+
+### Changes
+
+- minor changes in package dependencies (composer.json)
+- remove obsolete psr-4 autoload nodes from composer.json
+- change support e-mail in composer.json
+
+
 ## [1.0.0], 2015-11-01:
-_current (first stable release)_
+_first stable release_
 
 ### Fixed
 
