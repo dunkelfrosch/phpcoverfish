@@ -160,7 +160,7 @@ same mode, errors in code coverage identified and shown more detailed
 ## Version and compatibility
 
 Please use our latest stable version **1.0.2** of phpCoverFish for your productive static code analyzing process.
-This Documentation was last updated on **2015-11-98** (_internal version 1.0.1_)
+This Documentation was last updated on **2018-05-15** (_internal version 1.0.2_)
 
 phpCoverFish (>= 1.0.2) works fine with **php7.0**, **php7.1** and **php7.2**
 phpCoverFish (<= 1.0.1) is compatible with **php5.5**, **php5.6** and **php7.n**
