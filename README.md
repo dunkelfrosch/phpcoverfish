@@ -5,11 +5,14 @@ will analyze all of your @covers annotations inside your test files before the b
 your tests and may collide with bad coverage annotations scattered along the rails. Coverfish is using plugin base validators
 and is easy to extend / fulfill changes or extension in code coverage annotations.
 
+
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
+[![Software version](https://img.shields.io/badge/version-1.0.2-green.svg)](VERSION)
 [![Build Status](https://travis-ci.org/dunkelfrosch/phpcoverfish.svg?branch=master)](https://travis-ci.org/dunkelfrosch/phpcoverfish)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/?branch=master)
 [![Code Climate](https://codeclimate.com/github/dunkelfrosch/phpcoverfish/badges/gpa.svg)](https://codeclimate.com/github/dunkelfrosch/phpcoverfish)
 [![Code Coverage](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/dunkelfrosch/phpcoverfish/?branch=master)
+[![Project Status](https://img.shields.io/badge/project%20status-inactive-orange.svg)](STATUS)
 
 ## Installation
 
