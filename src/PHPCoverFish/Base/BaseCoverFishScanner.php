@@ -15,7 +15,7 @@ use DF\PHPCoverFish\Validator\Base\BaseCoverFishValidatorInterface;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.9
- * @version   1.0.0
+ * @version   1.0.2
  */
 class BaseCoverFishScanner extends BaseScanner
 {
@@ -38,6 +38,7 @@ class BaseCoverFishScanner extends BaseScanner
         '*.txt',
         '*.md',
         '*.yml',
+        '*.yaml',
         '*.xml'
     );
 

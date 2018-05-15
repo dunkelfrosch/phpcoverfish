@@ -22,7 +22,7 @@ use \PHP_Token_Stream;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   1.0.0
+ * @version   1.0.2
  */
 class CoverFishScanner extends BaseCoverFishScanner
 {
@@ -31,7 +31,7 @@ class CoverFishScanner extends BaseCoverFishScanner
 
     const APP_VERSION_MAJOR = 1;
     const APP_VERSION_MINOR = 0;
-    const APP_VERSION_BUILD = 0;
+    const APP_VERSION_BUILD = 2;
 
     /**
      * @param array           $cliOptions

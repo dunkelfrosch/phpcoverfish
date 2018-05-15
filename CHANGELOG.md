@@ -1,11 +1,24 @@
-# ChangeLog of PHPCoverFish 1.0.1
+# ChangeLog of PHPCoverFish 1.0.2
 
 All notable changes of the PHPCoverFish release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 _This PHPCoverFish changeLog documentation start with version 0.9.4 (2015-08-09)_
 
-## [1.0.1], 2015-11-09:
+## [1.0.2], 2018-05-15:
 _current_
+
+### Fixed
+
+- composer dependency issue(s)
+- open github issues by @ktomk
+- minor fixes in script permissions
+- minor fixes in code quality
+
+### Changes
+
+- documentation / project status notes
+
+## [1.0.1], 2015-11-09:
 
 ### Fixed
 

@@ -19,7 +19,7 @@ use DF\PHPCoverFish\Common\CoverFishHelper;
  * @license   http://www.opensource.org/licenses/MIT
  * @link      http://github.com/dunkelfrosch/phpcoverfish/tree
  * @since     class available since Release 0.9.0
- * @version   1.0.0
+ * @version   1.0.2
  */
 class CoverFishScanCommand extends Command
 {

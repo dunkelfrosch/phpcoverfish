@@ -170,7 +170,7 @@ to find out how to contribute to the PHPCoverFish Project.
 
 ## License
 
-Copyright (c) 2015 Patrick Paechnatz <patrick.paechnatz@gmail.com>
+Copyright (c) 2015 - 2018 Patrick Paechnatz <patrick.paechnatz@gmail.com>
                                                                            
 Permission is hereby granted,  free of charge,  to any  person obtaining a 
 copy of this software and associated documentation files (the "Software"),
