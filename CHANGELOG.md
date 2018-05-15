@@ -16,6 +16,8 @@ _current_
 
 ### Changes
 
+- add php 7.0/php7.1 compatibility
+- remove php5.5.n / php5.6.n dependencies
 - documentation / project status notes
 
 ## [1.0.1], 2015-11-09:
